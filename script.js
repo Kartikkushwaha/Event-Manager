@@ -44,7 +44,7 @@ setInterval(() => {
 }, 3000);
 
 
-document.getElementById("loginBtn")
+document.getElementByClass("login")
 .addEventListener("click", async (e) => {
 
     e.preventDefault();
@@ -73,7 +73,7 @@ document.getElementById("loginBtn")
 });
 
 
-document.getElementById("signupBtn")
+document.getElementByClass("signup")
 .addEventListener("click", async (e) => {
 
     e.preventDefault();
