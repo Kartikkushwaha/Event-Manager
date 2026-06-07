@@ -44,7 +44,7 @@ setInterval(() => {
 }, 3000);
 
 
-document.getElementById("loginbtn")
+document.getElementById("googleBtn")
 .addEventListener("click", async (e) => {
 
     e.preventDefault();
@@ -56,49 +56,31 @@ document.getElementById("loginbtn")
 
         const user = result.user;
 
-        alert(
-          `Welcome ${user.displayName}`
+        localStorage.setItem(
+            "userName",
+            user.displayName
         );
 
-        console.log(user);
+        localStorage.setItem(
+            "userEmail",
+            user.email
+        );
 
-    } catch(error) {
+        localStorage.setItem(
+            "userPhoto",
+            user.photoURL || ""
+        );
+
+        window.location.href =
+        "dashboard.html";
+
+    }
+
+    catch(error){
 
         console.error(error);
-
-        alert("Login Failed");
 
     }
 
 });
-
-
-document.getElementById("signupbtn")
-.addEventListener("click", async (e) => {
-
-    e.preventDefault();
-
-    try {
-
-        const result =
-        await signInWithPopup(auth, provider);
-
-        const user = result.user;
-
-        alert(
-          `Account Created: ${user.displayName}`
-        );
-
-        console.log(user);
-
-    } catch(error) {
-
-        console.error(error);
-
-        alert("Signup Failed");
-
-    }
-
-});
-
 
