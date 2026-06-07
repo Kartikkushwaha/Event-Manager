@@ -1,40 +1,134 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
-<nav>
+    <!-- Navbar -->
 
-    <h2>EventEase</h2>
-    <div>
+    <nav class="navbar">
 
-        <a href="#">Profile</a>
+        <div class="logo">
+            ✨ EventEase
+        </div>
 
-        <a href="#">Settings</a>
+        <div class="nav-links">
+            <a href="#">Dashboard</a>
+            <a href="#">My Events</a>
+            <a href="#">Wishlist</a>
+            <a href="#">Settings</a>
+        </div>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </nav>
+
+    <!-- Main Dashboard -->
+
+    <div class="dashboard">
+
+        <!-- Profile Card -->
+
+        <div class="profile-card">
+
+            <img
+                id="profilePhoto"
+                class="profile-photo"
+                style="display:none;"
+            >
+
+            <div id="profileLetter" class="profile-letter">
+            </div>
+
+            <h2 id="name">
+                User Name
+            </h2>
+
+            <p id="email">
+                user@email.com
+            </p>
+
+        </div>
+
+        <!-- Stats -->
+
+        <div class="stats-container">
+
+            <div class="stat-box">
+                <h2>3</h2>
+                <p>Events Planned</p>
+            </div>
+
+            <div class="stat-box">
+                <h2>12</h2>
+                <p>Saved Vendors</p>
+            </div>
+
+            <div class="stat-box">
+                <h2>5</h2>
+                <p>Wishlisted Venues</p>
+            </div>
+
+        </div>
+
+        <!-- Upcoming Event -->
+
+        <div class="section">
+
+            <h2>Upcoming Event</h2>
+
+            <div class="event-card">
+
+                <h3>Wedding Celebration</h3>
+
+                <p>Date: 15 December 2026</p>
+
+                <p>Location: Chandigarh</p>
+
+                <button>
+                    View Details
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Recommended Vendors -->
+
+        <div class="section">
+
+            <h2>Recommended Vendors</h2>
+
+            <div class="vendor-grid">
+
+                <div class="vendor-card">
+                    <h3>Dream Decorators</h3>
+                    <p>Decoration Services</p>
+                </div>
+
+                <div class="vendor-card">
+                    <h3>Royal Caterers</h3>
+                    <p>Catering Services</p>
+                </div>
+
+                <div class="vendor-card">
+                    <h3>Elite Photography</h3>
+                    <p>Photography Services</p>
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-</nav>
-
-<div class="profile">
-
-    <img
-        id="profilePhoto"
-        width="80"
-        style="display:none;"
-    >
-
-    <div id="profileLetter"></div>
-
-    <h2 id="name"></h2>
-
-    <p id="email"></p>
-
-</div>
-
-<script src="dashboard.js"></script>
+    <script src="dashboard.js"></script>
 
 </body>
 </html>
