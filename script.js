@@ -87,40 +87,40 @@ document.getElementById("googleBtn")
 
 // dashboard script
 
-const name =
-localStorage.getItem("userName");
+// const name =
+// localStorage.getItem("userName");
 
-const email =
-localStorage.getItem("userEmail");
+// const email =
+// localStorage.getItem("userEmail");
 
-const photo =
-localStorage.getItem("userPhoto");
+// const photo =
+// localStorage.getItem("userPhoto");
 
-document.getElementById("name")
-.textContent = name;
+// document.getElementById("name")
+// .textContent = name;
 
-document.getElementById("email")
-.textContent = email;
+// document.getElementById("email")
+// .textContent = email;
 
-if(photo){
+// if(photo){
 
-    const img =
-    document.getElementById(
-        "profilePhoto"
-    );
+//     const img =
+//     document.getElementById(
+//         "profilePhoto"
+//     );
 
-    img.src = photo;
+//     img.src = photo;
 
-    img.style.display = "block";
+//     img.style.display = "block";
 
-}
+// }
 
-else{
+// else{
 
-    document.getElementById(
-        "profileLetter"
-    ).textContent =
-    name.charAt(0).toUpperCase();
+//     document.getElementById(
+//         "profileLetter"
+//     ).textContent =
+//     name.charAt(0).toUpperCase();
 
-}
+// }
 
