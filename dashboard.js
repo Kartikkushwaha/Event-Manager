@@ -1,32 +1,32 @@
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-// import {
-//     getAuth,
-//     signOut
-// } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+    getAuth,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
-//   authDomain: "eventease-c0bd9.firebaseapp.com",
-//   projectId: "eventease-c0bd9",
-//   storageBucket: "eventease-c0bd9.firebasestorage.app",
-//   messagingSenderId: "720737113769",
-//   appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
-// };
+const firebaseConfig = {
+  apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
+  authDomain: "eventease-c0bd9.firebaseapp.com",
+  projectId: "eventease-c0bd9",
+  storageBucket: "eventease-c0bd9.firebasestorage.app",
+  messagingSenderId: "720737113769",
+  appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+};
 
-// const app = initializeApp(firebaseConfig);
-// const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const name =
 localStorage.getItem("userName");
 
 const email =
 localStorage.getItem("userEmail");
-// if(!email){
+if(!email){
 
-//     window.location.href =
-//     "index.html";
+    window.location.href =
+    "index.html";
 
-// }
+}
 
 const photo =
 localStorage.getItem("userPhoto");
