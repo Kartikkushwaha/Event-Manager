@@ -1,9 +1,9 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-import {
-    getAuth,
-    signOut
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+// import {
+//     getAuth,
+//     signOut
+// } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
@@ -14,8 +14,8 @@ import {
 //   appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
 // };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
 const name =
 localStorage.getItem("userName");
 
@@ -59,18 +59,18 @@ else{
 
 }
 
-document
-.getElementById("logoutBtn")
-.addEventListener("click", async () => {
+// document
+// .getElementById("logoutBtn")
+// .addEventListener("click", async () => {
 
-    await signOut(auth);
+//     await signOut(auth);
 
-    localStorage.clear();
+//     localStorage.clear();
 
-    window.location.href =
-    "index.html";
+//     window.location.href =
+//     "index.html";
 
-});
+// });
 
 
 
