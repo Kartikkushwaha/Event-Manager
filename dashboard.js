@@ -59,18 +59,18 @@ else{
 
 }
 
-// document
-// .getElementById("logoutBtn")
-// .addEventListener("click", async () => {
+document
+.getElementById("logoutBtn")
+.addEventListener("click", async () => {
 
-//     await signOut(auth);
+    await signOut(auth);
 
-//     localStorage.clear();
+    localStorage.clear();
 
-//     window.location.href =
-//     "index.html";
+    window.location.href =
+    "index.html";
 
-// });
+});
 
 
 
