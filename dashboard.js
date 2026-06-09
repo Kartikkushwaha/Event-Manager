@@ -71,5 +71,18 @@ document
 
 });
 
+// dashboard modals and clicks
+document
+.getElementById("createEventBtn")
+.addEventListener("click",()=>{
+
+    document
+    .getElementById("eventModal")
+    .style.display="block";
+
+});
+eventData.style="Traditional";
+eventData.style="Cultural";
+
 
 
