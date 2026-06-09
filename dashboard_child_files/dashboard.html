@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase Form</title>
+
+    <!-- css file start -->
+    <style>
+
+      /* day/night mode */
+
+      :root{
+
+    --bg:#f4f7fc;
+
+    --navbar:white;
+
+    --card:white;
+
+    --text:#333;
+
+    --secondaryText:gray;
+
+    --shadow:0 5px 15px rgba(0,0,0,0.08);
+      }
+
+    .dark-mode{
+
+    --bg:#0f172a;
+
+    --navbar:#1e293b;
+
+    --card:#334155;
+
+    --text:#f8fafc;
+
+    --secondaryText:#cbd5e1;
+
+    --shadow:0 5px 20px rgba(0,0,0,0.4);
+
+    }
+        /* Base Reset & Background */
+      
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background:var(--bg);
+            transition:.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Top Navigation Bar */
+        nav {
+            width: 100%;
+            background:var(--navbar);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        nav .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        nav .theme-btn {
+            background: #2563eb;
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        nav .theme-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Main Form Container (Second-largest box) */
+        .form-container {
+            background:var(--card);
+            color:var(--text);
+            width: 90%;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px;
+            border-radius: 8px;
+            /* Shadow effects at border */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Form Group styling for Labels + Select inputs */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group h3, .form-group label {
+            font-size: 1.0rem;
+            color: #4a5568;
+            font-weight: 700;
+        }
+
+        /* Dropdown Select Styling */
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background-color: #fff;
+            font-size: 0.90rem;
+            color: #333;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: #3182ce;
+        }
+
+        /* Bottom Grid for the 4 smaller dropdowns */
+        .dropdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        /* Responsive design for smaller screens */
+        @media (max-width: 768px) {
+            .dropdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .dropdown-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Save Button Styling at Rightmost-Bottom */
+        .button-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .save-btn {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .save-btn:hover {
+            background-color: #2b6cb0;
+        }
+    </style>
+    <!-- css file ends -->
+     
+</head>
+<body>
+
+    <nav>
+        <div class="logo">✨ EventEase</div>
+        <button class="theme-btn" id="themeToggle">🌙</button>
+    </nav>
+
+    <div class="form-container">
+        
+        <div class="form-group">
+            <h3>Name of the Event:</h3>
+            <form>
+                <input type="text" style="height: 40px; width: 300px;" placeholder="Ex-Wedding Celebration">
+            </form>
+
+        </div>
+
+        <div class="dropdown-grid">
+            
+            <div class="form-group">
+                <label>Choose the Type of Event</label>
+                <select name="event-type">
+                    <option value="" disabled selected>Select type...</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="social">Social</option>
+                    <option value="concert">Concert</option>
+                    <option value="exhibition">Exhibition</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Choose the State/Residence</label>
+                <select name="state-residence">
+                    <option value="" disabled selected>Select state...</option>
+                    <option value="ny">New York</option>
+                    <option value="ca">California</option>
+                    <option value="tx">Texas</option>
+                    <option value="fl">Florida</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Choose the Events</label>
+                <select name="specific-event">
+                    <option value="" disabled selected>Select event...</option>
+                    <option value="main-keynote">Main Keynote</option>
+                    <option value="networking-dinner">Networking Dinner</option>
+                    <option value="workshop-a">Workshop Session A</option>
+                    <option value="vip-reception">VIP Reception</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Number of Invitations</label>
+                <select name="invitation-count">
+                    <option value="" disabled selected>Select count...</option>
+                    <option value="1-50">1 - 50</option>
+                    <option value="51-200">51 - 200</option>
+                    <option value="201-500">201 - 500</option>
+                    <option value="500+">500+</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="button-wrapper">
+            <button type="submit" class="save-btn">Save</button>
+        </div>
+
+    </div>
+
+</body>
+</html>
