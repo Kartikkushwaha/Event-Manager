@@ -63,35 +63,44 @@ document.getElementById(
 saveBtn.addEventListener(
     "click",
     ()=>{
+        const eventType =
+document.getElementById("eventType");
 
-        const eventData={
+const state =
+document.getElementById("state");
 
-            eventName:
-            document.getElementById(
-                "name"
-            ).value,
+const category =
+document.getElementById("eventCategory");
 
-            eventType:
-            document.getElementById(
-                "eventType"
-            ).text,
+const guestCount =
+document.getElementById("guestCount");
 
-            state:
-            document.getElementById(
-                "state"
-            ).text,
+const eventData = {
 
-            category:
-            document.getElementById(
-                "eventCategory"
-            ).text,
+    eventName:
+    document.getElementById("name").value,
 
-            guestCount:
-            document.getElementById(
-                "guestCount"
-            ).text
+    eventType:
+    eventType.options[
+        eventType.selectedIndex
+    ].text,
 
-        };
+    state:
+    state.options[
+        state.selectedIndex
+    ].text,
+
+    category:
+    category.options[
+        category.selectedIndex
+    ].text,
+
+    guestCount:
+    guestCount.options[
+        guestCount.selectedIndex
+    ].text
+
+};
 
         let events=
         JSON.parse(
