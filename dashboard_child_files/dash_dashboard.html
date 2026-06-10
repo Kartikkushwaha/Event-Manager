@@ -210,7 +210,7 @@
             
             <div class="form-group">
                 <label>Choose the Type of Event</label>
-                <select name="event-type">
+                <select id="eventType" name="event-type">
                     <option value="" disabled selected>Select type...</option>
                     <option value="traditional">Traditional</option>
                     <option value="modern">Modern</option>
@@ -221,7 +221,7 @@
 
             <div class="form-group">
                 <label>Choose the State/Residence (India)</label>
-                <select name="state-residence">
+                <select id="state" name="state-residence">
                     <option value="" disabled selected>Select state...</option>
                     <!-- selecting states -->
                     <option value="ny">Andhra Pradesh</option>
@@ -269,7 +269,7 @@
 
             <div class="form-group">
                 <label>Choose the Events</label>
-                <select name="specific-event">
+                <select id="eventCategory" name="specific-event">
                     <option value="corporate">Wedding</option>
                     <option value="Birthday">Birthday</option>
                     <option value="Baby shower">Baby shower</option>
@@ -284,7 +284,7 @@
 
             <div class="form-group">
                 <label>Number of Invitations</label>
-                <select name="invitation-count">
+                <select id="guestCount" name="invitation-count">
                     <option value="" disabled selected>Select count...</option>
                     <option value="1-50">1 - 50</option>
                     <option value="51-200">51 - 200</option>
@@ -297,7 +297,7 @@
         </div>
 
         <div class="button-wrapper">
-            <button type="submit" class="save-btn">Save</button>
+            <button id="saveBtn" type="submit" class="save-btn">Save</button>
         </div>
 
     </div>
