@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>My Events</title>
+
+<style>
+
+:root{
+    --bg:#f4f7fc;
+    --card:white;
+    --text:#333;
+}
+
+.dark-mode{
+    --bg:#0f172a;
+    --card:#334155;
+    --text:#f8fafc;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    padding:40px;
+}
+
+h1{
+    margin-bottom:30px;
+}
+
+#eventsContainer{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.event-card{
+    background:var(--card);
+    padding:20px;
+    border-radius:15px;
+    box-shadow:
+    0 5px 15px rgba(0,0,0,0.1);
+}
+
+.event-card p{
+    margin:8px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>My Events</h1>
+
+<div id="eventsContainer"></div>
+
+<script src="my_events.js"></script>
+
+</body>
+
+</html>
