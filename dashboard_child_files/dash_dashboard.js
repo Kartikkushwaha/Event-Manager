@@ -54,3 +54,65 @@ themeBtn.addEventListener(
 
     }
 );
+
+const saveBtn =
+document.getElementById(
+    "saveBtn"
+);
+
+saveBtn.addEventListener(
+    "click",
+    ()=>{
+
+        const eventData={
+
+            eventName:
+            document.getElementById(
+                "name"
+            ).value,
+
+            eventType:
+            document.getElementById(
+                "eventType"
+            ).value,
+
+            state:
+            document.getElementById(
+                "state"
+            ).value,
+
+            category:
+            document.getElementById(
+                "eventCategory"
+            ).value,
+
+            guestCount:
+            document.getElementById(
+                "guestCount"
+            ).value
+
+        };
+
+        let events=
+        JSON.parse(
+            localStorage.getItem(
+                "events"
+            )
+        ) || [];
+
+        events.push(eventData);
+
+        localStorage.setItem(
+            "events",
+            JSON.stringify(events)
+        );
+
+        alert(
+            "Event Saved Successfully!"
+        );
+
+        window.location.href =
+        "../my_events.html";
+
+    }
+);
