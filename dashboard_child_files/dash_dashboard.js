@@ -112,7 +112,7 @@ saveBtn.addEventListener(
         );
 
         window.location.href =
-        "../my_events.html";
+        "dashboard_child_files/my_events.html";
 
     }
 );
