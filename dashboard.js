@@ -150,22 +150,22 @@ saveBtn.addEventListener(
             eventType:
             document.getElementById(
                 "eventType"
-            ).value,
+            ).text,
 
             state:
             document.getElementById(
                 "state"
-            ).value,
+            ).text,
 
             category:
             document.getElementById(
                 "eventCategory"
-            ).value,
+            ).text,
 
             guestCount:
             document.getElementById(
                 "guestCount"
-            ).value
+            ).text
 
         };
 
