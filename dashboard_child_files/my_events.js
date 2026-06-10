@@ -3,73 +3,120 @@ document.getElementById(
     "eventsContainer"
 );
 
-const savedTheme =
-localStorage.getItem(
-    "theme"
-);
-
-if(savedTheme==="dark"){
-
-    document.body.classList.add(
-        "dark-mode"
-    );
-
-}
-
-const events =
+let events =
 JSON.parse(
     localStorage.getItem(
         "events"
     )
 ) || [];
 
-if(events.length===0){
+let workingEvents =
+[...events];
 
-    container.innerHTML =
-    "<h2>No Events Created Yet</h2>";
+function renderEvents(){
+
+    container.innerHTML = "";
+
+    if(
+        workingEvents.length===0
+    ){
+
+        container.innerHTML =
+        "<h2>No Events Found</h2>";
+
+        return;
+    }
+
+    workingEvents.forEach(
+        (event,index)=>{
+
+            const card =
+            document.createElement(
+                "div"
+            );
+
+            card.className =
+            "event-card";
+
+            card.innerHTML = `
+                <h2>
+                ${event.eventName}
+                </h2>
+
+                <p>
+                Type:
+                ${event.eventType}
+                </p>
+
+                <p>
+                State:
+                ${event.state}
+                </p>
+
+                <p>
+                Event:
+                ${event.category}
+                </p>
+
+                <p>
+                Guests:
+                ${event.guestCount}
+                </p>
+
+                <button
+                class="deleteBtn">
+                    Delete Event
+                </button>
+            `;
+
+            const deleteBtn =
+            card.querySelector(
+                ".deleteBtn"
+            );
+
+            deleteBtn
+            .addEventListener(
+                "click",
+                ()=>{
+
+                    workingEvents.splice(
+                        index,
+                        1
+                    );
+
+                    renderEvents();
+
+                }
+            );
+
+            container
+            .appendChild(card);
+
+        }
+    );
 
 }
 
-else{
+renderEvents();
 
-    events.forEach(event=>{
+document
+.getElementById(
+    "updateBtn"
+)
+.addEventListener(
+    "click",
+    ()=>{
 
-        const card =
-        document.createElement(
-            "div"
+        localStorage.setItem(
+            "events",
+            JSON.stringify(
+                workingEvents
+            )
         );
 
-        card.className =
-        "event-card";
-
-        card.innerHTML = `
-            <h2>${event.eventName}</h2>
-
-            <p>
-            Type:
-            ${event.eventType}
-            </p>
-
-            <p>
-            State:
-            ${event.state}
-            </p>
-
-            <p>
-            Event:
-            ${event.category}
-            </p>
-
-            <p>
-            Guests:
-            ${event.guestCount}
-            </p>
-        `;
-
-        container.appendChild(
-            card
+        alert(
+            "Changes Updated!"
         );
 
-    });
-
-}
+    }
+);
