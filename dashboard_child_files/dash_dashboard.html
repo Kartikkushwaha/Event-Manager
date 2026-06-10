@@ -59,7 +59,7 @@
         }
         /* welcome text */
         #welcome{
-            font-size: 80px;
+            font-size: xxx-large;
             color:var(--text);
             margin: 40px auto;
             font-family:'Times New Roman', Times, serif;
@@ -104,7 +104,7 @@
             max-width: 1000px;
             margin: 60px auto;
             padding: 40px;
-            border-radius: 8px;
+            border-radius: 20px;
             /* Shadow effects at border */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
             display: flex;
@@ -201,7 +201,7 @@
         <div class="form-group">
             <h3>Name of the Event:</h3>
             <form>
-                <input type="text" style="height: 40px; width: 300px;" placeholder="Ex-Wedding Celebration">
+                <input id="name" type="text" style="height: 40px; width: 80%;" placeholder="Ex-Wedding Celebration">
             </form>
 
         </div>
@@ -212,32 +212,73 @@
                 <label>Choose the Type of Event</label>
                 <select name="event-type">
                     <option value="" disabled selected>Select type...</option>
-                    <option value="corporate">Corporate</option>
-                    <option value="social">Social</option>
-                    <option value="concert">Concert</option>
-                    <option value="exhibition">Exhibition</option>
+                    <option value="traditional">Traditional</option>
+                    <option value="modern">Modern</option>
+                    <option value="custom">Custom</option>
+                    
                 </select>
             </div>
 
             <div class="form-group">
-                <label>Choose the State/Residence</label>
+                <label>Choose the State/Residence (India)</label>
                 <select name="state-residence">
                     <option value="" disabled selected>Select state...</option>
-                    <option value="ny">New York</option>
-                    <option value="ca">California</option>
-                    <option value="tx">Texas</option>
-                    <option value="fl">Florida</option>
+                    <!-- selecting states -->
+                    <option value="ny">Andhra Pradesh</option>
+                    <option value="ca">Arunchal Pradesh</option>
+                    <option value="tx">Assam</option>
+                    <option value="br">Bihar</option>
+                    <option value="cht">Chattisgarh</option>
+                    <option value="go">Goa</option>
+                    <option value="gj">Gujarat</option>
+                    <option value="hr">Haryana</option>
+                    <option value="hp">Himanchal Pradesh</option>
+                    <option value="jk">Jharkhand</option>
+                    <option value="kt">Karnataka</option>
+                    <option value="kr">Kerala</option>
+                    <option value=""mp>Madhya Pradesh</option>
+                    <option value=""mh>Maharastra</option>
+                    <option value="mn">Manipur</option>
+                    <option value="mg">Meghalaya</option>
+                    <option value="mz">Mizoram</option>
+                    <option value="ng">Nagaland</option>
+                    <option value="od">Odisha</option>
+                    <option value="fl">Punjabption>
+                    <option value="fl">Rajasthan</option>
+                    <option value="fl">Sikkim</option>
+                    <option value="fl">Tamil Nadu</option>
+                    <option value="fl">Telangana</option>
+                    <option value="fl">Tripura</option>
+                    <option value="fl">Uttar Pradesh</option>
+                    <option value="fl">Uttrakhand</option>
+                    <option value="fl">West bengal</option>
+                    
+                    <!-- selecting union territories -->
+                    
+                    <option value="an">Andaman and Nicobar</option>
+                    <option value="chn">Chandigarh</option>
+                    <option value="dnhdd">Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option value="dl">Delhi(NCT)</option>
+                    <option value="jk">Jammu & Kashmir</option>
+                    <option value="lkh">Ladakh</option>
+                    <option value="lks">Lakshadweep</option>
+                    <option value="pd">Puducherry</option>
+                    
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Choose the Events</label>
                 <select name="specific-event">
-                    <option value="" disabled selected>Select event...</option>
-                    <option value="main-keynote">Main Keynote</option>
-                    <option value="networking-dinner">Networking Dinner</option>
-                    <option value="workshop-a">Workshop Session A</option>
-                    <option value="vip-reception">VIP Reception</option>
+                    <option value="corporate">Wedding</option>
+                    <option value="Birthday">Birthday</option>
+                    <option value="Baby shower">Baby shower</option>
+                    <option value="Corporate">Corporate</option>
+                    <option value="Farewell">Farewell</option>
+                    <option value="College Fest">College Fest</option>
+                    <option value="Anniversary">Anniversary</option>
+                    <option value="Valentine">Valentine</option>
+                    <option value="Custom">Custom</option>
                 </select>
             </div>
 
@@ -248,7 +289,8 @@
                     <option value="1-50">1 - 50</option>
                     <option value="51-200">51 - 200</option>
                     <option value="201-500">201 - 500</option>
-                    <option value="500+">500+</option>
+                    <option value="500-1000">500-1000</option>
+                    <option value="custom">Custom</option>
                 </select>
             </div>
 
