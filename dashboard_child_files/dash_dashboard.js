@@ -56,60 +56,81 @@ themeBtn.addEventListener(
 );
 
 const saveBtn =
-document.getElementById(
-    "saveBtn"
-);
+document.getElementById("saveBtn");
 
 saveBtn.addEventListener(
     "click",
     ()=>{
+
         const eventType =
-document.getElementById("eventType");
+        document.getElementById(
+            "eventType"
+        );
 
-const state =
-document.getElementById("state");
+        const state =
+        document.getElementById(
+            "state"
+        );
 
-const category =
-document.getElementById("eventCategory");
+        const category =
+        document.getElementById(
+            "eventCategory"
+        );
 
-const guestCount =
-document.getElementById("guestCount");
+        const guestCount =
+        document.getElementById(
+            "guestCount"
+        );
 
-const eventData = {
+        const eventData = {
 
-    eventName:
-    document.getElementById("name").value,
+            eventName:
+            document.getElementById(
+                "name"
+            ).value,
 
-    eventType:
-    eventType.options[
-        eventType.selectedIndex
-    ].text,
+            eventType:
+            eventType.options[
+                eventType.selectedIndex
+            ].text,
 
-    state:
-    state.options[
-        state.selectedIndex
-    ].text,
+            state:
+            state.options[
+                state.selectedIndex
+            ].text,
 
-    category:
-    category.options[
-        category.selectedIndex
-    ].text,
+            category:
+            category.options[
+                category.selectedIndex
+            ].text,
 
-    guestCount:
-    guestCount.options[
-        guestCount.selectedIndex
-    ].text
+            guestCount:
+            guestCount.options[
+                guestCount.selectedIndex
+            ].text
 
-};
+        };
 
-        let events=
+        if(
+            eventData.eventName.trim()
+            === ""
+        ){
+            alert(
+                "Please enter event name"
+            );
+            return;
+        }
+
+        let events =
         JSON.parse(
             localStorage.getItem(
                 "events"
             )
         ) || [];
 
-        events.push(eventData);
+        events.push(
+            eventData
+        );
 
         localStorage.setItem(
             "events",
@@ -117,11 +138,10 @@ const eventData = {
         );
 
         alert(
-            "Event Saved Successfully!"
+            "Event Saved!"
         );
 
         window.location.href =
         "my_events.html";
-
     }
 );
