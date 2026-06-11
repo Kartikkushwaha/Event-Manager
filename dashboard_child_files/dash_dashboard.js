@@ -1,3 +1,16 @@
+import {
+    getFirestore,
+    collection,
+    addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
 const themeBtn =
 document.getElementById(
     "themeToggle"
@@ -60,7 +73,7 @@ document.getElementById("saveBtn");
 
 saveBtn.addEventListener(
     "click",
-    ()=>{
+    async ()=>{
 
         const eventType =
         document.getElementById(
@@ -121,21 +134,21 @@ saveBtn.addEventListener(
             return;
         }
 
-        let events =
-        JSON.parse(
-            localStorage.getItem(
-                "events"
-            )
-        ) || [];
+        const user =
+auth.currentUser;
 
-        events.push(
-            eventData
-        );
+await addDoc(
 
-        localStorage.setItem(
-            "events",
-            JSON.stringify(events)
-        );
+    collection(
+        db,
+        "users",
+        user.uid,
+        "events"
+    ),
+
+    eventData
+
+);
 
         alert(
             "Event Saved!"
