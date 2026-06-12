@@ -1,3 +1,28 @@
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
+  authDomain: "eventease-c0bd9.firebaseapp.com",
+  projectId: "eventease-c0bd9",
+  storageBucket: "eventease-c0bd9.firebasestorage.app",
+  messagingSenderId: "720737113769",
+  appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+};
+
+const app =
+initializeApp(firebaseConfig);
+
+const db =
+getFirestore(app);
+
 
 const themeBtn =
 document.getElementById(
@@ -61,7 +86,7 @@ document.getElementById("saveBtn");
 
 saveBtn.addEventListener(
     "click",
-    ()=>{
+   async ()=>{
 
         const eventType =
         document.getElementById(
@@ -121,22 +146,35 @@ saveBtn.addEventListener(
             );
             return;
         }
- let events =
-        JSON.parse(
-            localStorage.getItem(
-                "events"
-            )
-        ) || [];
+ // let events =
+ //        JSON.parse(
+ //            localStorage.getItem(
+ //                "events"
+ //            )
+ //        ) || [];
         
 
-  events.push(
+ //  events.push(
+ //            eventData
+ //        );
+ //     localStorage.setItem(
+ //            "events",
+ //            JSON.stringify(events)
+ //        );
+            const uid =
+            localStorage.getItem(
+            "userUID"
+            );
+            
+            await addDoc(
+            collection(
+            db,
+            "users",
+            uid,
+            "events"
+            ),
             eventData
-        );
-     localStorage.setItem(
-            "events",
-            JSON.stringify(events)
-        );
-        
+            );
 
         alert(
             "Event Saved!"
