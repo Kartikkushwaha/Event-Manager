@@ -1,4 +1,27 @@
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
+import {
+getFirestore,
+collection,
+getDocs,
+deleteDoc,
+doc
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
+  authDomain: "eventease-c0bd9.firebaseapp.com",
+  projectId: "eventease-c0bd9",
+  storageBucket: "eventease-c0bd9.firebasestorage.app",
+  messagingSenderId: "720737113769",
+  appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
 
 
 const container =
@@ -7,15 +30,7 @@ document.getElementById(
 );
 
 
-    let events =
-    JSON.parse(
-        localStorage.getItem(
-            "events"
-        )
-    ) || [];
-
-    let workingEvents =
-[...events];
+  let workingEvents = [];
       
 
 function renderEvents(){
@@ -32,6 +47,48 @@ container.innerHTML = "";
 
            return;
     }
+
+ async function loadEvents(){
+
+const uid =
+localStorage.getItem(
+"userUID"
+);
+
+const snapshot =
+await getDocs(
+collection(
+db,
+"users",
+uid,
+"events"
+)
+);
+
+workingEvents=[];
+
+snapshot.forEach(
+(docSnap)=>{
+
+workingEvents.push({
+
+id:docSnap.id,
+
+...docSnap.data()
+
+});
+
+}
+);
+
+renderEvents();
+
+}
+
+
+
+    
+
  workingEvents.forEach(
         (event,index)=>{
 
@@ -79,31 +136,34 @@ container.innerHTML = "";
             card.querySelector(
                 ".deleteBtn"
             );
-            
-  deleteBtn
-            .addEventListener(
-                "click",
-                ()=>{
+deleteBtn
+.addEventListener(
+"click",
+async ()=>{
 
-                    workingEvents.splice(
-                        index,
-                        1
-                    );
+const uid =
+localStorage.getItem(
+"userUID"
+);
 
-                    renderEvents();
+await deleteDoc(
+doc(
+db,
+"users",
+uid,
+"events",
+event.id
+)
+);
 
-                }
-            );
+loadEvents();
 
-            container
-            .appendChild(card);
-
-        }
-    );
+}
+);   
 
 }
 
-renderEvents();
+
 
 document
 .getElementById(
@@ -112,13 +172,6 @@ document
 .addEventListener(
     "click",
     ()=>{
-
-        localStorage.setItem(
-            "events",
-            JSON.stringify(
-                workingEvents
-            )
-        );
 
         alert(
             "Changes Updated!"
@@ -129,3 +182,5 @@ document
 
     }
 );
+
+    loadEvents();
