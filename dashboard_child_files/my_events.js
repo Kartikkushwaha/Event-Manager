@@ -20,77 +20,67 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 
 const container =
 document.getElementById(
     "eventsContainer"
 );
 
+let workingEvents = [];
 
-  let workingEvents = [];
-      
+async function loadEvents(){
+
+    const uid =
+    localStorage.getItem(
+        "userUID"
+    );
+
+    const snapshot =
+    await getDocs(
+        collection(
+            db,
+            "users",
+            uid,
+            "events"
+        )
+    );
+
+    workingEvents = [];
+
+    snapshot.forEach(
+        (docSnap)=>{
+
+            workingEvents.push({
+
+                id: docSnap.id,
+
+                ...docSnap.data()
+
+            });
+
+        }
+    );
+
+    renderEvents();
+}
 
 function renderEvents(){
-       
-container.innerHTML = "";
-           
- if(
+
+    container.innerHTML = "";
+
+    if(
         workingEvents.length===0
     ){
-      
 
-         container.innerHTML =
+        container.innerHTML =
         "<h2>No Events Found</h2>";
 
-           return;
+        return;
     }
 
- async function loadEvents(){
-
-const uid =
-localStorage.getItem(
-"userUID"
-);
-
-const snapshot =
-await getDocs(
-collection(
-db,
-"users",
-uid,
-"events"
-)
-);
-
-workingEvents=[];
-
-snapshot.forEach(
-(docSnap)=>{
-
-workingEvents.push({
-
-id:docSnap.id,
-
-...docSnap.data()
-
-});
-
-}
-);
-
-renderEvents();
-
-}
-
-
-
-    
-
- workingEvents.forEach(
-        (event,index)=>{
+    workingEvents.forEach(
+        (event)=>{
 
             const card =
             document.createElement(
@@ -100,7 +90,7 @@ renderEvents();
             card.className =
             "event-card";
 
-            card.innerHTML=`
+            card.innerHTML = `
 
                 <h2>
                 ${event.eventName}
@@ -126,44 +116,50 @@ renderEvents();
                 ${event.guestCount}
                 </p>
 
-              <button
+                <button
                 class="deleteBtn">
-                    Delete Event
+                Delete Event
                 </button>
             `;
 
-           const deleteBtn =
+            const deleteBtn =
             card.querySelector(
                 ".deleteBtn"
             );
-deleteBtn
-.addEventListener(
-"click",
-async ()=>{
 
-const uid =
-localStorage.getItem(
-"userUID"
-);
+            deleteBtn
+            .addEventListener(
+                "click",
+                async ()=>{
 
-await deleteDoc(
-doc(
-db,
-"users",
-uid,
-"events",
-event.id
-)
-);
+                    const uid =
+                    localStorage.getItem(
+                        "userUID"
+                    );
 
-loadEvents();
+                    await deleteDoc(
+                        doc(
+                            db,
+                            "users",
+                            uid,
+                            "events",
+                            event.id
+                        )
+                    );
+
+                    loadEvents();
+
+                }
+            );
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
-);   
-
-}
-
-
 
 document
 .getElementById(
@@ -173,14 +169,10 @@ document
     "click",
     ()=>{
 
-        alert(
-            "Changes Updated!"
-        );
-         window.location.href =
+        window.location.href =
         "../dashboard.html";
-        
 
     }
 );
 
-    loadEvents();
+loadEvents();
