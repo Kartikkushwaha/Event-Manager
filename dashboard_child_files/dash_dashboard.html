@@ -208,10 +208,9 @@
         
         <div class="form-group">
             <h3>Name of the Event:</h3>
-            <form>
-                <input id="name" type="text" style="height: 40px; width: 80%;" placeholder="Ex-Wedding Celebration">
-            </form>
-
+            <!-- FIX 1: Removed wrapping <form> tag to prevent implicit form submission
+                        interfering with the Save button click handler -->
+            <input id="name" type="text" style="height: 40px; width: 80%;" placeholder="Ex-Wedding Celebration">
         </div>
 
         <div class="dropdown-grid">
@@ -244,22 +243,23 @@
                     <option value="jk">Jharkhand</option>
                     <option value="kt">Karnataka</option>
                     <option value="kr">Kerala</option>
-                    <option value=""mp>Madhya Pradesh</option>
-                    <option value=""mh>Maharastra</option>
+                    <!-- FIX 2: Corrected malformed value attributes (were value=""mp> and value=""mh>) -->
+                    <option value="mp">Madhya Pradesh</option>
+                    <option value="mh">Maharastra</option>
                     <option value="mn">Manipur</option>
                     <option value="mg">Meghalaya</option>
                     <option value="mz">Mizoram</option>
                     <option value="ng">Nagaland</option>
                     <option value="od">Odisha</option>
-                    <option value="fl">Punjab</option>
-                    <option value="fl">Rajasthan</option>
-                    <option value="fl">Sikkim</option>
-                    <option value="fl">Tamil Nadu</option>
-                    <option value="fl">Telangana</option>
-                    <option value="fl">Tripura</option>
-                    <option value="fl">Uttar Pradesh</option>
-                    <option value="fl">Uttrakhand</option>
-                    <option value="fl">West bengal</option>
+                    <option value="pb">Punjab</option>
+                    <option value="rj">Rajasthan</option>
+                    <option value="sk">Sikkim</option>
+                    <option value="tn">Tamil Nadu</option>
+                    <option value="tg">Telangana</option>
+                    <option value="tr">Tripura</option>
+                    <option value="up">Uttar Pradesh</option>
+                    <option value="uk">Uttrakhand</option>
+                    <option value="wb">West bengal</option>
                     
                     <!-- selecting union territories -->
                     
