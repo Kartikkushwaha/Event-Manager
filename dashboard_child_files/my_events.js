@@ -168,6 +168,8 @@ document
         alert(
             "Changes Updated!"
         );
+         window.location.href =
+        "../dashboard.html";
         
 
     }
