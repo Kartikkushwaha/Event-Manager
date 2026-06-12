@@ -70,6 +70,11 @@ document.getElementById("googleBtn")
             "userPhoto",
             user.photoURL || ""
         );
+      
+      localStorage.setItem(
+    "userUID",
+    user.uid
+);
 
         window.location.href =
         "dashboard.html";
