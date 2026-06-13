@@ -1,4 +1,4 @@
-import { initializeApp }
+@import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
 getFirestore,
@@ -6,7 +6,12 @@ collection,
 addDoc
 }
  // temporary ends
-
+import {
+  getAuth,
+  onAuthStateChanged
+}
+ 
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 // temporary end
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const firebaseConfig = {
@@ -24,7 +29,13 @@ getFirestore(app);
 
 // temp
 
+const auth = getAuth(app);
 
+onAuthStateChanged(auth, (user) => {
+
+    console.log("AUTH USER =", user);
+
+});
 // temp
 const themeBtn =
 document.getElementById(
