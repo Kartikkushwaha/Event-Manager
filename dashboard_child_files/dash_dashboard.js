@@ -5,7 +5,6 @@ getFirestore,
 collection,
 addDoc
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
@@ -19,8 +18,6 @@ const app =
 initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
-
-
 const themeBtn =
 document.getElementById(
     "themeToggle"
@@ -63,7 +60,6 @@ themeBtn.addEventListener(
 );
 const saveBtn =
 document.getElementById("saveBtn");
-
 saveBtn.addEventListener(
     "click",
     async ()=>{
