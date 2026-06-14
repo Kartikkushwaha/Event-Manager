@@ -79,18 +79,7 @@ function renderEvents(){
         return;
     }
 
-  const formattedDate =
-new Date(event.date_time)
-.toLocaleString(
-    "en-IN",
-    {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-    }
-);
+
 
     workingEvents.forEach(
     (event)=>{
