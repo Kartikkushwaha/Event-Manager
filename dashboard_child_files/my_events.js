@@ -79,23 +79,23 @@ function renderEvents(){
         return;
     }
 
-
-
-    workingEvents.forEach(
+workingEvents.forEach(
     (event)=>{
 
         const formattedDate =
-        new Date(event.date_time)
-        .toLocaleString(
-            "en-IN",
-            {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-                hour: "numeric",
-                minute: "2-digit"
-            }
-        );
+event.date_time
+? new Date(event.date_time)
+    .toLocaleString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    )
+: "Not Specified";
 
         const card =
         document.createElement(
@@ -126,37 +126,43 @@ function renderEvents(){
             </button>
         `;
 
-            deleteBtn
-            .addEventListener(
-                "click",
-                async ()=>{
+        const deleteBtn =
+        card.querySelector(
+            ".deleteBtn"
+        );
 
-                    const uid =
-                    localStorage.getItem(
-                        "userUID"
-                    );
+        deleteBtn
+        .addEventListener(
+            "click",
+            async ()=>{
 
-                    await deleteDoc(
-                        doc(
-                            db,
-                            "users",
-                            uid,
-                            "events",
-                            event.id
-                        )
-                    );
+                const uid =
+                localStorage.getItem(
+                    "userUID"
+                );
 
-                    loadEvents();
+                await deleteDoc(
+                    doc(
+                        db,
+                        "users",
+                        uid,
+                        "events",
+                        event.id
+                    )
+                );
 
-                }
-            );
+                loadEvents();
 
-            container.appendChild(
-                card
-            );
+            }
+        );
 
-        }
-    );
+        container.appendChild(
+            card
+        );
+
+    }
+);
+
 
 }
 
