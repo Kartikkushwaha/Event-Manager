@@ -69,6 +69,9 @@ saveBtn.addEventListener(
             const eventType =
             document.getElementById("eventType");
 
+            const relchose =
+            document.getElementById("relchose");
+
             const state =
             document.getElementById("state");
 
@@ -78,10 +81,19 @@ saveBtn.addEventListener(
             const guestCount =
             document.getElementById("guestCount");
 
+            
+
             if(
                 document.getElementById("name").value.trim() === ""
             ){
                 alert("Please enter event name");
+                return;
+            }
+
+            if(
+                document.getElementById("date_time").value.trim() === ""
+            ){
+                alert("Please choose date and time of Event");
                 return;
             }
 
@@ -99,10 +111,16 @@ saveBtn.addEventListener(
 
                 eventName:
                 document.getElementById("name").value,
+              
 
                 eventType:
                 eventType.options[
                     eventType.selectedIndex
+                ].text,
+
+              eventType:
+                relchose.options[
+                    relchose.selectedIndex
                 ].text,
 
                 state:
@@ -119,6 +137,9 @@ saveBtn.addEventListener(
                 guestCount.options[
                     guestCount.selectedIndex
                 ].text
+
+              eventName:
+              document.getElementById("date_time").value,
 
             };
 
