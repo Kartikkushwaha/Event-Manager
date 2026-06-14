@@ -81,7 +81,7 @@ function renderEvents(){
 
     workingEvents.forEach(
         (event)=>{
-
+console.log(event);
             const card =
             document.createElement(
                 "div"
