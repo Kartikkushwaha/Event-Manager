@@ -136,7 +136,7 @@ saveBtn.addEventListener(
                 guestCount:
                 guestCount.options[
                     guestCount.selectedIndex
-                ].text
+                ].text,
 
               eventName:
               document.getElementById("date_time").value,
