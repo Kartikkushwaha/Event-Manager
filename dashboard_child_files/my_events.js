@@ -102,6 +102,11 @@ function renderEvents(){
                 </p>
 
                 <p>
+                Religion:
+                ${event.relationChoice}
+                </p>
+
+                <p>
                 State:
                 ${event.state}
                 </p>
@@ -114,6 +119,11 @@ function renderEvents(){
                 <p>
                 Guests:
                 ${event.guestCount}
+                </p>
+
+                <p>
+                Timeline:
+                ${event.date_time}
                 </p>
 
                 <button
