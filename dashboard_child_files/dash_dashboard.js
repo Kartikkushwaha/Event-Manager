@@ -98,50 +98,49 @@ saveBtn.addEventListener(
             }
 
             if(
-                eventType.selectedIndex <= 0 ||
-                state.selectedIndex <= 0 ||
-                category.selectedIndex <= 0 ||
-                guestCount.selectedIndex <= 0
-            ){
+    eventType.selectedIndex <= 0 ||
+    relchose.selectedIndex <= 0 ||
+    state.selectedIndex <= 0 ||
+    category.selectedIndex <= 0 ||
+    guestCount.selectedIndex <= 0
+){
                 alert("Please fill all dropdown fields");
                 return;
             }
 
             const eventData = {
 
-                eventName:
-                document.getElementById("name").value,
-              
+    eventName:
+    document.getElementById("name").value,
 
-                eventType:
-                eventType.options[
-                    eventType.selectedIndex
-                ].text,
+    eventType:
+    eventType.options[
+        eventType.selectedIndex
+    ].text,
 
-              eventType:
-                relchose.options[
-                    relchose.selectedIndex
-                ].text,
+    relationChoice:
+    relchose.options[
+        relchose.selectedIndex
+    ].text,
 
-                state:
-                state.options[
-                    state.selectedIndex
-                ].text,
+    state:
+    state.options[
+        state.selectedIndex
+    ].text,
 
-                category:
-                category.options[
-                    category.selectedIndex
-                ].text,
+    category:
+    category.options[
+        category.selectedIndex
+    ].text,
 
-                guestCount:
-                guestCount.options[
-                    guestCount.selectedIndex
-                ].text,
+    guestCount:
+    guestCount.options[
+        guestCount.selectedIndex
+    ].text,
 
-              date_time:
-              document.getElementById("date_time").value,
-
-            };
+    date_time:
+    document.getElementById("date_time").value
+};
 
             const uid =
             localStorage.getItem("userUID");
