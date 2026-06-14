@@ -79,63 +79,63 @@ function renderEvents(){
         return;
     }
 
+  const formattedDate =
+new Date(event.date_time)
+.toLocaleString(
+    "en-IN",
+    {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+    }
+);
+
     workingEvents.forEach(
-        (event)=>{
-console.log(event);
-            const card =
-            document.createElement(
-                "div"
-            );
+    (event)=>{
 
-            card.className =
-            "event-card";
+        const formattedDate =
+        new Date(event.date_time)
+        .toLocaleString(
+            "en-IN",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "numeric",
+                minute: "2-digit"
+            }
+        );
 
-            card.innerHTML = `
+        const card =
+        document.createElement(
+            "div"
+        );
 
-                <h2>
-                ${event.eventName}
-                </h2>
+        card.className =
+        "event-card";
 
-                <p>
-                Type:
-                ${event.eventType}
-                </p>
+        card.innerHTML = `
 
-                <p>
-                Religion:
-                ${event.relationChoice}
-                </p>
+            <h2>${event.eventName}</h2>
 
-                <p>
-                State:
-                ${event.state}
-                </p>
+            <p>Type: ${event.eventType}</p>
 
-                <p>
-                Event:
-                ${event.category}
-                </p>
+            <p>Religion: ${event.relationChoice}</p>
 
-                <p>
-                Guests:
-                ${event.guestCount}
-                </p>
+            <p>State: ${event.state}</p>
 
-                <p>
-                Timeline:
-                ${event.date_time}
-                </p>
+            <p>Event: ${event.category}</p>
 
-                <button
-                class="deleteBtn">
-                Delete Event
-                </button>
-            `;
+            <p>Guests: ${event.guestCount}</p>
 
-            const deleteBtn =
-            card.querySelector(
-                ".deleteBtn"
-            );
+            <p>Timeline: ${formattedDate}</p>
+
+            <button class="deleteBtn">
+            Delete Event
+            </button>
+        `;
 
             deleteBtn
             .addEventListener(
