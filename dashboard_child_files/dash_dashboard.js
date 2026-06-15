@@ -5,7 +5,12 @@ getFirestore,
 collection,
 addDoc
 }
+  
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { getAuth, signInAnonymously } 
+  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
   authDomain: "eventease-c0bd9.firebaseapp.com",
@@ -18,6 +23,7 @@ const app =
 initializeApp(firebaseConfig);
 const db =
 getFirestore(app);
+const auth = getAuth(app);
 const themeBtn =
 document.getElementById(
     "themeToggle"
@@ -152,6 +158,9 @@ saveBtn.addEventListener(
 
             console.log("UID =", uid);
             console.log("EVENT =", eventData);
+          
+          const userCredential = await signInAnonymously(auth);
+        console.log("Firebase Auth established for write permission.");
 
             await addDoc(
                 collection(
@@ -171,7 +180,7 @@ saveBtn.addEventListener(
         }
         catch(error){
 
-            console.error(error);
+            // console.error(error);
 
             alert(
                 "Firebase Error:\n\n" +
