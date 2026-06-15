@@ -205,7 +205,7 @@ document
     ()=>{
 
         window.location.href =
-        "my_events.html";
+        "dash_dashboard.html";
 
     }
 );
