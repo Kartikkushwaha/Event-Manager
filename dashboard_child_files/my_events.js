@@ -165,7 +165,7 @@ event.date_time
 
 
 }
-
+// Update button
 document
 .getElementById(
     "updateBtn"
@@ -179,5 +179,36 @@ document
 
     }
 );
+// Go to Dashboard button
+document
+.getElementById(
+    "goToDash"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        window.location.href =
+        "../dashboard.html";
+
+    }
+);
+
+// Create more Events button
+
+document
+.getElementById(
+    "crtMreEvent"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        window.location.href =
+        "my_events.html";
+
+    }
+);
+
 
 loadEvents();
