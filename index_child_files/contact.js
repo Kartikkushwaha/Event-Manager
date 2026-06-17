@@ -5,7 +5,6 @@ document.getElementById(
     "themeToggle"
 
 );
-
 const savedTheme =
 
 localStorage.getItem(
