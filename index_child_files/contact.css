@@ -5,7 +5,7 @@
     --text:#333;
     --secondaryText:gray;
     --infoCardBg:#f8fafc;
-    --contactFormBg:#3472b0;
+    --contactFormBg:#f8fafc;
     --shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
@@ -16,7 +16,7 @@
     --text:#f8fafc;
     --secondaryText:#cbd5e1;
     --infoCardBg:#49535e;
-    --contactFormBg:#f8fafc;
+    --contactFormBg:#6a8db0;
     --shadow:0 5px 20px rgba(0,0,0,0.4);
 }
 
