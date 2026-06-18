@@ -6,6 +6,9 @@
     --secondaryText:gray;
     --infoCardBg:#f8fafc;
     --contactFormBg:#f8fafc;
+    /* --featureCardPrimaryText:rgb(40, 7, 8); */
+   
+
     --shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
@@ -16,7 +19,7 @@
     --text:#f8fafc;
     --secondaryText:#cbd5e1;
     --infoCardBg:#49535e;
-    --contactFormBg:#6a8db0;
+    --contactFormBg:#294867;
     --shadow:0 5px 20px rgba(0,0,0,0.4);
 }
 
@@ -28,7 +31,7 @@
 }
 
 body {
-  background: #eaf2fb;
+  background: var(--bg);
   color: #0f172a;
 }
 
@@ -98,10 +101,10 @@ nav .theme-btn:hover{
 .features-section {
   width: 75%;
   margin: 0 auto 60px;
-  background: #ffffff;
+  background:var(--card);
   border-radius: 24px;
   padding: 60px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow);
 }
 
 .section-header {
@@ -125,13 +128,13 @@ nav .theme-btn:hover{
   font-size: 44px;
   line-height: 1.15;
   margin-bottom: 18px;
-  color: #0f172a;
+  color: var(--text);
 }
 
 .section-header p {
   font-size: 18px;
   line-height: 1.7;
-  color: #475569;
+  color: var(--secondaryText);
 }
 
 /* Cards */
@@ -142,7 +145,7 @@ nav .theme-btn:hover{
 }
 
 .feature-card {
-  background: #f8fafc;
+  background:var(--contactFormBg);
   border-radius: 20px;
   padding: 28px;
   min-height: 230px;
@@ -163,13 +166,13 @@ nav .theme-btn:hover{
 .feature-card h3 {
   font-size: 20px;
   margin-bottom: 12px;
-  color: #0f172a;
+  color: var(--text);
 }
 
 .feature-card p {
   font-size: 15px;
   line-height: 1.6;
-  color: #64748b;
+  color: var(--secondaryText);
 }
 
 .highlight {
@@ -181,10 +184,11 @@ nav .theme-btn:hover{
   color: #ffffff;
 }
 
-.special {
-  background: #eff6ff;
+/* .feature-card-special {
+  background: #1c599f;
   border: 2px solid #bfdbfe;
-}
+  
+} */
 
 /* Responsive */
 @media (max-width: 1100px) {
