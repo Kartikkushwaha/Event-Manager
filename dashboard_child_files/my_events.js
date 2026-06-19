@@ -166,11 +166,20 @@ event.date_time
             <button class="deleteBtn">
             Delete Event
             </button>
+
+            <button class="AIbutton">
+            Plan Event with AI
+            </button>
         `;
 
         const deleteBtn =
         card.querySelector(
             ".deleteBtn"
+        );
+
+       const AIbutton =
+        card.querySelector(
+            ".AI button"
         );
 
         deleteBtn
