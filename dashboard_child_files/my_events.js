@@ -177,9 +177,9 @@ event.date_time
             ".deleteBtn"
         );
 
-       const AIbutton =
+      const AIbutton =
         card.querySelector(
-            ".AI button"
+            ".AIbutton"
         );
 
         deleteBtn
@@ -204,6 +204,13 @@ event.date_time
 
                 loadEvents();
 
+            }
+        );
+
+      AIbutton.addEventListener(
+            "click",
+            () => {
+                window.location.href = "Event-Manager/AI functions and APIs/AI_plan.html";
             }
         );
 
