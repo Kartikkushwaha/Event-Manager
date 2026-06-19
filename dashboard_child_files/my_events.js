@@ -210,7 +210,7 @@ event.date_time
       AIbutton.addEventListener(
             "click",
             () => {
-                window.location.href = "../AI_functions_and_APIs/AI_plan.html
+                window.location.href = "../AI_functions_and_APIs/AI_plan.html"
             }
         );
 
