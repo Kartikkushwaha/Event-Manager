@@ -102,14 +102,22 @@ body{
 #themeToggle:hover {
             background-color: #f0f0f0;
         }
-#logoutBtn{
-    background:#ef4444;
-    color:white;
-    border:none;
-    padding:10px 18px;
-    border-radius:8px;
-    cursor:pointer;
+
+
+
+.tag{
+    display:inline-block;
+    background:#dbeafe;
+    color:#2563eb;
+    padding:8px 15px;
+    border-radius:30px;
+    margin:40px;
+    font-size:14px;
+    font-weight:600;
+    
 }
+
+
     </style>
 </head>
 <body>
@@ -122,10 +130,10 @@ body{
 
         <div class="nav-links">
         
-            <a id="dashboard" href="dashboard_child_files/dash_dashboard.html">Create Events</a>
+            <a id="dashboard" href="dashboard_child_files/dash_dashboard.html">Dashboard</a>
             
             <a id="myEvents"  href="dashboard_child_files/my_events.html"> My Events </a>
-            <a id="wishlist" href="#">Wishlist</a>
+           
             <a id="settings" href="#">Settings</a>
             
  
@@ -134,12 +142,38 @@ body{
     🌙
 </button>
 
-        <button id="logoutBtn">
-            Logout
-        </button>
+    
 
     </nav>
+<center><span class="tag">AI Powered Event Planning Panel </span></center>
 
-    
+<!-- guest panel -->
+
+<div class="guest-panel">
+
+    <div class="panel-header">
+        <h2>👥 Guest List Manager</h2>
+        <button id="addGuestBtn">+ Add Guest</button>
+    </div>
+
+    <div class="guest-head">
+        <div>S.No.</div>
+        <div>Name *</div>
+        <div>Address</div>
+        <div>Phone</div>
+        <div>Action</div>
+    </div>
+
+    <div id="guestContainer"></div>
+
+    <div class="guest-footer">
+        <span id="guestCount">
+            Total Guests: 0
+        </span>
+    </div>
+
+</div>
+  
+<script type="module" src="AI_plan.js"></script>
 </body>
 </html>
