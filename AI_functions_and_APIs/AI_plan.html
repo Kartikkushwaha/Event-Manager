@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+:root{
 
+    --bg:#f4f7fc;
+
+    --navbar:white;
+
+    --card:white;
+
+    --text:#333;
+
+    --secondaryText:gray;
+
+    --shadow:0 5px 15px rgba(0,0,0,0.08);
+    
+
+}
+
+.dark-mode{
+
+    --bg:#0f172a;
+
+    --navbar:#1e293b;
+
+    --card:#334155;
+
+    --text:#f8fafc;
+
+    --secondaryText:#cbd5e1;
+
+    --shadow:0 5px 20px rgba(0,0,0,0.4);
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:var(--bg);
+    transition:.3s;
+}
+
+/* Navbar */
+
+.navbar{
+    background:var(--navbar);
+    padding:18px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#2563eb;
+}
+
+.nav-links{
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--text);
+    font-weight:500;
+}
+
+.nav-links a:hover{
+    color:#2563eb;
+}
+
+#themeToggle{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 15px;
+
+    border-radius:20px;
+
+    cursor:pointer;
+
+    margin-right:10px;
+
+}
+#themeToggle:hover {
+            background-color: #f0f0f0;
+        }
+#logoutBtn{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+    </style>
+</head>
+<body>
+
+     <nav class="navbar">
+
+        <div class="logo">
+            ✨ EventEase
+        </div>
+
+        <div class="nav-links">
+        
+            <a id="dashboard" href="dashboard_child_files/dash_dashboard.html">Create Events</a>
+            
+            <a id="myEvents"  href="dashboard_child_files/my_events.html"> My Events </a>
+            <a id="wishlist" href="#">Wishlist</a>
+            <a id="settings" href="#">Settings</a>
+            
+ 
+        </div>
+        <button id="themeToggle">
+    🌙
+</button>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </nav>
+
+    
+</body>
+</html>
