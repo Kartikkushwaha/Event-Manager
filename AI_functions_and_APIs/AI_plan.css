@@ -1,111 +1,217 @@
-:root{
-
-    --bg:#f4f7fc;
-
-    --navbar:white;
-
-    --card:white;
-
-    --text:#333;
-
-    --secondaryText:gray;
-
-    --shadow:0 5px 15px rgba(0,0,0,0.08);
-    
-
+:root {
+    --bg: #f4f7fc;
+    --navbar: white;
+    --card: rgb(190, 237, 240);
+    --text: #333;
+    --secondaryText: gray;
+    --shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.dark-mode{
-
-    --bg:#0f172a;
-
-    --navbar:#1e293b;
-
-    --card:#334155;
-
-    --text:#f8fafc;
-
-    --secondaryText:#cbd5e1;
-
-    --shadow:0 5px 20px rgba(0,0,0,0.4);
-
+.dark-mode {
+    --bg: #0f172a;
+    --navbar: #1e293b;
+    --card: #334155;
+    --text: #f8fafc;
+    --secondaryText: #cbd5e1;
+    --shadow: 0 5px 20px rgba(0,0,0,0.4);
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-body{
-    background:var(--bg);
-    transition:.3s;
+body {
+    background: var(--bg);
+    transition: .3s;
 }
 
 /* Navbar */
-
-.navbar{
-    background:var(--navbar);
-    padding:18px 50px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+.navbar {
+    background: var(--navbar);
+    padding: 18px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
-.logo{
-    font-size:28px;
-    font-weight:bold;
-    color:#2563eb;
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2563eb;
 }
 
-.nav-links{
-    display:flex;
-    gap:30px;
+.nav-links {
+    display: flex;
+    gap: 30px;
 }
 
-.nav-links a{
-    text-decoration:none;
-    color:var(--text);
-    font-weight:500;
+.nav-links a {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
 }
 
-.nav-links a:hover{
-    color:#2563eb;
+.nav-links a:hover {
+    color: #2563eb;
 }
 
-#themeToggle{
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 15px;
-
-    border-radius:20px;
-
-    cursor:pointer;
-
-    margin-right:10px;
-
+/* theme button toggle */
+#themeToggle {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
 }
+
 #themeToggle:hover {
-            background-color: #f0f0f0;
-        }
+    background-color: #f0f0f0;
+}
 
 
-
-.tag{
-    display:inline-block;
-    background:#dbeafe;
-    color:#2563eb;
-    padding:8px 15px;
-    border-radius:30px;
-    margin:40px;
-    font-size:14px;
-    font-weight:600;
+/* guest panel */
+.tag {
+    /* Made these changes to center the tag */
+    display: block; 
+    width: max-content;
+    margin: 40px auto; 
     
+    /* Original styling */
+    background: #dbeafe;
+    color: #2563eb;
+    padding: 8px 15px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* AI cards animation effects */
+
+/* --- Fully Responsive Grid Layout --- */
+.grid-container {
+    display: grid;
+    /* auto-fit makes columns wrap automatically based on screen size */
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    justify-items: center; /* Centers the cards inside their grid cells */
+    gap: 40px; 
+    padding: 20px;
+    max-width: 1200px; /* Prevents stretching too wide on massive screens */
+    margin: 0 auto; /* Centers the grid container */
+}
+
+/* --- CSS Variable for the Animation Angle --- */
+@property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+/* --- The Outer Container (Holds the Glow) --- */
+.card {
+    position: relative;
+    width: 260px;
+    height: 160px;
+    border-radius: 8px;
+    transition: transform 0.3s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-4px); 
+}
+
+/* --- The Animated Rainbow Border & Glow --- */
+.card::before, .card::after {
+    content: "";
+    position: absolute;
+    inset: 0; 
+    border-radius: inherit; 
+    background: conic-gradient(from var(--angle), #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+    animation: spin 3.5s linear infinite;
+}
+
+/* The blurred element for the outward glow */
+.card::after {
+    filter: blur(10px); 
+    opacity: 0.9;
+}
+
+/* --- Animation Keyframes --- */
+@keyframes spin {
+    0% { --angle: 0deg; }
+    100% { --angle: 360deg; }
+}
+
+/* --- The Solid Blue Body Box --- */
+.card-body {
+    position: absolute;
+    inset: 1.5px; 
+    background-color: var(--card); 
+    border-radius: 8px; 
+    z-index: 10; 
+    
+    /* Inner layout for text and button */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* --- Card Inner Text --- */
+.card-text {
+    color: var(--text);
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.card-secondary-text {
+
+    color: var(--secondaryText);
+    font-size: 15px ;
+    text-align: center;
+}
+
+/* --- Black Button Styling --- */
+.card-btn {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    width: 140px;
+    height: 30px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+.card-btn:hover {
+    background-color: #1253a3;
+}
+
+/* --- Mobile / Tablet Media Query --- */
+@media(max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px; /* Reduced padding for smaller screens */
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px; /* Tighter gap for mobile */
+    }
+
+    .grid-container {
+        gap: 30px; /* Reduces the huge gap between stacked cards on mobile */
+    }
 }
