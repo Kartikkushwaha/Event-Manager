@@ -21,5 +21,5 @@ themeBtn.addEventListener("click", () => {
 
 // Fixed: Added "document." and corrected "window.location.href"
 document.getElementById("guestListBtn").addEventListener("click", () => {
-    window.location.href = "AI_functions_and_APIs/AI_functions_and_APIs_child_files/guest_list_manager.html";
+    window.location.href = "AI_functions_and_APIs_child_files/guest_list_manager.html";
 });
