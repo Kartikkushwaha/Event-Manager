@@ -18,9 +18,9 @@
 
         <div class="nav-links">
         
-            <a id="dashboard" href="dashboard_child_files/dash_dashboard.html">Dashboard</a>
+            <a id="dashboard" href="../dashboard.html">Dashboard</a>
             
-            <a id="myEvents"  href="dashboard_child_files/my_events.html"> My Events </a>
+            <a id="myEvents"  href="../dashboard_child_files/my_events.html"> My Events </a>
            
             <a id="settings" href="#">Settings</a>
             
@@ -33,35 +33,42 @@
     
 
     </nav>
-<center><span class="tag">AI Powered Event Planning Panel </span></center>
+<span class="tag">AI Powered Event Planning Panel </span>
 
-<!-- guest panel -->
+    <div class="grid-container">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">🤵 Guest List Manager</p>
+                <p class="card-secondary-text">Make and manage your guest list with smart system</p>
+                <button id="guestListBtn" class="card-btn">Go</button>
+            </div>
+        </div>
 
-<div class="guest-panel">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">Card Text Here</p>
+                <p class="card-secondary-text"></p>
+                <button class="card-btn">BUTTON</button>
+            </div>
+        </div>
 
-    <div class="panel-header">
-        <h2>👥 Guest List Manager</h2>
-        <button id="addGuestBtn">+ Add Guest</button>
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">Card Text Here</p>
+                <p class="card-secondary-text"></p>
+                <button class="card-btn">BUTTON</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">Card Text Here</p>
+                <p class="card-secondary-text"></p>
+                <button class="card-btn">BUTTON</button>
+            </div>
+        </div>
     </div>
-
-    <div class="guest-head">
-        <div>S.No.</div>
-        <div>Name *</div>
-        <div>Address</div>
-        <div>Phone</div>
-        <div>Action</div>
-    </div>
-
-    <div id="guestContainer"></div>
-
-    <div class="guest-footer">
-        <span id="guestCount">
-            Total Guests: 0
-        </span>
-    </div>
-
-</div>
-  
+    
 <script type="module" src="AI_plan.js"></script>
 </body>
 </html>
