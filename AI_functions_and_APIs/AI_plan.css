@@ -1,5 +1,6 @@
 :root {
-    --bg: #f4f7fc;
+    --bgCore:#f5f7fa;
+    --bgSec: #dfe9f3;
     --navbar: white;
     --card: rgb(190, 237, 240);
     --text: #333;
@@ -8,12 +9,14 @@
 }
 
 .dark-mode {
-    --bg: #0f172a;
+    --bgCore:#363738;
+
+    --bgSec: #1273d4;
     --navbar: #1e293b;
     --card: #334155;
     --text: #f8fafc;
     --secondaryText: #cbd5e1;
-    --shadow: 0 5px 20px rgba(0,0,0,0.4);
+    --shadow: 0 5px 20px rgba(172, 186, 218, 0.4);
 }
 
 * {
@@ -24,18 +27,22 @@
 }
 
 body {
-    background: var(--bg);
+    background:linear-gradient(135deg,var(--bgCore),var(--bgSec));
+    min-height:100vh;
+    padding:30px;
     transition: .3s;
 }
 
 /* Navbar */
 .navbar {
+    
     background: var(--navbar);
     padding: 18px 50px;
     display: flex;
+    border-radius: 8px;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow);
 }
 
 .logo {
