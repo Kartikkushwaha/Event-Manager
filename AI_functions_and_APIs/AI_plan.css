@@ -4,12 +4,14 @@
     --navbar: white;
     --card: rgb(190, 237, 240);
     --text: #333;
+    --overviewBoxBg:rgb(218, 241, 243);
     --secondaryText: gray;
     --shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
 .dark-mode {
     --bgCore:#363738;
+    --overviewBoxBg:rgb(26, 37, 67);
 
     --bgSec: #1273d4;
     --navbar: #1e293b;
@@ -221,4 +223,103 @@ body {
     .grid-container {
         gap: 30px; /* Reduces the huge gap between stacked cards on mobile */
     }
+}
+
+/* --- Overview Section & Animations --- */
+
+.overview-container {
+    max-width: 900px;
+    margin: 80px auto 40px auto;
+    padding: 50px 30px; /* Added more padding for breathing room */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    overflow-x: hidden; 
+    
+    /* Premium Futuristic Background (Glassmorphism) */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+}
+
+/* Dark Mode Futuristic Container Update */
+.dark-mode .overview-container {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Premium Centered Title with Horizontal Rules --- */
+.overview-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-transform: uppercase; /* Makes it look more modern/premium */
+    letter-spacing: 2px;
+}
+
+/* Left Horizontal Rule */
+.overview-title::before {
+    content: "";
+    flex: 1; /* Takes up available space */
+    height: 2px;
+    margin-right: 20px;
+    max-width: 200px;
+    /* Fades from transparent to theme blue */
+    background: linear-gradient(90deg, transparent, #2563eb);
+}
+
+/* Right Horizontal Rule */
+.overview-title::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    margin-left: 20px;
+    max-width: 200px;
+    /* Fades from theme blue to transparent */
+    background: linear-gradient(270deg, transparent, #2563eb);
+}
+
+/* overview-box */
+
+.overview-box {
+    background-color: var(--overviewBoxBg);
+    padding: 30px;
+    border-radius: 4px; /* Required 4px radius */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Shadowy box */
+    
+    /* Animation Starting State */
+    opacity: 0;
+    transform: translateX(-150px); 
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Adjust shadow for dark mode to make it pop */
+.dark-mode .overview-box {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.overview-box h3 {
+    color: #2563eb;
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+.overview-box p {
+    color: var(--secondaryText);
+    line-height: 1.7;
+    font-size: 16px;
+}
+
+/* --- The class JS will add when scrolled into view --- */
+.overview-box.show {
+    opacity: 1;
+    transform: translateX(0);
 }
