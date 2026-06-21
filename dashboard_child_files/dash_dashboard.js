@@ -388,6 +388,18 @@ saveBtn.addEventListener(
 
             }
 
+          if(
+
+                document.getElementById("budget").value.trim() === ""
+
+            ){
+
+                alert("Please Enter the budget of the Event");
+
+                return;
+
+            }
+
 
 
             if(
@@ -474,7 +486,11 @@ saveBtn.addEventListener(
 
     date_time:
 
-    document.getElementById("date_time").value
+   document.getElementById("date_time").value,
+
+    budget:
+
+    document.getElementById("budget").value
 
 };
 
