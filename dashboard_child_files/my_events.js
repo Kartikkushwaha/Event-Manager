@@ -163,6 +163,9 @@ event.date_time
 
             <p>Timeline: ${formattedDate}</p>
 
+            <p>Budget: ${event.budget}</p>
+
+
             <button class="deleteBtn">
             Delete Event
             </button>
