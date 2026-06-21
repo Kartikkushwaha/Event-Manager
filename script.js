@@ -90,42 +90,60 @@ document.getElementById("googleBtn")
 });
 
 
-// dashboard script
 
-// const name =
-// localStorage.getItem("userName");
+const themeBtn =
+document.getElementById(
+    "themeToggle"
+);
 
-// const email =
-// localStorage.getItem("userEmail");
+const savedTheme =
+localStorage.getItem(
+    "theme"
+);
 
-// const photo =
-// localStorage.getItem("userPhoto");
+if(savedTheme==="dark"){
 
-// document.getElementById("name")
-// .textContent = name;
+    document.body.classList.add(
+        "dark-mode"
+    );
 
-// document.getElementById("email")
-// .textContent = email;
+    themeBtn.textContent="☀️";
 
-// if(photo){
+}
 
-//     const img =
-//     document.getElementById(
-//         "profilePhoto"
-//     );
+themeBtn.addEventListener(
+    "click",
+    ()=>{
 
-//     img.src = photo;
+        document.body.classList.toggle(
+            "dark-mode"
+        );
 
-//     img.style.display = "block";
+        if(
+            document.body.classList.contains(
+                "dark-mode"
+            )
+        ){
 
-// }
+            localStorage.setItem(
+                "theme",
+                "dark"
+            );
 
-// else{
+            themeBtn.textContent="☀️";
 
-//     document.getElementById(
-//         "profileLetter"
-//     ).textContent =
-//     name.charAt(0).toUpperCase();
+        }
 
-// }
+        else{
 
+            localStorage.setItem(
+                "theme",
+                "light"
+            );
+
+            themeBtn.textContent="🌙";
+
+        }
+
+    }
+);
