@@ -31,13 +31,12 @@
 body {
     background:linear-gradient(135deg,var(--bgCore),var(--bgSec));
     min-height:100vh;
-    padding:30px;
+    padding: 30px;
     transition: .3s;
 }
 
 /* Navbar */
 .navbar {
-    
     background: var(--navbar);
     padding: 18px 50px;
     display: flex;
@@ -103,17 +102,41 @@ body {
 
 /* AI cards animation effects */
 
-/* --- Fully Responsive Grid Layout --- */
+/* --- Fully Responsive & Centered Grid Layout --- */
 .grid-container {
     display: grid;
-    /* auto-fit makes columns wrap automatically based on screen size */
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    justify-items: center; /* Centers the cards inside their grid cells */
-    gap: 40px; 
-    padding: 20px;
-    max-width: 1200px; /* Prevents stretching too wide on massive screens */
-    margin: 0 auto; /* Centers the grid container */
+    /* Default for mobile: 1 column */
+    grid-template-columns: 300px;
+    /* This forces the entire block of cards to perfectly center on the screen */
+    justify-content: center; 
+    width: 100%;
+    margin: 0 auto;
+    /* Pushed to the edges: Minimal padding on the far left and right */
+    padding: 20px 10px; 
 }
+
+/* --- Tablets & Small Laptops: 2x2 Centered Layout --- */
+/* If the screen is less than 1250px, it drops 2 cards to the top and 2 to the bottom */
+@media (min-width: 650px) and (max-width: 1249px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 300px);
+        gap: 30px; /* Standard gap for the 2x2 layout */
+    }
+}
+
+/* --- 15.6" Laptops & Desktops: 4 Cards in One Line --- */
+/* Kicks in at 1250px (Standard 15.6" laptops are 1366px or 1920px wide) */
+@media (min-width: 1250px) {
+    .grid-container {
+        grid-template-columns: repeat(4, 300px);
+        /* Dynamic Gap Magic: 
+           It will shrink down to a minimum of 7px on tight laptop screens, 
+           but gracefully expand up to 25px on larger monitors. 
+        */
+        gap: clamp(7px, 1.5vw, 25px);
+    }
+}
+
 
 /* --- CSS Variable for the Animation Angle --- */
 @property --angle {
@@ -125,9 +148,11 @@ body {
 /* --- The Outer Container (Holds the Glow) --- */
 .card {
     position: relative;
-    width: 260px;
-    height: 160px;
+    /* Updated size: wider and slightly taller */
+    width: 300px;
+    height: 180px;
     border-radius: 8px;
+    margin: 10px;
     transition: transform 0.3s ease-out;
 }
 
@@ -157,7 +182,7 @@ body {
     100% { --angle: 360deg; }
 }
 
-/* --- The Solid Blue Body Box --- */
+/* --- The Solid Body Box --- */
 .card-body {
     position: absolute;
     inset: 1.5px; 
@@ -179,17 +204,19 @@ body {
     color: var(--text);
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: center;
 }
 .card-secondary-text {
-
     color: var(--secondaryText);
     font-size: 15px ;
+    margin-right: 0px;
     text-align: center;
+    margin-left: 0px;
+    line-height: 1.4;
 }
 
-/* --- Black Button Styling --- */
+/* --- Button Styling --- */
 .card-btn {
     background-color: #2563eb;
     color: #ffffff;
@@ -229,11 +256,13 @@ body {
 
 .overview-container {
     max-width: 900px;
-    margin: 80px auto 40px auto;
-    padding: 50px 30px; /* Added more padding for breathing room */
+    /* Reduced top margin to decrease space from card grid */
+    margin: 60px auto 30px auto;
+    /* Reduced overall padding to reduce internal gaps */
+    padding: 40px 20px; 
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 25px;
     overflow-x: hidden; 
     
     /* Premium Futuristic Background (Glassmorphism) */
@@ -260,7 +289,7 @@ body {
     color: var(--text);
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     text-transform: uppercase; /* Makes it look more modern/premium */
     letter-spacing: 2px;
 }
@@ -271,7 +300,7 @@ body {
     flex: 1; /* Takes up available space */
     height: 2px;
     margin-right: 20px;
-    max-width: 200px;
+    max-width: 150px; /* Shortened */
     /* Fades from transparent to theme blue */
     background: linear-gradient(90deg, transparent, #2563eb);
 }
@@ -282,7 +311,7 @@ body {
     flex: 1;
     height: 2px;
     margin-left: 20px;
-    max-width: 200px;
+    max-width: 150px; /* Shortened */
     /* Fades from theme blue to transparent */
     background: linear-gradient(270deg, transparent, #2563eb);
 }
