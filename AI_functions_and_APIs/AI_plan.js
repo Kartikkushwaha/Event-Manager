@@ -24,6 +24,11 @@ document.getElementById("guestListBtn").addEventListener("click", () => {
     window.location.href = "AI_functions_and_APIs_child_files/guest_list_manager.html";
 });
 
+document.getElementById("AI_invitationBtn").addEventListener("click", () => {
+    window.location.href = "AI_functions_and_APIs_child_files/AI_invitation_generator.html";
+});
+
+
 
 // Set up the Intersection Observer
 const observerOptions = {
