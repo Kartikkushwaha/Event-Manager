@@ -1,38 +1,104 @@
 :root {
-    --bgCore:#f5f7fa;
-    --bgSec: #dfe9f3;
-    --navbar: white;
-    --card: rgb(190, 237, 240);
-    --text: #333;
-    --overviewBoxBg:rgb(218, 241, 243);
-    --secondaryText: rgb(47, 45, 45);
-    --shadow: 0 5px 15px rgba(0,0,0,0.08);
+    /* Apple/Vercel inspired ultra-clean light mode */
+    --bgCore: #fbfbfd; 
+    --bgSec: #f5f5f7;
+    --navbar: rgba(226, 241, 255, 0.75); 
+    /* ✨ UPDATED: Premium gradient background for light mode cards */
+    --card-bg: linear-gradient(145deg, #ffffff, #f0f4f8);
+    --text: #1d1d1f; 
+    --overviewBoxBg: #ffffff;
+    --secondaryText: #86868b;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02); 
+    --border: rgba(0, 113, 227, 0.15);
+    --accent: #0071e3; 
+    --glow-1: #0071e3;
+    --glow-2: #47a9fa; /* Cyan/Icy blue */
+    --glow-3: #8b5cf6; /* Soft purple */
+    --glow-green: #34d399; /* Premium light mint green */
+    --btn-shadow: rgba(0, 113, 227, 0.25);
 }
 
 .dark-mode {
-    --bgCore:#363738;
-    --overviewBoxBg:rgb(26, 37, 67);
-
-    --bgSec: #1273d4;
-    --navbar: #1e293b;
-    --card: #334155;
-    --text: #f8fafc;
-    --secondaryText: #cbd5e1;
-    --shadow: 0 5px 20px rgba(172, 186, 218, 0.4);
+    /* Deep OLED blacks and sleek slate dark mode */
+    --bgCore: #000000; 
+    --bgSec: #0a0a0c;
+    --navbar: rgba(15, 35, 75, 0.65);
+    /* ✨ UPDATED: Premium gradient background for dark mode cards */
+    --card-bg: linear-gradient(145deg, #1c1c1e, #111112);
+    --text: #f5f5f7;
+    --overviewBoxBg: #1c1c1e;
+    --secondaryText: #a1a1a6;
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(0, 0, 0, 0.4);
+    --border: rgba(41, 151, 255, 0.15); 
+    --accent: #2997ff; 
+    --glow-1: #2997ff;
+    --glow-2: #06b6d4; /* Neon cyan */
+    --glow-3: #a855f7; /* Vibrant purple */
+    --glow-green: #05fa9f; /* Cyber neon mint green */
+    --btn-shadow: rgba(41, 151, 255, 0.25);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background:linear-gradient(135deg,var(--bgCore),var(--bgSec));
-    min-height:100vh;
+    background: linear-gradient(135deg, var(--bgCore), var(--bgSec));
+    min-height: 100vh;
     padding: 30px;
-    transition: .3s;
+    transition: background 0.4s ease, color 0.4s ease;
+    color: var(--text);
+    
+    position: relative;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+/* --- The Ambient Mirage Glow Effect --- */
+body::before, body::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(140px);
+    z-index: -1; 
+    pointer-events: none; 
+    animation: floatMirage 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.35; 
+}
+
+body::before {
+    width: 60vw;
+    height: 60vw;
+    background: var(--glow-2);
+    top: -10vh;
+    left: -10vw;
+}
+
+body::after {
+    width: 65vw;
+    height: 65vw;
+    background: linear-gradient(45deg, var(--glow-3), var(--glow-green));
+    bottom: -15vh;
+    right: -10vw;
+    animation-delay: -10s; 
+}
+
+@keyframes floatMirage {
+    0% {
+        transform: translate(0, 0) scale(0.9);
+        opacity: 0.25;
+    }
+    50% {
+        transform: translate(8vw, 6vh) scale(1.1);
+        opacity: 0.45;
+    }
+    100% {
+        transform: translate(-6vw, -4vh) scale(1);
+        opacity: 0.35;
+    }
 }
 
 /* Navbar */
@@ -40,16 +106,25 @@ body {
     background: var(--navbar);
     padding: 18px 50px;
     display: flex;
-    border-radius: 8px;
+    border-radius: 12px; 
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 100;
 }
 
 .logo {
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px; 
     color: #2563eb;
+}
+
+.logo span {
+    color: var(--accent);
 }
 
 .nav-links {
@@ -59,84 +134,74 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--text);
+    color: var(--secondaryText);
     font-weight: 500;
+    font-size: 15px;
+    transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: #2563eb;
+    color: var(--text);
 }
 
 /* theme button toggle */
 #themeToggle {
-    background: #2563eb;
-    color: white;
+    background: var(--text);
+    color: var(--bgCore);
     border: none;
-    padding: 10px 15px;
+    padding: 10px 18px;
     border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
     cursor: pointer;
     margin-right: 10px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 #themeToggle:hover {
-    background-color: #f0f0f0;
+    opacity: 0.85;
+    transform: scale(1.02);
 }
-
 
 /* guest panel */
 .tag {
-    /* Made these changes to center the tag */
     display: block; 
     width: max-content;
     margin: 40px auto; 
-    
-    /* Original styling */
-    background: #dbeafe;
-    color: #2563eb;
-    padding: 8px 15px;
+    background: transparent;
+    color: var(--accent);
+    padding: 6px 16px;
     border-radius: 30px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
+    border: 1px solid var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
-
-
-/* AI cards animation effects */
 
 /* --- Fully Responsive & Centered Grid Layout --- */
 .grid-container {
     display: grid;
-    /* Default for mobile: 1 column */
     grid-template-columns: 300px;
-    /* This forces the entire block of cards to perfectly center on the screen */
     justify-content: center; 
     width: 100%;
     margin: 0 auto;
-    /* Pushed to the edges: Minimal padding on the far left and right */
     padding: 20px 10px; 
 }
 
-/* --- Tablets & Small Laptops: 2x2 Centered Layout --- */
-/* If the screen is less than 1250px, it drops 2 cards to the top and 2 to the bottom */
 @media (min-width: 650px) and (max-width: 1249px) {
     .grid-container {
         grid-template-columns: repeat(2, 300px);
-        gap: 30px; /* Standard gap for the 2x2 layout */
+        gap: 30px;
     }
 }
 
-/* --- 15.6" Laptops & Desktops: 4 Cards in One Line --- */
-/* Kicks in at 1250px (Standard 15.6" laptops are 1366px or 1920px wide) */
 @media (min-width: 1250px) {
     .grid-container {
         grid-template-columns: repeat(4, 300px);
-        /* Dynamic Gap Magic: 
-           It will shrink down to a minimum of 7px on tight laptop screens, 
-           but gracefully expand up to 25px on larger monitors. 
-        */
-        gap: clamp(7px, 1.5vw, 25px);
+        gap: clamp(10px, 2vw, 30px);
     }
 }
-
 
 /* --- CSS Variable for the Animation Angle --- */
 @property --angle {
@@ -145,209 +210,230 @@ body {
     inherits: false;
 }
 
-/* --- The Outer Container (Holds the Glow) --- */
+/* --- The Outer Container --- */
 .card {
     position: relative;
-    /* Updated size: wider and slightly taller */
     width: 300px;
     height: 180px;
-    border-radius: 8px;
+    border-radius: 12px;
     margin: 10px;
-    transition: transform 0.3s ease-out;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .card:hover {
-    transform: translateY(-4px); 
+    transform: translateY(-8px); /* Slightly higher lift */
 }
 
-/* --- The Animated Rainbow Border & Glow --- */
+/* --- AI Glow Border --- */
 .card::before, .card::after {
     content: "";
     position: absolute;
-    inset: 0; 
+    inset: -1px; 
     border-radius: inherit; 
-    background: conic-gradient(from var(--angle), #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-    animation: spin 3.5s linear infinite;
+    background: conic-gradient(from var(--angle), var(--glow-1), var(--glow-green), var(--glow-2), var(--glow-3), var(--glow-green), var(--glow-1));
+    animation: spin 4s linear infinite;
+    opacity: 0.7; 
+    transition: opacity 0.4s ease;
 }
 
-/* The blurred element for the outward glow */
 .card::after {
-    filter: blur(10px); 
-    opacity: 0.9;
+    filter: blur(12px); 
+    opacity: 0.4; 
 }
 
-/* --- Animation Keyframes --- */
+/* Intensify glow on hover */
+.card:hover::before {
+    opacity: 1;
+}
+.card:hover::after {
+    opacity: 0.7;
+    filter: blur(16px);
+}
+
 @keyframes spin {
     0% { --angle: 0deg; }
     100% { --angle: 360deg; }
 }
 
-/* --- The Solid Body Box --- */
+/* --- ✨ UPDATED: Premium 3D Body Box --- */
 .card-body {
     position: absolute;
-    inset: 1.5px; 
-    background-color: var(--card); 
-    border-radius: 8px; 
+    inset: 1px; 
+    background: var(--card-bg); 
+    border-radius: 11px; 
     z-index: 10; 
-    
-    /* Inner layout for text and button */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 24px 20px;
     box-sizing: border-box;
+    /* Added inner top-light reflection for 3D depth */
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), inset 0 0 0 1px var(--border); 
+    overflow: hidden; /* Contains the hover sweep */
+}
+
+/* ✨ NEW: Glossy hover reflection sweep */
+.card-body::before {
+    content: "";
+    position: absolute;
+    top: 0; 
+    left: -150%; 
+    width: 50%; 
+    height: 100%;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.08), rgba(255,255,255,0));
+    transform: skewX(-25deg);
+    transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card:hover .card-body::before {
+    left: 150%; /* Sweeps across on hover */
+}
+
+/* Ensure text and button stay above the gloss sweep */
+.card-text, .card-secondary-text, .card-btn {
+    position: relative;
+    z-index: 1;
 }
 
 /* --- Card Inner Text --- */
 .card-text {
     color: var(--text);
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
     margin-bottom: 5px;
     text-align: center;
-}
-.card-secondary-text {
-    color: var(--secondaryText);
-    font-size: 15px ;
-    margin-right: 0px;
-    text-align: center;
-    margin-left: 0px;
-    line-height: 1.4;
 }
 
-/* --- Button Styling --- */
+.card-secondary-text {
+    color: var(--secondaryText);
+    font-size: 14px ;
+    text-align: center;
+    line-height: 1.5;
+}
+
+/* --- ✨ UPDATED: Premium Gradient Button --- */
 .card-btn {
-    background-color: #2563eb;
+    /* Blend the primary accent with the icy cyan for a tech feel */
+    background: linear-gradient(135deg, var(--accent), var(--glow-2));
     color: #ffffff;
     border: none;
-    width: 140px;
-    height: 30px;
+    width: 100%;
+    max-width: 160px;
+    height: 38px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    margin-bottom: 5px;
-    margin-top: 10px;
-    border-radius: 4px;
+    margin-top: auto;
+    border-radius: 8px; /* Slightly rounder, modern feel */
+    box-shadow: 0 4px 12px var(--btn-shadow); /* Colored glowing shadow */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .card-btn:hover {
-    background-color: #1253a3;
+    transform: translateY(-2px); /* Physical button press lift */
+    box-shadow: 0 6px 16px var(--btn-shadow);
+    filter: brightness(1.1);
 }
 
-/* --- Mobile / Tablet Media Query --- */
 @media(max-width: 768px) {
     .navbar {
         flex-direction: column;
         gap: 15px;
-        padding: 15px 20px; /* Reduced padding for smaller screens */
+        padding: 15px 20px;
     }
 
     .nav-links {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 15px; /* Tighter gap for mobile */
+        gap: 15px;
     }
 
     .grid-container {
-        gap: 30px; /* Reduces the huge gap between stacked cards on mobile */
+        gap: 30px; 
     }
 }
 
-/* --- Overview Section & Animations --- */
-
+/* --- Overview Section --- */
 .overview-container {
     max-width: 900px;
-    /* Reduced top margin to decrease space from card grid */
     margin: 60px auto 30px auto;
-    /* Reduced overall padding to reduce internal gaps */
-    padding: 40px 20px; 
+    padding: 40px; 
     display: flex;
     flex-direction: column;
     gap: 25px;
     overflow-x: hidden; 
     
-    /* Premium Futuristic Background (Glassmorphism) */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(37, 99, 235, 0.1);
+    background: var(--navbar);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
 }
 
-/* Dark Mode Futuristic Container Update */
-.dark-mode .overview-container {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-/* --- Premium Centered Title with Horizontal Rules --- */
+/* --- Premium Centered Title --- */
 .overview-title {
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text);
-    font-size: 28px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 600;
     margin-bottom: 20px;
-    text-transform: uppercase; /* Makes it look more modern/premium */
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
-/* Left Horizontal Rule */
 .overview-title::before {
     content: "";
-    flex: 1; /* Takes up available space */
-    height: 2px;
+    flex: 1; 
+    height: 1px; 
     margin-right: 20px;
-    max-width: 150px; /* Shortened */
-    /* Fades from transparent to theme blue */
-    background: linear-gradient(90deg, transparent, #2563eb);
+    max-width: 100px; 
+    background: linear-gradient(90deg, transparent, var(--border));
 }
 
-/* Right Horizontal Rule */
 .overview-title::after {
     content: "";
     flex: 1;
-    height: 2px;
+    height: 1px;
     margin-left: 20px;
-    max-width: 150px; /* Shortened */
-    /* Fades from theme blue to transparent */
-    background: linear-gradient(270deg, transparent, #2563eb);
+    max-width: 100px; 
+    background: linear-gradient(270deg, transparent, var(--border));
 }
 
 /* overview-box */
-
 .overview-box {
     background-color: var(--overviewBoxBg);
     padding: 30px;
-    border-radius: 4px; /* Required 4px radius */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Shadowy box */
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow); 
     
-    /* Animation Starting State */
     opacity: 0;
-    transform: translateX(-150px); 
-    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* Adjust shadow for dark mode to make it pop */
-.dark-mode .overview-box {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateX(-50px); 
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .overview-box h3 {
-    color: #2563eb;
-    margin-bottom: 15px;
-    font-size: 22px;
+    color: var(--text); 
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.4px;
 }
 
 .overview-box p {
     color: var(--secondaryText);
-    line-height: 1.7;
-    font-size: 16px;
+    line-height: 1.6;
+    font-size: 15px;
 }
 
-/* --- The class JS will add when scrolled into view --- */
 .overview-box.show {
     opacity: 1;
     transform: translateX(0);
