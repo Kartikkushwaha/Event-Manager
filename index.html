@@ -114,7 +114,15 @@
     </div>
 
 </main>
-    
+
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+		webhookUrl: 'https://eventease.app.n8n.cloud/webhook/406b7689-c21f-41d5-bd72-baba2765e243/chat'
+	});
+</script>
 
     <script type="module" src="script.js"></script>
 </body>
