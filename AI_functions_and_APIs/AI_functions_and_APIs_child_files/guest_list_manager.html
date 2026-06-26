@@ -51,59 +51,77 @@ body{
 }
 
 /* Navbar */
-
-.navbar{
-    background:var(--navbar);
-    padding:18px 50px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+.navbar {
+    background: var(--navbar);
+    padding: 18px 50px;
+    display: flex;
+    border-radius: 12px; 
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 100;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
-.logo{
-    font-size:28px;
-    font-weight:bold;
-    color:#2563eb;
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.5px; 
+    color: #2563eb;
 }
 
-.nav-links{
-    display:flex;
-    gap:30px;
+.logo span {
+    color: var(--accent);
 }
 
-.nav-links a{
-    text-decoration:none;
-    color:var(--text);
-    font-weight:500;
+.nav-links {
+    display: flex;
+    gap: 30px;
 }
 
-.nav-links a:hover{
-    color:#2563eb;
+.nav-links a {
+    text-decoration: none;
+    color: var(--secondaryText);
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text);
 }
 
 /* theme button toggle */
-
-#themeToggle{
-
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 15px;
-
-    border-radius:20px;
-
-    cursor:pointer;
-
-    margin-right:10px;
-
+#themeToggle {
+    background: var(--text);
+    color: var(--bgCore);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
+
 #themeToggle:hover {
-            background-color: #f0f0f0;
-        }
+    opacity: 0.85;
+    transform: scale(1.02);
+}
+
+
+/* guest panel */
+
+
+
+
 
 
 /* guest panel */
@@ -250,7 +268,25 @@ body{
     }
 }
 
+.panel-buttons{
+    display:flex;
+    gap:10px;
+}
 
+#saveGuestBtn{
+    background:#16a34a;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+#saveGuestBtn:hover{
+    background:#15803d;
+    transform:translateY(-2px);
+}
   
 </style>
 
@@ -288,9 +324,13 @@ body{
 <div class="guest-panel">
 
     <div class="panel-header">
-        <h2>🤵 Guest List Manager</h2>
+    <h2>🤵 Guest List Manager</h2>
+
+    <div class="panel-buttons">
+        <button id="saveGuestBtn">💾 Save</button>
         <button id="addGuestBtn">+ Add Guest</button>
     </div>
+</div>
 
     <div class="guest-head">
         <div>S.No.</div>
