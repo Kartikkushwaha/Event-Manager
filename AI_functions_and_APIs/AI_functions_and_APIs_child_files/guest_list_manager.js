@@ -1,4 +1,30 @@
 
+// toggle button 
+
+
+// theme toggle button
+const themeBtn = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeBtn.textContent = "☀️";
+}
+
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme", "dark");
+        themeBtn.textContent = "☀️";
+    } else {
+        localStorage.setItem("theme", "light");
+        themeBtn.textContent = "🌙";
+    }
+});
+
+
+
 const addGuestBtn =
 document.getElementById(
     "addGuestBtn"
@@ -100,3 +126,15 @@ addGuestBtn.addEventListener(
 );
 
 createGuest();
+
+const saveGuestBtn = document.getElementById("saveGuestBtn");
+saveGuestBtn.addEventListener("click",(e)=>{
+
+    e.preventDefault();   // Page reload nahi hoga
+
+    // Yahan apna save wala code likhna hai
+    // Firestore ya LocalStorage
+
+    console.log("Guest data saved!");
+
+});
