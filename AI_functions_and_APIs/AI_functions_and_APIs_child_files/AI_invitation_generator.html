@@ -3,192 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-<style>
-  :root{
+    <title>EventEase - Premium Invitations</title>
+    <style>
+        :root {
+            /* Light Mode Animated Gradient Colors */
+            --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            
+            /* Glassmorphism Settings (Light) */
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            
+            /* Text & Buttons */
+            --text: #1d1d1f;
+            --secondaryText: #49494b;
+            --btn-bg: rgba(255, 255, 255, 0.8);
+            --btn-text: #1d1d1f;
+            --btn-hover: #ffffff;
+        }
 
-    --bg:#f4f7fc;
+        .dark-mode {
+            /* Dark Mode Animated Gradient Colors */
+            --bg-gradient: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #020617);
+            
+            /* Glassmorphism Settings (Dark) */
+            --glass-bg: rgba(15, 23, 42, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            
+            /* Text & Buttons */
+            --text: #f5f5f7;
+            --secondaryText: #a1a1a6;
+            --btn-bg: rgba(255, 255, 255, 0.1);
+            --btn-text: #f5f5f7;
+            --btn-hover: rgba(255, 255, 255, 0.2);
+        }
 
-    --navbar:white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    --card:rgb(190, 237, 240);
+        /* --- Fluid Animated Background --- */
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientFusion 15s ease infinite;
+            color: var(--text);
+            min-height: 100vh;
+            transition: color 0.4s ease;
+        }
 
-    --text:#333;
+        @keyframes gradientFusion {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    --secondaryText:gray;
+        /* --- Glassmorphic Navbar --- */
+        .navbar {
+            background: var(--glass-bg);
+            padding: 16px 40px;
+            display: flex;
+            border-radius: 20px; 
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            margin: 24px;
+            transition: all 0.4s ease;
+        }
 
-    --shadow:0 5px 15px rgba(0,0,0,0.08);
-    
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px; 
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-}
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
 
-.dark-mode{
+        .nav-links a {
+            text-decoration: none;
+            color: var(--secondaryText);
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            transition: color 0.3s ease;
+        }
 
-    --bg:#0f172a;
+        .nav-links a:hover {
+            color: var(--text);
+        }
 
-    --navbar:#1e293b;
+        /* Theme button toggle */
+        #themeToggle {
+            background: var(--glass-bg);
+            color: var(--text);
+            border: 1px solid var(--glass-border);
+            padding: 10px 14px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
 
-    --card:#334155;
+        #themeToggle:hover {
+            /* transform: scale(1.1) rotate(15deg); */
+            background: var(--btn-bg);
+        }
 
-    --text:#f8fafc;
+        /* --- Glassmorphic Cards Section --- */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            padding: 50px 24px;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
 
-    --secondaryText:#cbd5e1;
+        .card {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: var(--glass-shadow);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
 
-    --shadow:0 5px 20px rgba(0,0,0,0.4);
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
 
-}
+        .card h3 {
+            color: var(--text);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
+        .card p {
+            color: var(--secondaryText);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 400;
+            flex-grow: 1; 
+            margin-bottom: 7px; /* Kept exactly at 7px as requested */
+        }
 
-body{
-    background:var(--bg);
-    transition:.3s;
-}
+        .card-btn {
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            text-decoration: none;
+            text-align: center;
+            padding: 14px 24px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
 
-.navbar {
-    background: var(--navbar);
-    padding: 18px 50px;
-    display: flex;
-    border-radius: 12px; 
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    z-index: 100;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-}
+        .card-btn:hover {
+            background: var(--btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
 
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.5px; 
-    color: #2563eb;
-}
-
-.logo span {
-    color: var(--accent);
-}
-
-.nav-links {
-    display: flex;
-    gap: 30px;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--secondaryText);
-    font-weight: 500;
-    font-size: 15px;
-    transition: color 0.2s ease;
-}
-
-.nav-links a:hover {
-    color: var(--text);
-}
-
-/* theme button toggle */
-#themeToggle {
-    background: var(--text);
-    color: var(--bgCore);
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-#themeToggle:hover {
-    opacity: 0.85;
-    transform: scale(1.02);
-}
-
-
-
-
-
-
-
-@media(max-width:900px){
-
-    .guest-head{
-        display:none;
-    }
-
-    .guest-row{
-        grid-template-columns:1fr;
-    }
-
-    .deleteBtn{
-        width:100%;
-    }
-
-}
-
-@media(max-width:768px){
-
-    .navbar{
-        flex-direction:column;
-        gap:15px;
-    }
-
-    /* .stats-container{
-        grid-template-columns:1fr;
-    } */
-
-    .nav-links{
-        flex-wrap:wrap;
-        justify-content:center;
-    }
-}
-
-
-  
-</style>
-
-
+        /* --- Responsive Media Queries --- */
+        @media(max-width: 768px){
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+                border-radius: 16px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+            .card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-     <nav class="navbar">
-
+    <nav class="navbar">
         <div class="logo">
             ✨ EventEase
         </div>
-
         <div class="nav-links">
-        
-           <a id="dashboard" href="../../dashboard.html">Dashboard</a>
-            
-            <a id="AIpanel"  href="../AI_plan.html"> AI Panel </a>
-           
-           
-            
- 
+            <a id="dashboard" href="../../dashboard.html">Dashboard</a>
+            <a id="AIpanel" href="../AI_plan.html">AI Panel</a>
         </div>
-        <button id="themeToggle">
-    🌙
-</button>
-
-    
-
+        <button id="themeToggle" title="Toggle Theme">🌙</button>
     </nav>
 
+    <div class="card-container">
+        
+        <div class="card">
+            <h3>AI-Powered Creator</h3>
+            <p>Leverage advanced artificial intelligence to instantly generate personalized and stunning invitations tailored specifically to your event's tone.</p>
+            <a href="ai_generator_page.html" class="card-btn">Launch AI Generator</a>
+        </div>
 
+        <div class="card">
+            <h3>Template-Based Creator</h3>
+            <p>Browse our curated collection of professional templates. Customize colors, fonts, and layouts to match your theme seamlessly and effortlessly.</p>
+            <a href="template_generator_page.html" class="card-btn">Browse Templates</a>
+        </div>
 
-   
-  
-<script type="module" src="AI_invitation_generator.js"></script>
+        <div class="card">
+            <h3>Custom Manual Creator</h3>
+            <p>Take absolute control of your design. Start from a blank canvas and build your invitation from scratch utilizing our advanced editing tools.</p>
+            <a href="manual_generator_page.html" class="card-btn">Start from Scratch</a>
+        </div>
+
+    </div>
+
+    <script type="module" src="AI_invitation_generator.js"></script>
 </body>
 </html>
