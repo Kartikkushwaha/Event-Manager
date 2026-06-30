@@ -12,12 +12,30 @@
 </head>
 <body>
 
-    <div class="app-header">
-        <h2 class="title-text">EventEase Editor</h2>
-        <button class="menu-btn" onclick="toggleSidebar()">
+   <div class="app-header">
+    <div class="header-left">
+        <button class="menu-btn" id="sidebarToggleBtn">
             <span style="font-size: 18px;">☰</span> Tools & Elements
         </button>
     </div>
+
+    <div class="header-center">
+        <div class="logo">
+            <span class="logo-icon">✨</span>
+            <span class="logo-text">EventEase</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">AI Panel</a>
+        </nav>
+    </div>
+
+    <div class="header-right">
+        <button class="theme-toggle" id="themeToggleBtn">
+            <span class="icon">🌞</span>
+        </button>
+    </div>
+</div>
 
     <div class="main-workspace">
         <div class="canvas-wrapper">
@@ -181,6 +199,6 @@
         </div>
     </div>
 
-    <script type="module" src="manual_invitation.js"></script>
+    <script src="manual_invitation.js"></script>
 </body>
 </html>
