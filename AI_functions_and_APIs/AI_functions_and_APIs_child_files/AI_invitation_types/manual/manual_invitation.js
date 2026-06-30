@@ -1,8 +1,56 @@
+// --- THEME TOGGLE LOGIC ---
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = themeToggleBtn.querySelector('.icon');
+const htmlElement = document.documentElement;
+
+// Check for saved theme in localStorage, default to light
+const savedTheme = localStorage.getItem('appTheme') || 'light';
+htmlElement.setAttribute('data-theme', savedTheme);
+updateThemeIcon(savedTheme);
+
+// Listen for clicks on the toggle button
+themeToggleBtn.addEventListener('click', () => {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    htmlElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('appTheme', newTheme); // Save preference
+    updateThemeIcon(newTheme);
+});
+
+// Helper function to swap the emoji
+function updateThemeIcon(theme) {
+    themeIcon.textContent = theme === 'dark' ? '🌙' : '🌞';
+}
+
+// --- SIDEBAR LOGIC (Updated to Event Listener) ---
+const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+}
+
+// Attach listener to the new button ID
+if (sidebarToggleBtn) {
+    sidebarToggleBtn.addEventListener('click', toggleSidebar);
+}
+// Keep overlay click to close
+if (overlay) {
+    overlay.addEventListener('click', toggleSidebar);
+}
+
 // --- UI LOGIC ---
+// 1. Keep your function exactly as it is
 function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
     document.getElementById('overlay').classList.toggle('open');
 }
+
+// 2. Attach the event listener at the bottom of your JS file (or right under the function)
+document.getElementById('sidebarToggleBtn').addEventListener('click', toggleSidebar);
 
 // --- FABRIC JS LOGIC ---
 const canvas = new fabric.Canvas('myCanvas', {
