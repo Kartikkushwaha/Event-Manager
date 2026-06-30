@@ -25,10 +25,11 @@ function updateThemeIcon(theme) {
 
 // --- SIDEBAR LOGIC (Updated to Event Listener) ---
 const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
 
 function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
     sidebar.classList.toggle('open');
     overlay.classList.toggle('open');
 }
@@ -266,19 +267,32 @@ function changeTextAlign(alignment) {
 }
 
 // --- IMAGES & SHAPES ---
-function uploadImage(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(f) {
-        fabric.Image.fromURL(f.target.result, function(img) {
-            if (img.width > 250) { img.scaleToWidth(250); }
-            img.set({ left: canvas.width / 2, top: canvas.height / 2, originX: 'center', originY: 'center', strokeUniform: true });
-            canvas.add(img);
-            canvas.setActiveObject(img);
-        });
-    };
-    reader.readAsDataURL(file);
+// --- 2. MULTIPLE IMAGE UPLOAD ---
+function uploadImage(event) {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    // Loop through all selected files
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(f) {
+            const data = f.target.result;
+            fabric.Image.fromURL(data, function(img) {
+                // Scale image down if it's too big
+                img.scaleToWidth(200); 
+                canvas.add(img);
+                canvas.centerObject(img);
+                canvas.setActiveObject(img);
+                canvas.renderAll();
+                
+                saveHistory(); // Save state for Undo
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+    
+    // Reset the input so you can upload the same images again if needed
+    event.target.value = ''; 
 }
 
 function addShape(type, isFilled) {
@@ -300,3 +314,89 @@ function sendBackward() {
     const activeObj = canvas.getActiveObject();
     if (activeObj) { canvas.sendBackwards(activeObj); canvas.renderAll(); }
 }
+// --- 3. UNDO (CTRL+Z) LOGIC ---
+let canvasHistory = [];
+let isHistoryProcessing = false;
+
+// Call this function whenever a change happens (add, modify, delete)
+function saveHistory() {
+    if (isHistoryProcessing) return;
+    // Save the current state of the canvas as a JSON string
+    canvasHistory.push(JSON.stringify(canvas));
+}
+
+// Bind Fabric.js events to save history automatically
+canvas.on('object:added', saveHistory);
+canvas.on('object:modified', saveHistory);
+canvas.on('object:removed', saveHistory);
+
+// Save the initial blank canvas state
+setTimeout(saveHistory, 100);
+
+// --- 4. COPY & PASTE LOGIC ---
+let _clipboard = null;
+
+function copy() {
+    const activeObject = canvas.getActiveObject();
+    if (activeObject) {
+        activeObject.clone(function(cloned) {
+            _clipboard = cloned;
+        });
+    }
+}
+
+function paste() {
+    if (!_clipboard) return;
+    
+    _clipboard.clone(function(clonedObj) {
+        canvas.discardActiveObject();
+        
+        // Offset the pasted object slightly so it doesn't perfectly overlap
+        clonedObj.set({
+            left: clonedObj.left + 20,
+            top: clonedObj.top + 20,
+            evented: true,
+        });
+
+        if (clonedObj.type === 'activeSelection') {
+            // If multiple objects are pasted
+            clonedObj.canvas = canvas;
+            clonedObj.forEachObject(function(obj) {
+                canvas.add(obj);
+            });
+            clonedObj.setCoords();
+        } else {
+            // Single object
+            canvas.add(clonedObj);
+        }
+
+        // Update clipboard offset so next paste moves even further
+        _clipboard.top += 20;
+        _clipboard.left += 20;
+        
+        canvas.setActiveObject(clonedObj);
+        canvas.renderAll();
+        saveHistory();
+    });
+}
+
+// --- 5. KEYBOARD SHORTCUTS LISTENER ---
+window.addEventListener('keydown', function(e) {
+    // Check if Ctrl (Windows) or Cmd (Mac) is pressed
+    const isModifierPressed = e.ctrlKey || e.metaKey;
+
+    if (isModifierPressed && e.key.toLowerCase() === 'z') {
+        e.preventDefault(); // Prevent browser's default undo
+        undo();
+    }
+    
+    if (isModifierPressed && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        copy();
+    }
+    
+    if (isModifierPressed && e.key.toLowerCase() === 'v') {
+        e.preventDefault();
+        paste();
+    }
+});
