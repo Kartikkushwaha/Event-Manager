@@ -52,6 +52,8 @@ body{
     justify-content:space-between;
     align-items:center;
     box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    margin: 10px;
+    border-radius: 14px;
 }
 
 .logo{
@@ -69,6 +71,7 @@ body{
     text-decoration:none;
     color:var(--text);
     font-weight:500;
+    font-size: 15px;
 }
 
 .nav-links a:hover{
