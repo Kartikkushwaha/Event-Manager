@@ -99,7 +99,7 @@ body {
 
 /* Main Content */
 main {
-  padding-top: 150px;
+  padding-top: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -162,6 +162,7 @@ main {
 
 .card {
   min-width: 280px; 
+  max-width: 280px; /* Force the width to stay constant */
   height: 380px;
   background: var(--card-bg);
   backdrop-filter: blur(16px);
@@ -177,8 +178,9 @@ main {
   position: relative;
   user-select: none; 
   cursor: pointer; 
-  /* Reset text alignment inside the cards back to left */
-  text-align: left; 
+  text-align: left;
+  /* Ensure content stays inside */
+  overflow: hidden; 
 }
 
 .card:first-child {
@@ -218,6 +220,8 @@ main {
   font-size: 1.4rem;
   margin-bottom: 15px;
   font-weight: 600;
+  /* Prevent long headers from breaking layout */
+  word-wrap: break-word;
 }
 
 .card p {
@@ -225,6 +229,10 @@ main {
   font-size: 0.95rem;
   line-height: 1.5;
   flex-grow: 1;
+  /* FORCE TEXT WRAPPING */
+  white-space: normal; 
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .card-footer {
