@@ -44,7 +44,7 @@
                 const userDoc = await getDoc(doc(db, "users", uid));
                 if (userDoc.exists() && userDoc.data().is_authorized) {
                     // REDIRECT TO NEW PAGE
-                    window.location.href = "community_chat.html";
+                    window.location.href = "SyncSphere_community.html";
                     return;
                 }
 
@@ -59,7 +59,7 @@
                         timestamp: new Date()
                     });
                     // REDIRECT TO NEW PAGE
-                    window.location.href = "community_chat.html";
+                    window.location.href = "SyncSphere_community.html";
                     return;
                 }
 
