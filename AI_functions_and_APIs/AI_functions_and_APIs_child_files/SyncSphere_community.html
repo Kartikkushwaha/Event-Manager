@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventEase - Workspace</title>
+    <style>
+        /* CSS resets and base styles */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; background-color: #d1d7db; }
+        * { box-sizing: border-box; }
 
+        /* Main Layout */
+        .app-container { display: flex; height: 100vh; width: 100vw; max-width: 1600px; margin: 0 auto; background: #fff; box-shadow: 0 1px 1px 0 rgba(0,0,0,0.06); }
+        
+        /* Sidebar (Left) */
+        .sidebar { width: 30%; min-width: 250px; background-color: #ffffff; display: flex; flex-direction: column; border-right: 1px solid #e1e1e1; }
+        .sidebar-header { background-color: #f0f2f5; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1; }
+        .sidebar-header h3 { margin: 0; font-size: 16px; color: #41525d; }
+        .contact-list { flex: 1; overflow-y: auto; background: #fff; }
+        .contact { padding: 15px; border-bottom: 1px solid #f2f2f2; cursor: pointer; display: flex; align-items: center; }
+        .contact:hover { background-color: #f5f6f6; }
+        .contact-avatar { width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; margin-right: 15px; }
+        
+        /* Chat Window (Right) */
+        .chat-window { flex: 1; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-color: #efeae2; }
+        .chat-header { background-color: #f0f2f5; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e1e1e1; }
+        .chat-header h2 { margin: 0; font-size: 16px; color: #111b21; }
+        
+        /* Message Area */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        .message { max-width: 65%; padding: 10px 15px; margin-bottom: 10px; border-radius: 7.5px; font-size: 14.5px; position: relative; line-height: 1.4; word-wrap: break-word; }
+        .message .sender-name { font-size: 12px; font-weight: bold; margin-bottom: 3px; color: #1f2937; }
+        
+        /* Sent vs Received Styles */
+        .message.sent { align-self: flex-end; background-color: #d9fdd3; border-top-right-radius: 0; }
+
+        .message.received { align-self: flex-start; background-color: #ffffff; border-top-left-radius: 0; }
+
+        .message .time { font-size: 11px; color: #667781; text-align: right; margin-top: 4px; display: block; }
+        
+        /* Input Area */
+        .chat-input-container { background-color: #f0f2f5; padding: 15px; display: flex; align-items: center; }
+
+        .chat-input { flex: 1; padding: 12px 15px; border: none; border-radius: 8px; font-size: 15px; outline: none; }
+
+        .send-btn { background-color: #2563eb; color: white; border: none; padding: 12px 20px; margin-left: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .send-btn:hover { background-color: #1d4ed8; }
+
+        .logout-btn { background-color: transparent; color: #dc2626; border: none; cursor: pointer; font-weight: bold; }
+
+        /* User Info in Navbar */
+.header-user-info {
+    font-size: 13px;
+    color: #667781;
+    font-weight: normal;
+    margin-left: 10px;
+}
+
+/* Delete Message Button */
+.delete-msg-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 11px;
+    cursor: pointer;
+    color: #dc2626; /* Red */
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    padding: 2px 5px;
+    display: none; /* Hidden by default */
+}
+
+/* Show the delete button only when hovering over a message */
+.message:hover .delete-msg-btn {
+    display: block;
+}
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .sidebar { display: none; /* Hides sidebar on mobile to focus on chat */ }
+            .chat-window { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3 id="user-greeting">Loading Profile...</h3>
+            </div>
+            <div class="contact-list">
+                <div class="contact">
+                    <div class="contact-avatar">G</div>
+                    <div>
+                        <div style="font-weight: bold; color: #111b21;">General Chat</div>
+                        <div style="font-size: 13px; color: #667781;">Company workspace</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-window">
+            <div class="chat-header">
+                <div>
+                    <h2 style="display: inline-block; margin: 0;">EventEase General Chat</h2>
+                    <span id="header-user-info" class="header-user-info"></span>
+                </div>
+                <button class="logout-btn" id="logout-btn">Sign Out</button>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div style="text-align: center; color: #667781; font-size: 13px; margin-top: 20px;">
+                    Messages are end-to-end secured by Firebase rules.
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" id="message-input" class="chat-input" placeholder="Type a message..." autocomplete="off">
+                <button id="send-btn" class="send-btn">Send</button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+       import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        // Your specific EventEase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
+            authDomain: "eventease-c0bd9.firebaseapp.com",
+            projectId: "eventease-c0bd9",
+            storageBucket: "eventease-c0bd9.firebasestorage.app",
+            messagingSenderId: "720737113769",
+            appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        const messagesContainer = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // 1. SECURITY & AUTHENTICATION GATE
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Verify authorization against the database rules
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists() && userDoc.data().is_authorized) {
+                    currentUser = user;
+                    document.getElementById('user-greeting').innerText = user.displayName || user.email.split('@')[0];
+                    
+                    // NEW LINE: Update the navbar with Display Name and Email
+                    document.getElementById('header-user-info').innerText = `- ${user.displayName || 'User'} (${user.email})`;
+
+                    loadMessages();
+                } else {
+                    window.location.href = "Syncsphere.html"; // Kick out unauthorized users
+                }
+            } else {
+                window.location.href = "SyncSphere.html";
+            }
+        });
+
+        // 2. REAL-TIME MESSAGE LISTENER
+        function loadMessages() {
+            const q = query(collection(db, "community_chats"), orderBy("timestamp", "asc"));
+            
+            onSnapshot(q, (snapshot) => {
+                messagesContainer.innerHTML = ''; // Clear container
+                
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    
+                    // FILTER: If the current user's UID is in the deletedBy array, skip rendering it!
+                    if (data.deletedBy && data.deletedBy.includes(currentUser.uid)) {
+                        return; // Skip to the next message
+                    }
+                    
+                    displayMessage(docSnap.id, data); // Pass docSnap.id to the renderer
+                });
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            });
+        }
+
+        // 3. RENDER MESSAGES TO UI
+        function displayMessage(docId, data) {
+            const isSentByMe = data.uid === currentUser.uid;
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isSentByMe ? 'sent' : 'received');
+
+            let timeString = '';
+            if (data.timestamp) {
+                const date = data.timestamp.toDate();
+                timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // Build the standard message HTML
+            let htmlContent = '';
+            if (!isSentByMe) {
+                htmlContent += `<div class="sender-name">${data.senderName}</div>`;
+            }
+            htmlContent += `<div>${data.text}</div><span class="time">${timeString}</span>`;
+            messageDiv.innerHTML = htmlContent;
+
+            // Create and append the delete button dynamically
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-msg-btn';
+            deleteBtn.innerText = 'Delete';
+            deleteBtn.title = "Delete this message for me";
+            
+            // The Soft Delete Logic
+            deleteBtn.onclick = async () => {
+                try {
+                    await updateDoc(doc(db, "community_chats", docId), {
+                        // arrayUnion adds the UID to the array without overwriting existing data
+                        deletedBy: arrayUnion(currentUser.uid) 
+                    });
+                } catch (error) {
+                    console.error("Error deleting message: ", error);
+                    alert("Could not delete message. Check your permissions.");
+                }
+            };
+
+            messageDiv.appendChild(deleteBtn);
+            messagesContainer.appendChild(messageDiv);
+        }
+
+        // 4. SEND MESSAGE FUNCTION
+        async function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text === '') return;
+
+            messageInput.value = ''; // Clear input immediately for good UX
+
+            try {
+                await addDoc(collection(db, "community_chats"), {
+                    text: text,
+                    uid: currentUser.uid,
+                    senderName: currentUser.displayName || currentUser.email.split('@')[0],
+                    timestamp: serverTimestamp()
+                });
+            } catch (error) {
+                console.error("Error writing message: ", error);
+                alert("Could not send message. Check permissions.");
+            }
+        }
+
+        // Listen for Send Button click or 'Enter' key
+        sendBtn.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Logout Logic
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => window.location.href = "SyncSphere.html");
+        });
+
+    </script>
+</body>
+</html>
