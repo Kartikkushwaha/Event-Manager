@@ -4,28 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventEase - Employee Portal</title>
+    <title>EventEase - Community Access Portal</title>
     <style>
-        body { font-family: system-ui, sans-serif; background: #f4f4f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .hidden { display: none; }
-        button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 10px;}
-        button:hover { background: #1d4ed8; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        #chat-ui { text-align: left; }
+        body { 
+    font-family: system-ui, sans-serif; 
+    background: #f4f4f5; 
+    display: flex; 
+    flex-direction: column; /* This forces the footer UNDER the login card */
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; /* min-height prevents cutting off on small screens */
+    margin: 0; 
+    padding: 1rem; /* Adds breathing room on mobile */
+    box-sizing: border-box;
+}
+
+        .container { 
+    background: white; 
+    padding: 2rem; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    width: 100%; 
+    max-width: 400px; /* Limits width on desktop, but takes full width on mobile */
+    text-align: center; 
+    box-sizing: border-box;
+}
+
+/* Ensure hidden screens do not take up space */
+.hidden { 
+    display: none !important; 
+}
+
+       button { 
+    background: #2563eb; 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    width: 100%; 
+    margin-top: 15px; /* Slightly better spacing */
+}
+
+   button:hover { 
+    background: #1d4ed8; 
+}
+
+input { 
+    width: 100%; 
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    box-sizing: border-box; /* Keeps input from spilling out of the box */
+}
+
+/* Footer styling specifically for the bottom */
+footer {
+    text-align: center;
+    margin-top: 2rem; /* Creates space between the card and the text */
+    color: #6b7280; 
+    font-size: 0.875rem; 
+    width: 100%;
+}
+
+footer a {
+    color: #2563eb; 
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+} 
+
+/* If you are using dark mode, add this so it stays readable */
+body.dark-mode footer {
+    color: #9ca3af;
+}
+body.dark-mode footer a {
+    color: #60a5fa;
+}
     </style>
 </head>
 <body>
 
     <div id="login-screen" class="container">
         <h2>Welcome to EventEase</h2>
-        <p>Employee Portal</p>
+        <p>Community Access Portal</p>
         <button id="login-btn">Sign in with Google</button>
     </div>
 
     <div id="referral-screen" class="container hidden">
         <h2>Access Restricted</h2>
-        <p>Your email is not on the whitelist. Please enter your employee referral code to join.</p>
+        <p>Your email is not on the whitelist. Please enter your community referral code to join.</p>
         <input type="text" id="referral-input" placeholder="e.g. EMP-2026">
         <button id="submit-referral-btn">Submit Code</button>
         <button id="logout-btn-1" style="background: #dc2626; margin-top: 20px;">Sign Out</button>
@@ -40,130 +112,15 @@
         <button id="logout-btn-2" style="background: #dc2626; margin-top: 20px;">Sign Out</button>
     </div>
 
-    <script type="module">
-        // Import Firebase v10 Modular SDK from CDN
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <footer>
+        <p>Maintained by the EventEase Team.</p>
+        <p>If you experience any technical issues, please <a href="mailto:support@yourcompany.com">contact support</a>.</p>
+    </footer>
 
-        // Your specific EventEase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
-            authDomain: "eventease-c0bd9.firebaseapp.com",
-            projectId: "eventease-c0bd9",
-            storageBucket: "eventease-c0bd9.firebasestorage.app",
-            messagingSenderId: "720737113769",
-            appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
-        };
+    
 
-        // Initialize Services
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-
-        // UI Elements
-        const loginScreen = document.getElementById('login-screen');
-        const referralScreen = document.getElementById('referral-screen');
-        const chatScreen = document.getElementById('chat-screen');
-        let currentUser = null;
-
-        // --- NAVIGATION HELPER ---
-        function showScreen(screen) {
-            loginScreen.classList.add('hidden');
-            referralScreen.classList.add('hidden');
-            chatScreen.classList.add('hidden');
-            screen.classList.remove('hidden');
-        }
-
-        // --- ONBOARDING LOGIC ---
-        async function checkUserAccess(user) {
-            currentUser = user;
-            const uid = user.uid;
-            const email = user.email;
-
-            try {
-                // 1. Check if they are already registered in the 'users' collection
-                const userDoc = await getDoc(doc(db, "users", uid));
-                if (userDoc.exists() && userDoc.data().is_authorized) {
-                    document.getElementById('user-greeting').innerText = `Welcome back, ${user.displayName || email}!`;
-                    showScreen(chatScreen);
-                    return;
-                }
-
-                // 2. If not registered, check if their email is in 'allowed_users' whitelist
-                const whitelistDoc = await getDoc(doc(db, "allowed_users", email));
-                if (whitelistDoc.exists()) {
-                    // Provision their account automatically
-                    await setDoc(doc(db, "users", uid), {
-                        email: email,
-                        displayName: user.displayName,
-                        is_authorized: true,
-                        joinedVia: "whitelist",
-                        timestamp: new Date()
-                    });
-                    document.getElementById('user-greeting').innerText = `Welcome, ${user.displayName || email}!`;
-                    showScreen(chatScreen);
-                    return;
-                }
-
-                // 3. If neither, show referral screen
-                showScreen(referralScreen);
-
-            } catch (error) {
-                console.error("Error checking access:", error);
-                alert("Database permission denied. Have you set up Firestore Rules?");
-            }
-        }
-
-        // --- REFERRAL CODE LOGIC ---
-        document.getElementById('submit-referral-btn').addEventListener('click', async () => {
-            const code = document.getElementById('referral-input').value.trim();
-            if (!code) return alert("Please enter a code.");
-
-            try {
-                const codeRef = doc(db, "referral_codes", code);
-                const codeSnap = await getDoc(codeRef);
-
-                if (!codeSnap.exists()) return alert("Invalid code.");
-                if (codeSnap.data().is_used) return alert("Code already claimed.");
-
-                // Mark code as used and create user profile
-                await updateDoc(codeRef, { is_used: true, claimedBy: currentUser.email });
-                await setDoc(doc(db, "users", currentUser.uid), {
-                    email: currentUser.email,
-                    displayName: currentUser.displayName,
-                    is_authorized: true,
-                    joinedVia: "referral",
-                    timestamp: new Date()
-                });
-
-                document.getElementById('user-greeting').innerText = `Welcome, ${currentUser.displayName}!`;
-                showScreen(chatScreen);
-
-            } catch (error) {
-                console.error("Referral Error:", error);
-                alert("Error validating code. Check console.");
-            }
-        });
-
-        // --- AUTHENTICATION TRIGGERS ---
-        document.getElementById('login-btn').addEventListener('click', () => {
-            signInWithPopup(auth, provider).catch(error => console.error("Login failed", error));
-        });
-
-        const handleLogout = () => signOut(auth).then(() => showScreen(loginScreen));
-        document.getElementById('logout-btn-1').addEventListener('click', handleLogout);
-        document.getElementById('logout-btn-2').addEventListener('click', handleLogout);
-
-        // --- GLOBAL AUTH LISTENER ---
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                checkUserAccess(user); // Triggers the gatekeeper
-            } else {
-                showScreen(loginScreen); // Resets to login
-            }
-        });
+    <script type="module" src="SyncSphere.js" >
+       
     </script>
 </body>
 </html>
