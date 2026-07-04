@@ -1,126 +1,483 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventEase - Community Access Portal</title>
+    <title>EventEase - Workspace</title>
     <style>
-        body { 
-    font-family: system-ui, sans-serif; 
-    background: #f4f4f5; 
-    display: flex; 
-    flex-direction: column; /* This forces the footer UNDER the login card */
-    justify-content: center; 
-    align-items: center; 
-    min-height: 100vh; /* min-height prevents cutting off on small screens */
-    margin: 0; 
-    padding: 1rem; /* Adds breathing room on mobile */
-    box-sizing: border-box;
-}
+        /* Base styles */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100vh; background-color: #d1d7db; overflow: hidden; }
+        * { box-sizing: border-box; }
 
-        .container { 
-    background: white; 
-    padding: 2rem; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-    width: 100%; 
-    max-width: 400px; /* Limits width on desktop, but takes full width on mobile */
-    text-align: center; 
-    box-sizing: border-box;
-}
+        /* Main Layout */
+        .app-container { display: flex; flex-direction: row; height: 100vh; width: 100vw; max-width: 1600px; margin: 0 auto; background: #fff; box-shadow: 0 1px 1px 0 rgba(0,0,0,0.06); position: relative; }
+        
+        /* Sidebar */
+        .sidebar { width: 30%; min-width: 280px; background-color: #ffffff; display: flex; flex-direction: column; border-right: 1px solid #e1e1e1; z-index: 1000; transition: left 0.3s ease; }
+        .sidebar-header { background-color: #f0f2f5; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1; }
+        .sidebar-header h3 { margin: 0; font-size: 15px; color: #41525d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
+        
+        .contact-list { flex: 1; overflow-y: auto; background: #fff; }
+        .community-item { padding: 15px; border-bottom: 1px solid #f2f2f2; cursor: pointer; display: flex; align-items: center; }
+        .community-item:hover, .community-item.active { background-color: #f5f6f6; }
+        .community-avatar { width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; margin-right: 15px; text-transform: uppercase; flex-shrink: 0; }
+        
+        /* Chat Window */
+        .chat-window { flex: 1; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-color: #efeae2; height: 100%; }
+        .chat-header { background-color: #f0f2f5; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e1e1e1; }
+        .chat-header-left { display: flex; align-items: center; }
+        .chat-header-title { margin: 0; font-size: 16px; color: #111b21; display: inline-block; }
+        .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+        
+        /* Message Area */
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; }
+        .message { max-width: 65%; padding: 10px 15px; margin-bottom: 10px; border-radius: 7.5px; font-size: 14.5px; position: relative; line-height: 1.4; word-wrap: break-word; }
+        .message .sender-name { font-size: 12px; font-weight: bold; margin-bottom: 3px; color: #1f2937; }
+        .message.sent { align-self: flex-end; background-color: #d9fdd3; border-top-right-radius: 0; }
+        .message.received { align-self: flex-start; background-color: #ffffff; border-top-left-radius: 0; }
+        .message .time { font-size: 11px; color: #667781; text-align: right; margin-top: 4px; display: block; }
+        
+        /* Message Delete Button */
+        .delete-msg-btn { position: absolute; top: 5px; right: 5px; font-size: 11px; cursor: pointer; color: #dc2626; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 4px; padding: 2px 5px; display: none; }
+        .message:hover .delete-msg-btn { display: block; }
 
-/* Ensure hidden screens do not take up space */
-.hidden { 
-    display: none !important; 
-}
+        /* Input Area */
+        .chat-input-container { background-color: #f0f2f5; padding: 15px; display: flex; align-items: center; }
+        .chat-input { flex: 1; padding: 12px 15px; border: none; border-radius: 8px; font-size: 15px; outline: none; }
+        .send-btn { background-color: #2563eb; color: white; border: none; padding: 12px 20px; margin-left: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex-shrink: 0; }
+        .send-btn:hover { background-color: #1d4ed8; }
 
-       button { 
-    background: #2563eb; 
-    color: white; 
-    border: none; 
-    padding: 10px 20px; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    font-size: 16px; 
-    width: 100%; 
-    margin-top: 15px; /* Slightly better spacing */
-}
+        /* Buttons & Badges */
+        .action-btn { background-color: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; white-space: nowrap; }
+        .action-btn:hover { background-color: #059669; }
+        .action-btn.outline { background-color: transparent; color: #2563eb; border: 1px solid #2563eb; }
+        .action-btn.outline:hover { background-color: #eff6ff; }
+        .btn-danger { color: #dc2626 !important; border-color: #dc2626 !important; }
+        .btn-danger:hover { background-color: #fef2f2 !important; }
+        .admin-badge { color: #dc2626; font-weight: bold; font-size: 10px; margin-left: 5px; vertical-align: super; }
 
-   button:hover { 
-    background: #1d4ed8; 
-}
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
+        .modal-overlay.hidden { display: none; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 5px; }
+        .modal-header h2 { margin: 0; font-size: 18px; color: #111b21; }
+        .close-modal { cursor: pointer; font-size: 24px; font-weight: bold; color: #6b7280; border: none; background: transparent; }
+        .modal-content label { font-size: 14px; font-weight: 500; color: #374151; }
+        .modal-content input { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; outline: none; }
+        .full-btn { background: #2563eb; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
+        .member-list-item { padding: 10px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .member-list-item span.email { color: #6b7280; font-size: 12px; display: block; }
+        .hidden { display: none !important; }
 
-input { 
-    width: 100%; 
-    padding: 10px; 
-    margin: 10px 0; 
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
-    box-sizing: border-box; /* Keeps input from spilling out of the box */
-}
+        /* Mobile specific elements (Hidden on desktop) */
+        .mobile-menu-btn { display: none; background: transparent; border: none; font-size: 24px; cursor: pointer; margin-right: 15px; color: #41525d; padding: 0; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 900; display: none; }
+        .sidebar-overlay.active { display: block; }
 
-/* Footer styling specifically for the bottom */
-footer {
-    text-align: center;
-    margin-top: 2rem; /* Creates space between the card and the text */
-    color: #6b7280; 
-    font-size: 0.875rem; 
-    width: 100%;
-}
-
-footer a {
-    color: #2563eb; 
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-} 
-
-/* If you are using dark mode, add this so it stays readable */
-body.dark-mode footer {
-    color: #9ca3af;
-}
-body.dark-mode footer a {
-    color: #60a5fa;
-}
+        /* ========================================= */
+        /* MOBILE RESPONSIVENESS (The Sliding Drawer)*/
+        /* ========================================= */
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: inline-block; }
+            
+            /* The Sidebar hides to the left by default */
+            .sidebar { position: absolute; left: -100%; top: 0; height: 100vh; width: 85%; max-width: 350px; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+            /* When 'open' class is added, it slides in */
+            .sidebar.open { left: 0; }
+            
+            .chat-window { width: 100%; }
+            .message { max-width: 85%; font-size: 13.5px; }
+            .action-btn { padding: 5px 8px; font-size: 11px; }
+            .chat-header-title { font-size: 15px; }
+            .delete-msg-btn { padding: 4px 8px; font-size: 12px; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="container">
-        <h2>Welcome to EventEase</h2>
-        <p>Community Access Portal</p>
-        <button id="login-btn">Sign in with Google</button>
-    </div>
+    <div class="app-container">
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <div id="referral-screen" class="container hidden">
-        <h2>Access Restricted</h2>
-        <p>Your email is not on the whitelist. Please enter your community referral code to join.</p>
-        <input type="text" id="referral-input" placeholder="e.g. EMP-2026">
-        <button id="submit-referral-btn">Submit Code</button>
-        <button id="logout-btn-1" style="background: #dc2626; margin-top: 20px;">Sign Out</button>
-    </div>
-
-    <div id="chat-screen" class="container hidden">
-        <h2>EventEase Workspace</h2>
-        <p id="user-greeting"></p>
-        <div id="chat-ui">
-            <p><em>Chat interface will go here... You are authorized!</em></p>
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3 id="user-greeting">Loading...</h3>
+                <div style="display: flex; gap: 5px;">
+                    <button class="action-btn outline" id="btn-join-community" style="padding: 6px 10px; font-size: 12px;">Join</button>
+                    <button class="action-btn" id="btn-create-community" style="padding: 6px 10px; font-size: 12px;">+ New</button>
+                </div>
+            </div>
+            <div class="contact-list" id="community-list">
+                </div>
         </div>
-        <button id="logout-btn-2" style="background: #dc2626; margin-top: 20px;">Sign Out</button>
+
+        <div class="chat-window">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
+                    <h2 id="chat-title" class="chat-header-title">Select a Community</h2>
+                </div>
+                <div class="header-actions hidden" id="chat-actions">
+                    <button class="action-btn outline btn-danger hidden" id="btn-delete-comm">Delete</button>
+                    <button class="action-btn outline" id="btn-view-members">Members</button>
+                    <button class="action-btn" id="btn-add-member">+ User</button>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div style="text-align: center; color: #667781; margin-top: 20vh;">
+                    Create, Join, or Select a community from the list to start chatting.
+                </div>
+            </div>
+
+            <div class="chat-input-container hidden" id="chat-input-area">
+                <input type="text" id="message-input" class="chat-input" placeholder="Type a message..." autocomplete="off">
+                <button id="send-btn" class="send-btn">Send</button>
+            </div>
+        </div>
     </div>
 
-    <footer>
-        <p>Maintained by the EventEase Team.</p>
-        <p>If you experience any technical issues, please <a href="mailto:support@yourcompany.com">contact support</a>.</p>
-    </footer>
+    <div class="modal-overlay hidden" id="modal-create">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Community</h2>
+                <button class="close-modal" onclick="closeModals()">&times;</button>
+            </div>
+            <div>
+                <label>Community Name</label>
+                <input type="text" id="create-comm-name" placeholder="e.g. Design Team">
+            </div>
+            <div>
+                <label>Custom Referral Code</label>
+                <input type="text" id="create-comm-code" placeholder="e.g. DESIGN-26">
+            </div>
+            <button class="full-btn" id="submit-create-comm">Create</button>
+        </div>
+    </div>
 
-    
+    <div class="modal-overlay hidden" id="modal-join">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Join a Community</h2>
+                <button class="close-modal" onclick="closeModals()">&times;</button>
+            </div>
+            <div>
+                <label>Enter Referral Code</label>
+                <input type="text" id="join-comm-code" placeholder="e.g. MARKETING-101">
+            </div>
+            <button class="full-btn" id="submit-join-comm">Join Community</button>
+        </div>
+    </div>
 
-    <script type="module" src="SyncSphere.js" >
-       
+    <div class="modal-overlay hidden" id="modal-add">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Member</h2>
+                <button class="close-modal" onclick="closeModals()">&times;</button>
+            </div>
+            <div>
+                <label>Member's Gmail Address</label>
+                <input type="email" id="add-member-email" placeholder="user@gmail.com">
+            </div>
+            <button class="full-btn" id="submit-add-member">Add to Community</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="modal-members">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Community Members</h2>
+                <button class="close-modal" onclick="closeModals()">&times;</button>
+            </div>
+            <div id="member-list-container" style="max-height: 300px; overflow-y: auto;">
+                </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
+            authDomain: "eventease-c0bd9.firebaseapp.com",
+            projectId: "eventease-c0bd9",
+            storageBucket: "eventease-c0bd9.firebasestorage.app",
+            messagingSenderId: "720737113769",
+            appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let activeCommunityId = null; 
+        let unsubscribeMessages = null; 
+
+        // Elements
+        const commList = document.getElementById('community-list');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatTitle = document.getElementById('chat-title');
+        const chatActions = document.getElementById('chat-actions');
+        const chatInputArea = document.getElementById('chat-input-area');
+        const messageInput = document.getElementById('message-input');
+        
+        // Mobile Sidebar Elements
+        const sidebar = document.getElementById('sidebar');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        // Mobile Sidebar Logic
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        window.closeModals = () => {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+        }
+
+        // 1. AUTH & INIT
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('user-greeting').innerText = user.displayName || user.email.split('@')[0];
+                loadSidebarCommunities();
+            } else {
+                window.location.href = "index.html"; 
+            }
+        });
+
+        // 2. LOAD SIDEBAR COMMUNITIES
+        function loadSidebarCommunities() {
+            const q = query(collection(db, "communities"), where("members", "array-contains", currentUser.email));
+            
+            onSnapshot(q, (snapshot) => {
+                commList.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const div = document.createElement('div');
+                    div.className = `community-item ${activeCommunityId === docSnap.id ? 'active' : ''}`;
+                    div.innerHTML = `
+                        <div class="community-avatar">${data.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: bold; color: #111b21;">${data.name}</div>
+                            <div style="font-size: 12px; color: #10b981; font-weight: 500;">Code: ${data.referralCode}</div>
+                        </div>
+                    `;
+                    div.onclick = () => selectCommunity(docSnap.id, data);
+                    commList.appendChild(div);
+                });
+            });
+        }
+
+        // 3. SELECT A COMMUNITY
+        function selectCommunity(commId, commData) {
+            activeCommunityId = commId;
+            chatTitle.innerText = commData.name;
+            
+            chatActions.classList.remove('hidden');
+            chatInputArea.classList.remove('hidden');
+            
+            document.querySelectorAll('.community-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const deleteBtn = document.getElementById('btn-delete-comm');
+            if (currentUser.uid === commData.ownerId) {
+                deleteBtn.classList.remove('hidden');
+            } else {
+                deleteBtn.classList.add('hidden');
+            }
+            
+            // Auto-close sidebar on mobile after selection
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('active');
+            }
+
+            if (unsubscribeMessages) unsubscribeMessages();
+
+            const q = query(collection(db, `communities/${commId}/messages`), orderBy("timestamp", "asc"));
+            
+            unsubscribeMessages = onSnapshot(q, (snapshot) => {
+                chatMessages.innerHTML = ''; 
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.deletedBy && data.deletedBy.includes(currentUser.uid)) return; 
+                    renderMessage(docSnap.id, data);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+
+        // 4. RENDER MESSAGE
+        function renderMessage(docId, data) {
+            const isSentByMe = data.uid === currentUser.uid;
+            const div = document.createElement('div');
+            div.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+
+            let timeString = data.timestamp ? data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+            let html = !isSentByMe ? `<div class="sender-name">${data.senderName}</div>` : '';
+            html += `<div>${data.text}</div><span class="time">${timeString}</span>`;
+            div.innerHTML = html;
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-msg-btn';
+            deleteBtn.innerText = 'Delete';
+            deleteBtn.onclick = async () => {
+                await updateDoc(doc(db, `communities/${activeCommunityId}/messages`, docId), {
+                    deletedBy: arrayUnion(currentUser.uid) 
+                });
+            };
+            
+            div.appendChild(deleteBtn);
+            chatMessages.appendChild(div);
+        }
+
+        // 5. SEND MESSAGE
+        document.getElementById('send-btn').addEventListener('click', async () => {
+            if (!activeCommunityId) return;
+            const text = messageInput.value.trim();
+            if (text === '') return;
+            messageInput.value = ''; 
+
+            await addDoc(collection(db, `communities/${activeCommunityId}/messages`), {
+                text: text,
+                uid: currentUser.uid,
+                senderName: currentUser.displayName || currentUser.email.split('@')[0],
+                timestamp: serverTimestamp()
+            });
+        });
+        messageInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('send-btn').click(); });
+
+        // 6. CREATE COMMUNITY
+        document.getElementById('btn-create-community').addEventListener('click', () => {
+            document.getElementById('modal-create').classList.remove('hidden');
+        });
+
+        document.getElementById('submit-create-comm').addEventListener('click', async () => {
+            const name = document.getElementById('create-comm-name').value.trim();
+            const code = document.getElementById('create-comm-code').value.trim();
+            if (!name || !code) return alert("Fill all fields.");
+
+            try {
+                const commRef = await addDoc(collection(db, "communities"), {
+                    name: name,
+                    ownerId: currentUser.uid,
+                    ownerEmail: currentUser.email,
+                    referralCode: code,
+                    members: [currentUser.email], 
+                    createdAt: serverTimestamp()
+                });
+                await setDoc(doc(db, "referral_codes", code), { is_used: false, community_id: commRef.id });
+                
+                closeModals();
+                document.getElementById('create-comm-name').value = '';
+                document.getElementById('create-comm-code').value = '';
+            } catch (error) { console.error(error); alert("Error creating community."); }
+        });
+
+        // 7. JOIN COMMUNITY VIA REFERRAL CODE
+        document.getElementById('btn-join-community').addEventListener('click', () => {
+            document.getElementById('modal-join').classList.remove('hidden');
+        });
+
+        document.getElementById('submit-join-comm').addEventListener('click', async () => {
+            const code = document.getElementById('join-comm-code').value.trim();
+            if (!code) return alert("Enter a referral code.");
+
+            try {
+                const codeDoc = await getDoc(doc(db, "referral_codes", code));
+                if (!codeDoc.exists()) {
+                    return alert("Invalid referral code.");
+                }
+
+                const commId = codeDoc.data().community_id;
+                
+                await updateDoc(doc(db, "communities", commId), {
+                    members: arrayUnion(currentUser.email)
+                });
+                
+                await setDoc(doc(db, "allowed_users", currentUser.email), { role: "joined_member" }, { merge: true });
+
+                alert("Successfully joined the community!");
+                closeModals();
+                document.getElementById('join-comm-code').value = '';
+            } catch (error) { console.error(error); alert("Error joining community."); }
+        });
+
+        // 8. ADD MEMBER TO ACTIVE COMMUNITY
+        document.getElementById('btn-add-member').addEventListener('click', () => {
+            document.getElementById('modal-add').classList.remove('hidden');
+        });
+
+        document.getElementById('submit-add-member').addEventListener('click', async () => {
+            const email = document.getElementById('add-member-email').value.trim();
+            if (!email) return alert("Enter an email address.");
+
+            try {
+                await updateDoc(doc(db, "communities", activeCommunityId), {
+                    members: arrayUnion(email)
+                });
+                await setDoc(doc(db, "allowed_users", email), { role: "invited_member" }, { merge: true });
+                
+                alert(`${email} has been added!`);
+                closeModals();
+                document.getElementById('add-member-email').value = '';
+            } catch (error) { console.error(error); alert("Error adding member."); }
+        });
+
+        // 9. VIEW MEMBERS & ADMIN BADGE
+        document.getElementById('btn-view-members').addEventListener('click', async () => {
+            const listContainer = document.getElementById('member-list-container');
+            listContainer.innerHTML = 'Loading...';
+            document.getElementById('modal-members').classList.remove('hidden');
+
+            try {
+                const commDoc = await getDoc(doc(db, "communities", activeCommunityId));
+                const data = commDoc.data();
+                const emails = data.members || [];
+                const ownerEmail = data.ownerEmail; 
+                
+                listContainer.innerHTML = '';
+                emails.forEach(email => {
+                    const name = email.split('@')[0];
+                    const adminBadge = (email === ownerEmail) ? '<span class="admin-badge">Admin</span>' : '';
+                    
+                    listContainer.innerHTML += `
+                        <div class="member-list-item">
+                            <strong>${name}</strong> ${adminBadge}
+                            <span class="email">${email}</span>
+                        </div>
+                    `;
+                });
+            } catch (error) { console.error(error); listContainer.innerHTML = 'Error loading members.'; }
+        });
+
+        // 10. DELETE ENTIRE COMMUNITY
+        document.getElementById('btn-delete-comm').addEventListener('click', async () => {
+            if (confirm("Are you sure you want to delete this community? This will permanently remove it for all members.")) {
+                try {
+                    await deleteDoc(doc(db, "communities", activeCommunityId));
+                    
+                    chatTitle.innerText = "Select a Community";
+                    chatActions.classList.add('hidden');
+                    chatInputArea.classList.add('hidden');
+                    chatMessages.innerHTML = '<div style="text-align: center; color: #667781; margin-top: 20vh;">Community deleted. Select another to start chatting.</div>';
+                    activeCommunityId = null;
+                } catch (error) {
+                    console.error(error); alert("Error deleting community. Check your permissions.");
+                }
+            }
+        });
+
     </script>
 </body>
 </html>
