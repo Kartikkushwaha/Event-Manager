@@ -78,6 +78,23 @@ function renderEvents(){
             }) 
             : "Not Specified";
 
+        // --- NEW LOGIC: Check for Wedding or Birthday ---
+        // We convert to lowercase just to make the check foolproof
+        const typeLower = (event.eventType || "").toLowerCase();
+        const categoryLower = (event.category || "").toLowerCase();
+        
+        let specialPersonHTML = "";
+        
+        if (typeLower.includes("wedding") || typeLower.includes("birthday") || 
+            categoryLower.includes("wedding") || categoryLower.includes("birthday")) {
+            
+            // Assuming 'specialPerson' is the key you save to Firebase. 
+            // If they haven't provided a name, it defaults to 'Not Specified'
+            const personName = event.specialPerson || "Not Specified"; 
+            specialPersonHTML = `<p>Special person/Couples: ${personName}</p>`;
+        }
+        // ------------------------------------------------
+
         const card = document.createElement("div");
         card.className = "event-card";
         card.innerHTML = `
@@ -86,7 +103,7 @@ function renderEvents(){
             <p>Religion: ${event.relationChoice}</p>
             <p>State: ${event.state}</p>
             <p>Event: ${event.category}</p>
-            <p>Guests: ${event.guestCount}</p>
+            ${specialPersonHTML} <p>Guests: ${event.guestCount}</p>
             <p>Timeline: ${formattedDate}</p>
             <p>Budget: ${event.budget}</p>
 
