@@ -5,177 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventEase Form</title>
     <style>
-      /* day/night mode */
-      :root{
-        --bg:#f4f7fc;
-        --navbar:white;
-        --card:white;
-        --text:#333;
-        --secondaryText:gray;
-        --shadow:0 5px 15px rgba(0,0,0,0.08);
+      /* Day/Night Mode Variables */
+      :root {
+        --bg: #f4f7fc;
+        --navbar: rgba(255, 255, 255, 0.85);
+        --card: #ffffff;
+        --text: #1e293b;
+        --secondaryText: #64748b;
+        --border: #e2e8f0;
+        --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
       }
-      .dark-mode{
-        --bg:#0f172a;
-        --navbar:#1e293b;
-        --card:#334155;
-        --text:#f8fafc;
-        --secondaryText:#cbd5e1;
-        --shadow:0 5px 20px rgba(0,0,0,0.4);
+      .dark-mode {
+        --bg: #0f172a;
+        --navbar: rgba(30, 41, 59, 0.85);
+        --card: #1e293b;
+        --text: #f8fafc;
+        --secondaryText: #94a3b8;
+        --border: #334155;
+        --shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+        --primary: #3b82f6;
+        --primary-hover: #60a5fa;
       }
+
       /* Base Reset & Background */
       * {
           box-sizing: border-box;
           margin: 0;
           padding: 0;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
       }
+      
       body {
-          background:var(--bg);
-          transition:.3s;
+          background: var(--bg);
+          color: var(--text);
+          transition: background-color 0.3s, color 0.3s;
           min-height: 100vh;
           display: flex;
           flex-direction: column;
           align-items: center;
       }
-      /* welcome text */
-      #welcome{
-          font-size: xxx-large;
-          color:var(--text);
-          margin: 40px auto;
-          font-family:'Times New Roman', Times, serif;
-      }
-      /* create your event */
-      #crtyrevent{
-          font-size: x-large;
-          color:var(--text);
-          margin: 10px auto;
-          font-family:'Times New Roman', Times, serif;
-      }
+
       /* Top Navigation Bar */
       nav {
           width: 100%;
-          background:var(--navbar);
+          background: var(--navbar);
+          backdrop-filter: blur(10px); /* Premium glass effect */
+          -webkit-backdrop-filter: blur(10px);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 15px 40px;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+          padding: 15px 5%;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+          position: sticky;
+          top: 0;
+          z-index: 100;
       }
+      
+      /* Flex layouts to perfectly center the nav links */
+      .nav-left, .nav-right {
+          flex: 1;
+          display: flex;
+      }
+      .nav-right {
+          justify-content: flex-end;
+      }
+      .nav-center {
+          flex: 2;
+          display: flex;
+          justify-content: center;
+      }
+
       nav .logo {
-          font-size: 28px;
-          font-weight: bold;
-          color: #2563eb;
+          font-size: 24px;
+          font-weight: 800;
+          color: var(--primary);
+          letter-spacing: -0.5px;
       }
+
       nav .theme-btn {
-          background: #2563eb;
-          border: 1px solid #ccc;
+          background: transparent;
+          border: 1px solid var(--border);
           padding: 8px 12px;
           border-radius: 20px;
           cursor: pointer;
-          font-size: 1rem;
-          transition: background 0.3s;
+          font-size: 1.2rem;
+          transition: all 0.3s ease;
+          color: var(--text);
       }
+      
       nav .theme-btn:hover {
-          background-color: #f0f0f0;
+          background-color: var(--border);
       }
+
+      .nav-links {
+          display: flex;
+          gap: 40px;
+      }
+
+      .nav-links a {
+          text-decoration: none;
+          color: var(--secondaryText);
+          font-weight: 500;
+          font-size: 15px;
+          transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover {
+          color: var(--primary);
+      }
+
+      /* Typography Setup */
+      .header-section {
+          text-align: center;
+          margin: 50px 20px 20px;
+      }
+      
+      #welcome {
+          font-size: 2.5rem;
+          font-weight: 800;
+          color: var(--text);
+          letter-spacing: -1px;
+      }
+      
+      #crtyrevent {
+          font-size: 1.1rem;
+          color: var(--secondaryText);
+          margin-top: 5px;
+      }
+
       /* Main Form Container */
       .form-container {
-          background:var(--card);
-          color:var(--text);
-          width: 90%;
-          max-width: 1000px;
-          margin: 60px auto;
+          background: var(--card);
+          color: var(--text);
+          width: 95%;
+          max-width: 900px;
+          margin: 20px auto 60px;
           padding: 40px;
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+          border-radius: 16px;
+          box-shadow: var(--shadow);
+          border: 1px solid var(--border);
           display: flex;
           flex-direction: column;
-          gap: 30px;
+          gap: 25px;
+          transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
       }
-      /* Form Group styling for Labels + Select inputs */
+
+      /* Form Group styling */
       .form-group {
           display: flex;
           flex-direction: column;
           gap: 8px;
       }
+      
       .form-group h3, .form-group label {
-          font-size: 1.0rem;
-          color:var(--text);
-          font-weight: 700;
+          font-size: 0.95rem;
+          color: var(--text);
+          font-weight: 600;
       }
-      /* Dropdown Select Styling */
+
+      /* Input & Select Styling */
       select, input[type="text"], input[type="number"], input[type="datetime-local"] {
           width: 100%;
-          padding: 12px;
-          border: 1px solid #cbd5e1;
-          border-radius: 6px;
-          background-color: #fff;
-          font-size: 0.90rem;
-          color: #333;
+          padding: 12px 16px;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background-color: transparent;
+          font-size: 0.95rem;
+          color: grey;
           outline: none;
-          transition: border-color 0.2s;
+          transition: border-color 0.2s, box-shadow 0.2s;
       }
+      
       select:focus, input:focus {
-          border-color: #3182ce;
+          border-color: var(--primary);
+          box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
       }
-      /* Bottom Grid */
+      
+      /* Dropdown Grid */
       .dropdown-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 20px;
       }
-      @media (max-width: 768px) {
-          .dropdown-grid {
-              grid-template-columns: repeat(2, 1fr);
-          }
-      }
-      @media (max-width: 480px) {
-          .dropdown-grid {
-              grid-template-columns: 1fr;
-          }
-      }
+
       /* Save Button Styling */
       .button-wrapper {
           display: flex;
           justify-content: flex-end;
-          margin-top: 10px;
+          margin-top: 15px;
       }
+      
       .save-btn {
-          background-color: #3182ce;
+          background-color: var(--primary);
           color: white;
           border: none;
-          padding: 12px 30px;
+          padding: 14px 36px;
           font-size: 1rem;
-          font-weight: bold;
-          border-radius: 6px;
+          font-weight: 600;
+          border-radius: 8px;
           cursor: pointer;
-          transition: background-color 0.2s;
+          transition: background-color 0.2s, transform 0.1s;
       }
+      
       .save-btn:hover {
-          background-color: #2b6cb0;
+          background-color: var(--primary-hover);
+      }
+      
+      .save-btn:active {
+          transform: scale(0.98);
+      }
+
+      /* Responsive Adjustments for Mobile & Tablets */
+      @media (max-width: 992px) {
+          .dropdown-grid {
+              grid-template-columns: repeat(2, 1fr);
+          }
+      }
+      
+      @media (max-width: 600px) {
+          nav {
+              flex-direction: column;
+              gap: 15px;
+              padding: 20px;
+          }
+          .nav-left, .nav-center, .nav-right {
+              justify-content: center;
+              width: 100%;
+          }
+          .dropdown-grid {
+              grid-template-columns: 1fr;
+          }
+          .form-container {
+              padding: 25px 20px;
+          }
+          .button-wrapper {
+              justify-content: stretch;
+          }
+          .save-btn {
+              width: 100%;
+          }
       }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">✨ EventEase</div>
-        <button class="theme-btn" id="themeToggle">🌙</button>
+        <div class="nav-left">
+            <div class="logo">✨ EventEase</div>
+        </div>
+        <div class="nav-center">
+            <div class="nav-links">
+                <a id="dashboard-link" href="../dashboard.html">Dashboard</a>
+                <a id="myevents-link" href="my_events.html">My events</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="theme-btn" id="themeToggle">🌙</button>
+        </div>
     </nav>
     
-    <div id="welcome"><b>Welcome!</b></div>
-    <div id="crtyrevent">Create your Event..</div>
+    <div class="header-section">
+        <div id="welcome">Welcome!</div>
+        <div id="crtyrevent">Create your Event seamlessly.</div>
+    </div>
 
     <div class="form-container">
         
         <div class="form-group">
             <h3>Name of the Event:</h3>
-            <input id="name" type="text" style="height: 40px; width: 80%;" placeholder="Ex-Wedding Celebration">
+            <input id="name" type="text" placeholder="Ex: Wedding Celebration">
         </div>
 
         <div class="form-group" id="specialPersonGroup" style="display: none;">
             <h3>Special person/Couples:</h3>
-            <input id="specialPerson" type="text" style="height: 40px; width: 80%;" placeholder="Enter Name(s) (e.g. John & Jane)">
+            <input id="specialPerson" type="text" placeholder="Enter Name(s) (e.g. John & Jane)">
         </div>
 
         <div class="dropdown-grid">
@@ -204,19 +309,50 @@
             </div>
 
             <div class="form-group">
-                <label>Choose the State/Residence (India)</label>
+                <label>Choose State/Residence (India)</label>
                 <select id="state" name="state-residence">
-                    <option value="" disabled selected>Select state...</option>
-                    <option value="mh">Maharashtra</option>
-                    <option value="dl">Delhi(NCT)</option>
-                    <option value="up">Uttar Pradesh</option>
-                    <option value="pb">Punjab</option>
-                    <option value="tn">Tamil Nadu</option>
-                    <option value="kt">Karnataka</option>
-                    <option value="gj">Gujarat</option>
-                    <option value="wb">West Bengal</option>
-                    <option value="rj">Rajasthan</option>
-                    </select>
+                    <option value="" disabled selected>Select state/UT...</option>
+                    <optgroup label="States">
+                        <option value="ap">Andhra Pradesh</option>
+                        <option value="ar">Arunachal Pradesh</option>
+                        <option value="as">Assam</option>
+                        <option value="br">Bihar</option>
+                        <option value="ct">Chhattisgarh</option>
+                        <option value="ga">Goa</option>
+                        <option value="gj">Gujarat</option>
+                        <option value="hr">Haryana</option>
+                        <option value="hp">Himachal Pradesh</option>
+                        <option value="jh">Jharkhand</option>
+                        <option value="ka">Karnataka</option>
+                        <option value="kl">Kerala</option>
+                        <option value="mp">Madhya Pradesh</option>
+                        <option value="mh">Maharashtra</option>
+                        <option value="mn">Manipur</option>
+                        <option value="ml">Meghalaya</option>
+                        <option value="mz">Mizoram</option>
+                        <option value="nl">Nagaland</option>
+                        <option value="or">Odisha</option>
+                        <option value="pb">Punjab</option>
+                        <option value="rj">Rajasthan</option>
+                        <option value="sk">Sikkim</option>
+                        <option value="tn">Tamil Nadu</option>
+                        <option value="tg">Telangana</option>
+                        <option value="tr">Tripura</option>
+                        <option value="up">Uttar Pradesh</option>
+                        <option value="ut">Uttarakhand</option>
+                        <option value="wb">West Bengal</option>
+                    </optgroup>
+                    <optgroup label="Union Territories">
+                        <option value="an">Andaman and Nicobar Islands</option>
+                        <option value="ch">Chandigarh</option>
+                        <option value="dh">Dadra and Nagar Haveli and Daman and Diu</option>
+                        <option value="dl">Delhi</option>
+                        <option value="jk">Jammu and Kashmir</option>
+                        <option value="la">Ladakh</option>
+                        <option value="ld">Lakshadweep</option>
+                        <option value="py">Puducherry</option>
+                    </optgroup>
+                </select>
             </div>
 
             <div class="form-group">
@@ -242,25 +378,25 @@
                     <option value="1-50">1 - 50</option>
                     <option value="51-200">51 - 200</option>
                     <option value="201-500">201 - 500</option>
-                    <option value="500-1000">500-1000</option>
-                    <option value="1000-2000">1000-2000</option>
+                    <option value="500-1000">500 - 1000</option>
+                    <option value="1000-2000">1000 - 2000</option>
                     <option value="custom">Custom</option>
                 </select>
             </div>
             
             <div class="form-group">
-                <label>Choose Date and time of Event</label>
+                <label>Choose Date & Time</label>
                 <input type="datetime-local" id="date_time">
             </div>
         </div>
 
         <div class="form-group">
             <h3>Budget of the Event</h3>
-            <input id="budget" type="number" style="height: 40px; width: 80%;" placeholder="Enter Amount (INR)">
+            <input id="budget" type="number" placeholder="Enter Amount (INR)">
         </div>
 
         <div class="button-wrapper">
-            <button id="saveBtn" type="button" class="save-btn">Save</button>
+            <button id="saveBtn" type="button" class="save-btn">Save Event</button>
         </div>
 
     </div>
