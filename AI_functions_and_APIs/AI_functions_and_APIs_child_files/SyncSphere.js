@@ -1,7 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
         // IMPORT arrayRemove added here
-        import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
@@ -15,6 +18,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         let currentUser = null;
         let activeCommunityId = null; 
@@ -122,28 +126,49 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
         }
 
         // 4. RENDER MESSAGE
-        function renderMessage(docId, data) {
-            const isSentByMe = data.uid === currentUser.uid;
-            const div = document.createElement('div');
-            div.className = `message ${isSentByMe ? 'sent' : 'received'}`;
+       function renderMessage(docId, data) {
+    const isSentByMe = data.uid === currentUser.uid;
+    const div = document.createElement('div');
+    div.className = `message ${isSentByMe ? 'sent' : 'received'}`;
 
-            let timeString = data.timestamp ? data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-            let html = !isSentByMe ? `<div class="sender-name">${data.senderName}</div>` : '';
-            html += `<div>${data.text}</div><span class="time">${timeString}</span>`;
-            div.innerHTML = html;
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-msg-btn';
-            deleteBtn.innerText = 'Delete';
-            deleteBtn.onclick = async () => {
-                await updateDoc(doc(db, `communities/${activeCommunityId}/messages`, docId), {
-                    deletedBy: arrayUnion(currentUser.uid) 
-                });
-            };
-            
-            div.appendChild(deleteBtn);
-            chatMessages.appendChild(div);
+    let timeString = data.timestamp ? data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    let html = !isSentByMe ? `<div class="sender-name">${data.senderName}</div>` : '';
+    
+    // --- NEW LOGIC: Handle Attachments ---
+    if (data.attachmentUrl) {
+        if (data.attachmentType && data.attachmentType.startsWith('image/')) {
+            // Display Image
+            html += `<img src="${data.attachmentUrl}" alt="attachment" style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; display: block;">`;
+        } else if (data.attachmentType && data.attachmentType.startsWith('video/')) {
+            // Display Video
+            html += `<video src="${data.attachmentUrl}" controls style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; display: block;"></video>`;
+        } else {
+            // Display generic file link
+            html += `<a href="${data.attachmentUrl}" target="_blank" style="color: #2563eb; text-decoration: underline; display: block; margin-bottom: 5px;">📎 ${data.attachmentName || 'Download File'}</a>`;
         }
+    }
+
+    // Handle standard text
+    if (data.text) {
+        html += `<div>${data.text}</div>`;
+    }
+    
+    html += `<span class="time">${timeString}</span>`;
+    div.innerHTML = html;
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-msg-btn';
+    deleteBtn.innerText = 'Delete';
+    deleteBtn.onclick = async () => {
+        await updateDoc(doc(db, `communities/${activeCommunityId}/messages`, docId), {
+            deletedBy: arrayUnion(currentUser.uid) 
+        });
+    };
+    
+    div.appendChild(deleteBtn);
+    chatMessages.appendChild(div);
+}
+
         // 5. SEND MESSAGE & FILE ATTACHMENT LOGIC
         document.getElementById('send-btn').addEventListener('click', async () => {
             if (!activeCommunityId) return;
@@ -165,14 +190,46 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
             document.getElementById('file-attachment').click();
         });
 
-        document.getElementById('file-attachment').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(file) {
-                // Placeholder logic - requires Firebase Storage setup
-                alert(`You selected: ${file.name}.\n\nTo complete this feature, integrate Firebase Storage to upload 'file' and append the returned downloadURL to your message payload!`);
-                e.target.value = ''; // Reset input
-            }
+       document.getElementById('file-attachment').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file || !activeCommunityId) return;
+
+    // Temporarily change the button icon to show it's uploading
+    const attachBtn = document.getElementById('attach-btn');
+    attachBtn.innerText = '⏳';
+    attachBtn.disabled = true;
+
+    try {
+        // 1. Create a reference in Firebase Storage (organize by community)
+        const storageRef = ref(storage, `communities/${activeCommunityId}/attachments/${Date.now()}_${file.name}`);
+        
+        // 2. Upload the file to Storage
+        const snapshot = await uploadBytes(storageRef, file);
+        
+        // 3. Get the public URL for the uploaded file
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        
+        // 4. Save the message to Firestore with the attachment data
+        await addDoc(collection(db, `communities/${activeCommunityId}/messages`), {
+            text: "", // Optional: You could add logic to grab text from the input box here
+            attachmentUrl: downloadURL,
+            attachmentType: file.type, 
+            attachmentName: file.name,
+            uid: currentUser.uid,
+            senderName: currentUser.displayName || currentUser.email.split('@')[0],
+            timestamp: serverTimestamp()
         });
+        
+    } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Failed to upload file. Check console for details.");
+    } finally {
+        // Reset the input and button
+        e.target.value = '';
+        attachBtn.innerText = '📎';
+        attachBtn.disabled = false;
+    }
+});
 
         // 6. CREATE COMMUNITY
         document.getElementById('btn-create-community').addEventListener('click', () => {
