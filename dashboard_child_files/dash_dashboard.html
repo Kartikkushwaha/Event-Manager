@@ -4,196 +4,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventEase Form</title>
-
-    <!-- css file start -->
     <style>
-
       /* day/night mode */
-
       :root{
-
-    --bg:#f4f7fc;
-
-    --navbar:white;
-
-    --card:white;
-
-    --text:#333;
-
-    --secondaryText:gray;
-
-    --shadow:0 5px 15px rgba(0,0,0,0.08);
+        --bg:#f4f7fc;
+        --navbar:white;
+        --card:white;
+        --text:#333;
+        --secondaryText:gray;
+        --shadow:0 5px 15px rgba(0,0,0,0.08);
       }
-
-    .dark-mode{
-
-    --bg:#0f172a;
-
-    --navbar:#1e293b;
-
-    --card:#334155;
-
-    --text:#f8fafc;
-
-    --secondaryText:#cbd5e1;
-
-    --shadow:0 5px 20px rgba(0,0,0,0.4);
-
-    }
-        /* Base Reset & Background */
-      
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background:var(--bg);
-            transition:.3s;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        /* welcome text */
-        #welcome{
-            font-size: xxx-large;
-            color:var(--text);
-            margin: 40px auto;
-            font-family:'Times New Roman', Times, serif;
-        }
-        /* create your event */
-        #crtyrevent{
-            font-size: x-large;
-            color:var(--text);
-            margin: 10px auto;
-            font-family:'Times New Roman', Times, serif;
-        }
-
-        /* Top Navigation Bar */
-        nav {
-            width: 100%;
-            background:var(--navbar);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        nav .logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2563eb;
-        }
-
-        nav .theme-btn {
-            background: #2563eb;
-            border: 1px solid #ccc;
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
-        }
-
-        nav .theme-btn:hover {
-            background-color: #f0f0f0;
-        }
-
-        /* Main Form Container (Second-largest box) */
-        .form-container {
-            background:var(--card);
-            color:var(--text);
-            width: 90%;
-            max-width: 1000px;
-            margin: 60px auto;
-            padding: 40px;
-            border-radius: 20px;
-            /* Shadow effects at border */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* Form Group styling for Labels + Select inputs */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group h3, .form-group label {
-            font-size: 1.0rem;
-            color:var(--text);
-            font-weight: 700;
-        }
-
-        /* Dropdown Select Styling */
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            background-color: #fff;
-            font-size: 0.90rem;
-            color: #333;
-            outline: none;
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
-
-        select:focus {
-            border-color: #3182ce;
-        }
-
-        /* Bottom Grid for the 4 smaller dropdowns */
-        .dropdown-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        /* Responsive design for smaller screens */
-        @media (max-width: 768px) {
-            .dropdown-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 480px) {
-            .dropdown-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Save Button Styling at Rightmost-Bottom */
-        .button-wrapper {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 10px;
-        }
-
-        .save-btn {
-            background-color: #3182ce;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .save-btn:hover {
-            background-color: #2b6cb0;
-        }
+      .dark-mode{
+        --bg:#0f172a;
+        --navbar:#1e293b;
+        --card:#334155;
+        --text:#f8fafc;
+        --secondaryText:#cbd5e1;
+        --shadow:0 5px 20px rgba(0,0,0,0.4);
+      }
+      /* Base Reset & Background */
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      body {
+          background:var(--bg);
+          transition:.3s;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+      /* welcome text */
+      #welcome{
+          font-size: xxx-large;
+          color:var(--text);
+          margin: 40px auto;
+          font-family:'Times New Roman', Times, serif;
+      }
+      /* create your event */
+      #crtyrevent{
+          font-size: x-large;
+          color:var(--text);
+          margin: 10px auto;
+          font-family:'Times New Roman', Times, serif;
+      }
+      /* Top Navigation Bar */
+      nav {
+          width: 100%;
+          background:var(--navbar);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 15px 40px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+      nav .logo {
+          font-size: 28px;
+          font-weight: bold;
+          color: #2563eb;
+      }
+      nav .theme-btn {
+          background: #2563eb;
+          border: 1px solid #ccc;
+          padding: 8px 12px;
+          border-radius: 20px;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: background 0.3s;
+      }
+      nav .theme-btn:hover {
+          background-color: #f0f0f0;
+      }
+      /* Main Form Container */
+      .form-container {
+          background:var(--card);
+          color:var(--text);
+          width: 90%;
+          max-width: 1000px;
+          margin: 60px auto;
+          padding: 40px;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+      }
+      /* Form Group styling for Labels + Select inputs */
+      .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+      .form-group h3, .form-group label {
+          font-size: 1.0rem;
+          color:var(--text);
+          font-weight: 700;
+      }
+      /* Dropdown Select Styling */
+      select, input[type="text"], input[type="number"], input[type="datetime-local"] {
+          width: 100%;
+          padding: 12px;
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          background-color: #fff;
+          font-size: 0.90rem;
+          color: #333;
+          outline: none;
+          transition: border-color 0.2s;
+      }
+      select:focus, input:focus {
+          border-color: #3182ce;
+      }
+      /* Bottom Grid */
+      .dropdown-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+      }
+      @media (max-width: 768px) {
+          .dropdown-grid {
+              grid-template-columns: repeat(2, 1fr);
+          }
+      }
+      @media (max-width: 480px) {
+          .dropdown-grid {
+              grid-template-columns: 1fr;
+          }
+      }
+      /* Save Button Styling */
+      .button-wrapper {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 10px;
+      }
+      .save-btn {
+          background-color: #3182ce;
+          color: white;
+          border: none;
+          padding: 12px 30px;
+          font-size: 1rem;
+          font-weight: bold;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+      }
+      .save-btn:hover {
+          background-color: #2b6cb0;
+      }
     </style>
-    <!-- css file ends -->
-     
 </head>
 <body>
 
@@ -201,6 +162,7 @@
         <div class="logo">✨ EventEase</div>
         <button class="theme-btn" id="themeToggle">🌙</button>
     </nav>
+    
     <div id="welcome"><b>Welcome!</b></div>
     <div id="crtyrevent">Create your Event..</div>
 
@@ -208,13 +170,15 @@
         
         <div class="form-group">
             <h3>Name of the Event:</h3>
-            <!-- FIX 1: Removed wrapping <form> tag to prevent implicit form submission
-                        interfering with the Save button click handler -->
             <input id="name" type="text" style="height: 40px; width: 80%;" placeholder="Ex-Wedding Celebration">
         </div>
 
+        <div class="form-group" id="specialPersonGroup" style="display: none;">
+            <h3>Special person/Couples:</h3>
+            <input id="specialPerson" type="text" style="height: 40px; width: 80%;" placeholder="Enter Name(s) (e.g. John & Jane)">
+        </div>
+
         <div class="dropdown-grid">
-            
             <div class="form-group">
                 <label>Choose the Type of Event</label>
                 <select id="eventType" name="event-type">
@@ -222,22 +186,20 @@
                     <option value="traditional">Traditional</option>
                     <option value="modern">Modern</option>
                     <option value="custom">Custom</option>
-                    
                 </select>
             </div>
 
             <div class="form-group">
                 <label>Choose the Religion</label>
                 <select id="relchose" name="rel-type">
-                    <option value="" disabled selected>Select relgion...</option>
-                    <option value="traditional">Hinduism</option>
-                    <option value="modern">Islam</option>
-                    <option value="modern">Christianity</option>
-                    <option value="modern">Sikhism </option>
-                    <option value="modern">Buddhism  </option>
-                    <option value="custom">others</option>
-                    <option value="custom">No choice required</option>
-                    
+                    <option value="" disabled selected>Select religion...</option>
+                    <option value="hinduism">Hinduism</option>
+                    <option value="islam">Islam</option>
+                    <option value="christianity">Christianity</option>
+                    <option value="sikhism">Sikhism</option>
+                    <option value="buddhism">Buddhism</option>
+                    <option value="others">Others</option>
+                    <option value="none">No choice required</option>
                 </select>
             </div>
 
@@ -245,64 +207,31 @@
                 <label>Choose the State/Residence (India)</label>
                 <select id="state" name="state-residence">
                     <option value="" disabled selected>Select state...</option>
-                    <!-- selecting states -->
-                    <option value="ny">Andhra Pradesh</option>
-                    <option value="ca">Arunchal Pradesh</option>
-                    <option value="tx">Assam</option>
-                    <option value="br">Bihar</option>
-                    <option value="cht">Chattisgarh</option>
-                    <option value="go">Goa</option>
-                    <option value="gj">Gujarat</option>
-                    <option value="hr">Haryana</option>
-                    <option value="hp">Himanchal Pradesh</option>
-                    <option value="jk">Jharkhand</option>
-                    <option value="kt">Karnataka</option>
-                    <option value="kr">Kerala</option>
-                    <!-- FIX 2: Corrected malformed value attributes (were value=""mp> and value=""mh>) -->
-                    <option value="mp">Madhya Pradesh</option>
-                    <option value="mh">Maharastra</option>
-                    <option value="mn">Manipur</option>
-                    <option value="mg">Meghalaya</option>
-                    <option value="mz">Mizoram</option>
-                    <option value="ng">Nagaland</option>
-                    <option value="od">Odisha</option>
-                    <option value="pb">Punjab</option>
-                    <option value="rj">Rajasthan</option>
-                    <option value="sk">Sikkim</option>
-                    <option value="tn">Tamil Nadu</option>
-                    <option value="tg">Telangana</option>
-                    <option value="tr">Tripura</option>
-                    <option value="up">Uttar Pradesh</option>
-                    <option value="uk">Uttrakhand</option>
-                    <option value="wb">West bengal</option>
-                    
-                    <!-- selecting union territories -->
-                    
-                    <option value="an">Andaman and Nicobar</option>
-                    <option value="chn">Chandigarh</option>
-                    <option value="dnhdd">Dadra and Nagar Haveli and Daman and Diu</option>
+                    <option value="mh">Maharashtra</option>
                     <option value="dl">Delhi(NCT)</option>
-                    <option value="jk">Jammu & Kashmir</option>
-                    <option value="lkh">Ladakh</option>
-                    <option value="lks">Lakshadweep</option>
-                    <option value="pd">Puducherry</option>
-                    
-                </select>
+                    <option value="up">Uttar Pradesh</option>
+                    <option value="pb">Punjab</option>
+                    <option value="tn">Tamil Nadu</option>
+                    <option value="kt">Karnataka</option>
+                    <option value="gj">Gujarat</option>
+                    <option value="wb">West Bengal</option>
+                    <option value="rj">Rajasthan</option>
+                    </select>
             </div>
 
             <div class="form-group">
                 <label>Choose the Events</label>
                 <select id="eventCategory" name="specific-event">
-                    <option value="" disabled selected>Select state...</option>
-                    <option value="corporate">Wedding</option>
-                    <option value="Birthday">Birthday</option>
-                    <option value="Baby shower">Baby shower</option>
-                    <option value="Corporate">Corporate</option>
-                    <option value="Farewell">Farewell</option>
-                    <option value="College Fest">College Fest</option>
-                    <option value="Anniversary">Anniversary</option>
-                    <option value="Valentine">Valentine</option>
-                    <option value="Custom">Custom</option>
+                    <option value="" disabled selected>Select category...</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="baby_shower">Baby shower</option>
+                    <option value="corporate">Corporate</option>
+                    <option value="farewell">Farewell</option>
+                    <option value="college_fest">College Fest</option>
+                    <option value="anniversary">Anniversary</option>
+                    <option value="valentine">Valentine</option>
+                    <option value="custom">Custom</option>
                 </select>
             </div>
 
@@ -314,32 +243,28 @@
                     <option value="51-200">51 - 200</option>
                     <option value="201-500">201 - 500</option>
                     <option value="500-1000">500-1000</option>
-                    <option value="500-1000">1000-2000</option>
+                    <option value="1000-2000">1000-2000</option>
                     <option value="custom">Custom</option>
                 </select>
             </div>
-        <div class="form-group">
-            <label>Choose Date and time of Event</label>
-            <form>
+            
+            <div class="form-group">
+                <label>Choose Date and time of Event</label>
                 <input type="datetime-local" id="date_time">
-            </form>
-
+            </div>
         </div>
 
-            
         <div class="form-group">
             <h3>Budget of the Event</h3>
-           
             <input id="budget" type="number" style="height: 40px; width: 80%;" placeholder="Enter Amount (INR)">
         </div>
-
 
         <div class="button-wrapper">
             <button id="saveBtn" type="button" class="save-btn">Save</button>
         </div>
 
     </div>
+    
     <script type="module" src="dash_dashboard.js"></script>
-
 </body>
 </html>
