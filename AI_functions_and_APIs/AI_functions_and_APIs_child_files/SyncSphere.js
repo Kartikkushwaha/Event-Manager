@@ -144,7 +144,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebas
             div.appendChild(deleteBtn);
             chatMessages.appendChild(div);
         }
-
         // 5. SEND MESSAGE & FILE ATTACHMENT LOGIC
         document.getElementById('send-btn').addEventListener('click', async () => {
             if (!activeCommunityId) return;
