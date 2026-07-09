@@ -231,10 +231,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 });
 
         // 6. CREATE COMMUNITY
-        document.getElementById('btn-create-community').addEventListener('click', () => {
-            document.getElementById('modal-create').classList.remove('hidden');
-        });
-
         document.getElementById('submit-create-comm').addEventListener('click', async () => {
             const name = document.getElementById('create-comm-name').value.trim();
             const code = document.getElementById('create-comm-code').value.trim();
@@ -247,6 +243,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
                     ownerEmail: currentUser.email,
                     referralCode: code,
                     members: [currentUser.email], 
+                    pendingMembers: [], // <-- ADD THIS LINE
                     createdAt: serverTimestamp()
                 });
                 await setDoc(doc(db, "referral_codes", code), { is_used: false, community_id: commRef.id });
@@ -257,11 +254,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
             } catch (error) { console.error(error); alert("Error creating community."); }
         });
 
-        // 7. JOIN COMMUNITY VIA REFERRAL CODE
-        document.getElementById('btn-join-community').addEventListener('click', () => {
-            document.getElementById('modal-join').classList.remove('hidden');
-        });
-
+       // 7. JOIN COMMUNITY VIA REFERRAL CODE
         document.getElementById('submit-join-comm').addEventListener('click', async () => {
             const code = document.getElementById('join-comm-code').value.trim();
             if (!code) return alert("Enter a referral code.");
@@ -274,13 +267,12 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
 
                 const commId = codeDoc.data().community_id;
                 
+                // ADD TO PENDING INSTEAD OF MEMBERS
                 await updateDoc(doc(db, "communities", commId), {
-                    members: arrayUnion(currentUser.email)
+                    pendingMembers: arrayUnion(currentUser.email)
                 });
                 
-                await setDoc(doc(db, "allowed_users", currentUser.email), { role: "joined_member" }, { merge: true });
-
-                alert("Successfully joined the community!");
+                alert("Join request sent! The admin must approve your request before you can chat.");
                 closeModals();
                 document.getElementById('join-comm-code').value = '';
             } catch (error) { console.error(error); alert("Error joining community."); }
@@ -323,7 +315,43 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
             }
         };
 
-        // 9. VIEW MEMBERS & ADMIN BADGE
+// Global functions to handle approvals/rejections
+        window.approveMember = async (memberEmail) => {
+            try {
+                // Remove from pending and add to active members
+                await updateDoc(doc(db, "communities", activeCommunityId), {
+                    pendingMembers: arrayRemove(memberEmail),
+                    members: arrayUnion(memberEmail)
+                });
+                
+                // Add role permission (Moved here from the original join logic)
+                await setDoc(doc(db, "allowed_users", memberEmail), { role: "joined_member" }, { merge: true });
+                
+                // Refresh the list view
+                document.getElementById('btn-view-members').click(); 
+            } catch (error) {
+                console.error(error);
+                alert("Error approving member.");
+            }
+        };
+
+        window.rejectMember = async (memberEmail) => {
+            if(confirm(`Are you sure you want to reject ${memberEmail}'s request?`)) {
+                try {
+                    // Just remove from pending
+                    await updateDoc(doc(db, "communities", activeCommunityId), {
+                        pendingMembers: arrayRemove(memberEmail)
+                    });
+                    
+                    // Refresh the list view
+                    document.getElementById('btn-view-members').click(); 
+                } catch (error) {
+                    console.error(error);
+                    alert("Error rejecting member.");
+                }
+            }
+        };
+       // 9. VIEW MEMBERS & ADMIN BADGE
         document.getElementById('btn-view-members').addEventListener('click', async () => {
             const listContainer = document.getElementById('member-list-container');
             listContainer.innerHTML = 'Loading...';
@@ -333,16 +361,36 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
                 const commDoc = await getDoc(doc(db, "communities", activeCommunityId));
                 const data = commDoc.data();
                 const emails = data.members || [];
+                const pendingEmails = data.pendingMembers || [];
                 const ownerEmail = data.ownerEmail; 
                 const isCurrentUserAdmin = currentUser.email === ownerEmail;
                 
                 listContainer.innerHTML = '';
+
+                // --- PENDING MEMBERS LIST (Only visible to admin) ---
+                if (isCurrentUserAdmin && pendingEmails.length > 0) {
+                    listContainer.innerHTML += `<div class="pending-heading">Pending Requests</div>`;
+                    
+                    pendingEmails.forEach(email => {
+                        const name = email.split('@')[0];
+                        listContainer.innerHTML += `
+                            <div class="member-list-item pending-item">
+                                <strong>${name}</strong>
+                                <button class="btn-reject" onclick="rejectMember('${email}')">Reject</button>
+                                <button class="btn-approve" onclick="approveMember('${email}')">Approve</button>
+                                <span class="email">${email}</span>
+                            </div>
+                        `;
+                    });
+                    listContainer.innerHTML += `<div class="pending-heading" style="color:#111b21; border-top:2px solid #eee; margin-top: 10px; padding-top:10px;">Current Members</div>`;
+                }
+
+                // --- APPROVED MEMBERS LIST ---
                 emails.forEach(email => {
                     const name = email.split('@')[0];
                     const isAdmin = email === ownerEmail;
                     const adminBadge = isAdmin ? '<span class="admin-badge">Admin</span>' : '';
                     
-                    // Show remove button only if current user is admin, and the target is not the admin
                     const removeBtnHtml = (isCurrentUserAdmin && !isAdmin) 
                         ? `<button class="remove-member-btn" onclick="removeCommunityMember('${email}')">Remove</button>` 
                         : '';
