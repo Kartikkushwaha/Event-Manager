@@ -5,12 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EventEase - Workspace</title>
     <style>
-        /* Base styles */
-        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100dvh; background-color: #d1d7db; overflow: hidden; }
+        /* Base styles - MOBILE KEYBOARD FIX */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            height: 100%; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height */
+            background-color: #d1d7db; 
+            overflow: hidden; 
+            position: fixed; /* Prevents the body from scrolling off-screen */
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%;
+        }
         * { box-sizing: border-box; }
 
         /* Main Layout */
-        .app-container { display: flex; flex-direction: row; height: 100dvh; width: 100vw; max-width: 1600px; margin: 0 auto; background: #fff; box-shadow: 0 1px 1px 0 rgba(0,0,0,0.06); position: relative; }
+        .app-container { 
+            display: flex; 
+            flex-direction: row; 
+            height: 100%; /* Inherits the fixed height from body */
+            width: 100%; 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            background: #fff; 
+            box-shadow: 0 1px 1px 0 rgba(0,0,0,0.06); 
+            position: relative; 
+        }
         
         /* Sidebar */
         .sidebar { width: 30%; min-width: 280px; background-color: #ffffff; display: flex; flex-direction: column; border-right: 1px solid #e1e1e1; z-index: 1000; transition: left 0.3s ease; }
