@@ -6,7 +6,6 @@
     <title>EventEase - Workspace</title>
     <style>
         /* Base styles */
-        /* Changed 100vh to 100dvh to fix the disappearing mobile footer issue */
         body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; height: 100dvh; background-color: #d1d7db; overflow: hidden; }
         * { box-sizing: border-box; }
 
@@ -62,9 +61,18 @@
         .btn-danger:hover { background-color: #fef2f2 !important; }
         .admin-badge { color: #dc2626; font-weight: bold; font-size: 10px; margin-left: 5px; vertical-align: super; }
         
-        /* Remove Member Button */
+        /* Modal List Buttons (NEW STYLES ADDED HERE) */
         .remove-member-btn { background-color: #fef2f2; color: #dc2626; border: 1px solid #f87171; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; float: right; margin-top: -15px;}
         .remove-member-btn:hover { background-color: #fee2e2; }
+        
+        .btn-approve { background-color: #d9fdd3; color: #166534; border: 1px solid #22c55e; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; float: right; margin-top: -15px; margin-right: 5px;}
+        .btn-approve:hover { background-color: #bbf7d0; }
+        
+        .btn-reject { background-color: #fef2f2; color: #dc2626; border: 1px solid #f87171; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; float: right; margin-top: -15px; }
+        .btn-reject:hover { background-color: #fee2e2; }
+
+        .pending-heading { font-size: 14px; font-weight: bold; color: #d97706; margin-top: 15px; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .pending-item { background-color: #fffbeb; }
 
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 10px; }
