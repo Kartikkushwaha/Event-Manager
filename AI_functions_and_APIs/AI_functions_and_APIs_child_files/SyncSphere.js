@@ -13,7 +13,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstati
             messagingSenderId: "720737113769",
             appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
         };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
