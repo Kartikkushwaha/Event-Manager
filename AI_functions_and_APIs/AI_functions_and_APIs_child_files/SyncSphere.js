@@ -20,6 +20,7 @@ const storage = getStorage(app);
 let currentUser = null;
 let activeCommunityId = null; 
 let unsubscribeMessages = null; 
+let unsubscribeCommunity = null; // NEW: Listener to detect if active community gets deleted
 
 // Elements
 const commList = document.getElementById('community-list');
@@ -28,14 +29,12 @@ const chatTitle = document.getElementById('chat-title');
 const chatActions = document.getElementById('chat-actions');
 const chatInputArea = document.getElementById('chat-input-area');
 const messageInput = document.getElementById('message-input');
-
-// Mobile Sidebar Elements
 const sidebar = document.getElementById('sidebar');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 
 // -----------------------------------------
-// UI & LAYOUT LOGIC
+// UI, LAYOUT & THEME LOGIC
 // -----------------------------------------
 mobileMenuBtn.addEventListener('click', () => {
     sidebar.classList.add('open');
@@ -51,13 +50,26 @@ window.closeModals = () => {
     document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
 }
 
-// Mobile Keyboard Fix: Auto-scroll chat when input is focused
 messageInput.addEventListener('focus', () => {
-    setTimeout(() => {
-        if(chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-    }, 300); // 300ms delay gives the mobile keyboard time to slide up
+    setTimeout(() => { if(chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight; }, 300);
+});
+
+// Dark Mode Toggle
+const themeToggle = document.getElementById('theme-toggle');
+const bodyElement = document.body;
+if (localStorage.getItem('theme') === 'dark') {
+    bodyElement.classList.add('dark-mode');
+    themeToggle.innerText = '☀️';
+}
+themeToggle.addEventListener('click', () => {
+    bodyElement.classList.toggle('dark-mode');
+    if (bodyElement.classList.contains('dark-mode')) {
+        localStorage.setItem('theme', 'dark');
+        themeToggle.innerText = '☀️';
+    } else {
+        localStorage.setItem('theme', 'light');
+        themeToggle.innerText = '🌙';
+    }
 });
 
 // -----------------------------------------
@@ -99,7 +111,7 @@ function loadSidebarCommunities() {
 }
 
 // -----------------------------------------
-// 3. SELECT A COMMUNITY
+// 3. SELECT A COMMUNITY & DETECT DELETION
 // -----------------------------------------
 function selectCommunity(commId, commData) {
     activeCommunityId = commId;
@@ -114,6 +126,8 @@ function selectCommunity(commId, commData) {
     const deleteBtn = document.getElementById('btn-delete-comm');
     if (currentUser.uid === commData.ownerId) {
         deleteBtn.classList.remove('hidden');
+        // Store the referral code directly on the button so we can delete it later
+        deleteBtn.dataset.referralCode = commData.referralCode; 
     } else {
         deleteBtn.classList.add('hidden');
     }
@@ -123,8 +137,18 @@ function selectCommunity(commId, commData) {
         sidebarOverlay.classList.remove('active');
     }
 
-    if (unsubscribeMessages) unsubscribeMessages();
+    // --- NEW FEATURE 2: DETECT IF ADMIN DELETES THE ACTIVE COMMUNITY ---
+    if (unsubscribeCommunity) unsubscribeCommunity();
+    unsubscribeCommunity = onSnapshot(doc(db, "communities", commId), (docSnap) => {
+        if (!docSnap.exists()) {
+            // The document has been deleted!
+            alert("This community has been deleted by the admin.");
+            window.location.reload(); // Redirects/Refreshes the page exactly as requested
+        }
+    });
 
+    // Load Messages
+    if (unsubscribeMessages) unsubscribeMessages();
     const q = query(collection(db, `communities/${commId}/messages`), orderBy("timestamp", "asc"));
     
     unsubscribeMessages = onSnapshot(q, (snapshot) => {
@@ -159,10 +183,7 @@ function renderMessage(docId, data) {
         }
     }
 
-    if (data.text) {
-        html += `<div>${data.text}</div>`;
-    }
-    
+    if (data.text) { html += `<div>${data.text}</div>`; }
     html += `<span class="time">${timeString}</span>`;
     div.innerHTML = html;
 
@@ -237,7 +258,7 @@ document.getElementById('file-attachment').addEventListener('change', async (e) 
 });
 
 // -----------------------------------------
-// 6. CREATE COMMUNITY
+// 6. CREATE COMMUNITY & CHECK UNIQUE REFERRAL
 // -----------------------------------------
 document.getElementById('btn-create-community').addEventListener('click', () => {
     document.getElementById('modal-create').classList.remove('hidden');
@@ -249,6 +270,14 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
     if (!name || !code) return alert("Fill all fields.");
 
     try {
+        // --- NEW FEATURE 1: CHECK IF REFERRAL CODE ALREADY EXISTS ---
+        const codeDoc = await getDoc(doc(db, "referral_codes", code));
+        if (codeDoc.exists()) {
+            alert("Already in use. Please create a unique one!");
+            return; // Stop the creation process
+        }
+
+        // If it does not exist, proceed with creation
         const commRef = await addDoc(collection(db, "communities"), {
             name: name,
             ownerId: currentUser.uid,
@@ -258,6 +287,8 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
             pendingMembers: [],
             createdAt: serverTimestamp()
         });
+        
+        // Save the unique code to the database
         await setDoc(doc(db, "referral_codes", code), { is_used: false, community_id: commRef.id });
         
         closeModals();
@@ -336,10 +367,8 @@ document.getElementById('btn-view-members').addEventListener('click', async () =
         
         listContainer.innerHTML = '';
 
-        // --- PENDING MEMBERS LIST (Only visible to admin) ---
         if (isCurrentUserAdmin && pendingEmails.length > 0) {
             listContainer.innerHTML += `<div class="pending-heading">Pending Requests</div>`;
-            
             pendingEmails.forEach(email => {
                 const name = email.split('@')[0];
                 listContainer.innerHTML += `
@@ -354,7 +383,6 @@ document.getElementById('btn-view-members').addEventListener('click', async () =
             listContainer.innerHTML += `<div class="pending-heading" style="color:#111b21; border-top:2px solid #eee; margin-top: 10px; padding-top:10px;">Current Members</div>`;
         }
 
-        // --- APPROVED MEMBERS LIST ---
         emails.forEach(email => {
             const name = email.split('@')[0];
             const isAdmin = email === ownerEmail;
@@ -375,7 +403,6 @@ document.getElementById('btn-view-members').addEventListener('click', async () =
     } catch (error) { console.error(error); listContainer.innerHTML = 'Error loading members.'; }
 });
 
-// Global functions for inline HTML buttons
 window.approveMember = async (memberEmail) => {
     try {
         await updateDoc(doc(db, "communities", activeCommunityId), {
@@ -384,10 +411,7 @@ window.approveMember = async (memberEmail) => {
         });
         await setDoc(doc(db, "allowed_users", memberEmail), { role: "joined_member" }, { merge: true });
         document.getElementById('btn-view-members').click(); 
-    } catch (error) {
-        console.error(error);
-        alert("Error approving member.");
-    }
+    } catch (error) { console.error(error); alert("Error approving member."); }
 };
 
 window.rejectMember = async (memberEmail) => {
@@ -397,10 +421,7 @@ window.rejectMember = async (memberEmail) => {
                 pendingMembers: arrayRemove(memberEmail)
             });
             document.getElementById('btn-view-members').click(); 
-        } catch (error) {
-            console.error(error);
-            alert("Error rejecting member.");
-        }
+        } catch (error) { console.error(error); alert("Error rejecting member."); }
     }
 };
 
@@ -411,26 +432,26 @@ window.removeCommunityMember = async (memberEmail) => {
                 members: arrayRemove(memberEmail)
             });
             document.getElementById('btn-view-members').click();
-        } catch (error) {
-            console.error(error);
-            alert("Error removing member.");
-        }
+        } catch (error) { console.error(error); alert("Error removing member."); }
     }
 };
 
 // -----------------------------------------
-// 10. DELETE ENTIRE COMMUNITY
+// 10. DELETE ENTIRE COMMUNITY (UPDATED)
 // -----------------------------------------
-document.getElementById('btn-delete-comm').addEventListener('click', async () => {
+document.getElementById('btn-delete-comm').addEventListener('click', async (event) => {
     if (confirm("Are you sure you want to delete this community? This will permanently remove it for all members.")) {
         try {
+            // Delete the referral code from the database so it can be used again
+            const codeToDelete = event.target.dataset.referralCode;
+            if (codeToDelete) {
+                await deleteDoc(doc(db, "referral_codes", codeToDelete));
+            }
+
+            // Deleting the community document triggers the onSnapshot listener in Section 3 
+            // for all connected users, popping the alert and kicking them to the main page automatically!
             await deleteDoc(doc(db, "communities", activeCommunityId));
             
-            chatTitle.innerText = "Select a Community";
-            chatActions.classList.add('hidden');
-            chatInputArea.classList.add('hidden');
-            chatMessages.innerHTML = '<div style="text-align: center; color: #667781; margin-top: 20vh;">Community deleted. Select another to start chatting.</div>';
-            activeCommunityId = null;
         } catch (error) {
             console.error(error); alert("Error deleting community. Check your permissions.");
         }
