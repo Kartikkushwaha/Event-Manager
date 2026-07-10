@@ -21,7 +21,21 @@ themeBtn.addEventListener('click', () => {
   }
 });
 
-// --- Drag to Scroll Logic ---
+// --- Mobile Menu Toggle ---
+const mobileBtn = document.getElementById('mobileMenuBtn');
+const navLinks = document.getElementById('navLinks');
+
+mobileBtn.addEventListener('click', () => {
+  navLinks.classList.toggle('active');
+  // Optional: Change hamburger to an 'X' when open
+  if(navLinks.classList.contains('active')) {
+    mobileBtn.textContent = '✕';
+  } else {
+    mobileBtn.textContent = '☰';
+  }
+});
+
+// --- Drag to Scroll Logic (Desktop) ---
 const slider = document.getElementById('carousel');
 let isDown = false;
 let startX;
