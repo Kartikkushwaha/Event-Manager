@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 const firebaseConfig = {
@@ -436,24 +436,47 @@ window.removeCommunityMember = async (memberEmail) => {
     }
 };
 
-// -----------------------------------------
-// 10. DELETE ENTIRE COMMUNITY (UPDATED)
+// // -----------------------------------------
+// 10. DELETE ENTIRE COMMUNITY (DEEP WIPE)
 // -----------------------------------------
 document.getElementById('btn-delete-comm').addEventListener('click', async (event) => {
-    if (confirm("Are you sure you want to delete this community? This will permanently remove it for all members.")) {
+    if (confirm("Are you sure you want to completely delete this community? This will permanently erase all messages and data for everyone.")) {
+        
+        // Change button text to show it's processing, as deleting many messages takes a moment
+        const deleteBtn = event.target;
+        const originalText = deleteBtn.innerText;
+        deleteBtn.innerText = "Deleting...";
+        deleteBtn.disabled = true;
+
         try {
-            // Delete the referral code from the database so it can be used again
-            const codeToDelete = event.target.dataset.referralCode;
+            // 1. Delete the referral code from the database so it can be used again instantly
+            const codeToDelete = deleteBtn.dataset.referralCode;
             if (codeToDelete) {
                 await deleteDoc(doc(db, "referral_codes", codeToDelete));
             }
 
-            // Deleting the community document triggers the onSnapshot listener in Section 3 
-            // for all connected users, popping the alert and kicking them to the main page automatically!
+            // 2. Fetch and delete ALL messages in the subcollection to prevent "ghost" data
+            const messagesQuery = query(collection(db, `communities/${activeCommunityId}/messages`));
+            const querySnapshot = await getDocs(messagesQuery);
+            
+            const deletePromises = [];
+            querySnapshot.forEach((docSnap) => {
+                // Add each message deletion task to an array
+                deletePromises.push(deleteDoc(doc(db, `communities/${activeCommunityId}/messages`, docSnap.id)));
+            });
+            
+            // Execute all message deletions concurrently
+            await Promise.all(deletePromises);
+
+            // 3. Finally, delete the parent community document itself
+            // (This will trigger the onSnapshot listener for connected users and kick them to the main page)
             await deleteDoc(doc(db, "communities", activeCommunityId));
             
         } catch (error) {
-            console.error(error); alert("Error deleting community. Check your permissions.");
+            console.error(error); 
+            alert("Error deleting community data. Check console for details.");
+            deleteBtn.innerText = originalText;
+            deleteBtn.disabled = false;
         }
     }
 });
