@@ -10,11 +10,11 @@
             margin: 0; 
             padding: 0; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            height: 100%; /* Fallback */
-            height: 100dvh; /* Dynamic viewport height */
+            height: 100%; 
+            height: 100dvh; 
             background-color: #d1d7db; 
             overflow: hidden; 
-            position: fixed; /* Prevents the body from scrolling off-screen */
+            position: fixed; 
             top: 0; left: 0; right: 0; bottom: 0;
             width: 100%;
         }
@@ -24,7 +24,7 @@
         .app-container { 
             display: flex; 
             flex-direction: row; 
-            height: 100%; /* Inherits the fixed height from body */
+            height: 100%; 
             width: 100%; 
             max-width: 1600px; 
             margin: 0 auto; 
@@ -82,7 +82,7 @@
         .btn-danger:hover { background-color: #fef2f2 !important; }
         .admin-badge { color: #dc2626; font-weight: bold; font-size: 10px; margin-left: 5px; vertical-align: super; }
         
-        /* Modal List Buttons (NEW STYLES ADDED HERE) */
+        /* Modal List Buttons */
         .remove-member-btn { background-color: #fef2f2; color: #dc2626; border: 1px solid #f87171; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; float: right; margin-top: -15px;}
         .remove-member-btn:hover { background-color: #fee2e2; }
         
@@ -125,6 +125,47 @@
             .chat-header-title { font-size: 15px; }
             .delete-msg-btn { padding: 4px 8px; font-size: 12px; }
         }
+
+        /* --- PREMIUM DARK MODE OVERRIDES --- */
+        body.dark-mode { background-color: #111b21; }
+        body.dark-mode .app-container { background: #222e35; box-shadow: none; }
+        
+        body.dark-mode .sidebar { background-color: #111b21; border-color: #313d45; }
+        body.dark-mode .sidebar-header, 
+        body.dark-mode .chat-header, 
+        body.dark-mode .chat-input-container { background-color: #202c33; border-color: #313d45; }
+        
+        body.dark-mode .sidebar-header h3, 
+        body.dark-mode .chat-header-title { color: #e9edef; }
+        body.dark-mode .mobile-menu-btn { color: #e9edef; }
+        
+        body.dark-mode .contact-list { background: #111b21; }
+        body.dark-mode .community-item { border-bottom: 1px solid #202c33; }
+        body.dark-mode .community-item:hover, 
+        body.dark-mode .community-item.active { background-color: #2a3942; }
+        body.dark-mode .community-item div[style*="color: #111b21"] { color: #e9edef !important; }
+        
+        body.dark-mode .chat-window { background-color: #0b141a; background-image: none; }
+        
+        body.dark-mode .message.received { background-color: #202c33; color: #e9edef; }
+        body.dark-mode .message.sent { background-color: #005c4b; color: #e9edef; }
+        body.dark-mode .message .sender-name { color: #8198a8; }
+        body.dark-mode .message .time { color: #8696a0; }
+        body.dark-mode .delete-msg-btn { background: #2a3942; border-color: #313d45; }
+        
+        body.dark-mode .chat-input { background-color: #2a3942; color: #e9edef; }
+        body.dark-mode .chat-input::placeholder { color: #8696a0; }
+        body.dark-mode .attach-btn { color: #8696a0; }
+        body.dark-mode .attach-btn:hover { color: #e9edef; }
+        
+        body.dark-mode .modal-content { background: #202c33; border: 1px solid #313d45; }
+        body.dark-mode .modal-header { border-bottom-color: #313d45; }
+        body.dark-mode .modal-header h2, 
+        body.dark-mode .modal-content label { color: #e9edef; }
+        body.dark-mode .modal-content input { background-color: #2a3942; color: #e9edef; border: 1px solid #313d45; }
+        body.dark-mode .member-list-item { border-bottom-color: #313d45; color: #e9edef; }
+        body.dark-mode .pending-heading { color: #fbbf24; border-bottom-color: #313d45; }
+        body.dark-mode .pending-item { background-color: #2a3942; }
     </style>
 </head>
 <body>
@@ -136,6 +177,7 @@
             <div class="sidebar-header">
                 <h3 id="user-greeting">Loading...</h3>
                 <div style="display: flex; gap: 5px;">
+                    <button id="theme-toggle" class="action-btn outline" style="padding: 6px 10px; font-size: 14px; border:none;" title="Toggle Dark Mode">🌙</button>
                     <button class="action-btn outline" id="btn-join-community" style="padding: 6px 10px; font-size: 12px;">Join</button>
                     <button class="action-btn" id="btn-create-community" style="padding: 6px 10px; font-size: 12px;">+ New</button>
                 </div>
@@ -165,7 +207,6 @@
             <div class="chat-input-container hidden" id="chat-input-area">
                 <input type="file" id="file-attachment" style="display: none;" accept="image/*,video/*,audio/*,application/*">
                 <button class="attach-btn" id="attach-btn" title="Attach a file">📎</button>
-                
                 <input type="text" id="message-input" class="chat-input" placeholder="Type a message..." autocomplete="off">
                 <button id="send-btn" class="send-btn">Send</button>
             </div>
@@ -225,13 +266,10 @@
                 <button class="close-modal" onclick="closeModals()">&times;</button>
             </div>
             <div id="member-list-container" style="max-height: 300px; overflow-y: auto;">
-                </div>
+            </div>
         </div>
     </div>
 
-    <script type="module" src="SyncSphere.js">
-        
-
-    </script>
+    <script type="module" src="SyncSphere.js"></script>
 </body>
 </html>
