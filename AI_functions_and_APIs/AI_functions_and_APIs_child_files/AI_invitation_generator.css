@@ -1,6 +1,6 @@
 /* --- GLOBAL CSS VARIABLES & THEME --- */
 :root {
-    --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+    --bg-gradient: linear-gradient(-45deg, #ddbebf, #f1e7ee, #a1c4fd, #c2e9fb);
     --glass-bg: rgba(255, 255, 255, 0.4);
     --glass-border: rgba(255, 255, 255, 0.6);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
