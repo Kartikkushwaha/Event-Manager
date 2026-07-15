@@ -43,7 +43,7 @@ setInterval(() => {
 
 }, 3000);
 
-
+// authentication 
 document.getElementById("googleBtn")
 .addEventListener("click", async (e) => {
 
@@ -89,7 +89,7 @@ document.getElementById("googleBtn")
 
 });
 
-
+// day and night mode 
 
 const themeBtn =
 document.getElementById(
@@ -147,3 +147,49 @@ themeBtn.addEventListener(
 
     }
 );
+
+// counting animation for premium look
+document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".counter");
+    const duration = 2500; // Total counting time in milliseconds (2.5 seconds)
+
+    const startCounting = (counter) => {
+        const target = +counter.getAttribute("data-target");
+        let startTime = null;
+
+        const updateCount = (currentTime) => {
+            if (!startTime) startTime = currentTime;
+            const elapsed = currentTime - startTime;
+
+            // Calculate progress as a percentage from 0.0 to 1.0
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Multiply target by the progress percentage
+            const currentCount = Math.floor(progress * target);
+
+            counter.innerText = currentCount.toLocaleString() + "+";
+
+            // Continue the animation loop until 100% progress is reached
+            if (progress < 1) {
+                requestAnimationFrame(updateCount);
+            } else {
+                // Guarantee the exact final number is displayed at the end
+                counter.innerText = target.toLocaleString() + "+";
+            }
+        };
+
+        requestAnimationFrame(updateCount);
+    };
+
+    // Optional: Only start counting when the section scrolls into view
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                startCounting(entry.target);
+                observer.unobserve(entry.target); // Run animation once
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => observer.observe(counter));
+});

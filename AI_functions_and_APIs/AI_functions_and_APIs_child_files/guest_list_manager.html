@@ -3,102 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>EventEase - Guest List Manager</title>
+    <link rel="icon" type="image/png" href="../../ee_logo_bgremove.png">
 <style>
-  :root{
+  :root {
+    --bg: #f8fafc;
+    --navbar: rgba(255, 255, 255, 0.85);
+    --card: #ffffff;
+    --text: #0f172a;
+    --secondaryText: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    --accent: #2563eb;
+    --bgCore: #f8fafc;
+  }
 
-    --bg:#f4f7fc;
+  .dark-mode {
+    --bg: #0b0f19;
+    --navbar: rgba(30, 41, 59, 0.8);
+    --card: #1e293b;
+    --text: #f8fafc;
+    --secondaryText: #94a3b8;
+    --border: #334155;
+    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    --accent: #3b82f6;
+    --bgCore: #0b0f19;
+  }
 
-    --navbar:white;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
 
-    --card:rgb(190, 237, 240);
+  body {
+    background: var(--bg);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
+  }
 
-    --text:#333;
-
-    --secondaryText:gray;
-
-    --shadow:0 5px 15px rgba(0,0,0,0.08);
-    
-
-}
-
-.dark-mode{
-
-    --bg:#0f172a;
-
-    --navbar:#1e293b;
-
-    --card:#334155;
-
-    --text:#f8fafc;
-
-    --secondaryText:#cbd5e1;
-
-    --shadow:0 5px 20px rgba(0,0,0,0.4);
-
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:var(--bg);
-    transition:.3s;
-}
-
-/* Navbar */
-.navbar {
+  /* Navbar */
+  .navbar {
     background: var(--navbar);
-    padding: 18px 50px;
+    padding: 16px 36px;
     display: flex;
-    border-radius: 12px; 
+    border-radius: 16px; 
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    position: sticky;
+    top: 15px;
     z-index: 100;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-}
+    margin: 15px 20px 0 20px;
+  }
 
-
-.logo {
-    font-size: 24px;
+  .logo {
+    font-size: 22px;
     font-weight: 700;
     letter-spacing: -0.5px; 
-    color: #2563eb;
-}
-
-.logo span {
     color: var(--accent);
-}
-
-.nav-links {
     display: flex;
-    gap: 30px;
-}
+    align-items: center;
+    gap: 8px;
+  }
 
-.nav-links a {
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .nav-links a {
     text-decoration: none;
     color: var(--secondaryText);
     font-weight: 500;
     font-size: 15px;
     transition: color 0.2s ease;
-}
+  }
 
-.nav-links a:hover {
-    color: var(--text);
-}
+  .nav-links a:hover {
+    color: var(--accent);
+  }
 
-/* theme button toggle */
-#themeToggle {
+  /* theme button toggle (UNTOUCHED) */
+  #themeToggle {
     background: var(--text);
     color: var(--bgCore);
     border: none;
@@ -109,250 +103,332 @@ body{
     cursor: pointer;
     margin-right: 10px;
     transition: transform 0.2s ease, opacity 0.2s ease;
-}
+  }
 
-#themeToggle:hover {
+  #themeToggle:hover {
     opacity: 0.85;
     transform: scale(1.02);
-}
+  }
 
+  /* Guest Panel */
+  .guest-panel {
+    width: 92%;
+    max-width: 1200px;
+    margin: 30px auto;
+    background: var(--card);
+    padding: 28px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
 
-/* guest panel */
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
 
+  .panel-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
 
+  /* Top Stat Bar */
+  .guest-stats-bar {
+    background: rgba(37, 99, 235, 0.08);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 15px;
+  }
 
+  /* Refined Button Hierarchy */
+  .panel-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
 
+  .panel-buttons button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
 
+  #addGuestBtn, #saveGuestBtn {
+    background: var(--accent);
+    color: white;
+    border: 1px solid transparent;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  }
 
-/* guest panel */
+  #addGuestBtn:hover, #saveGuestBtn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
 
+  #ExportGuestBtn {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
 
-.tag{
-    display:inline-block;
-    background:#dbeafe;
-    color:#2563eb;
-    padding:8px 15px;
-    border-radius:30px;
-    margin:40px;
-    font-size:14px;
-    font-weight:600;
-    
-}
+  #ExportGuestBtn:hover {
+    background: rgba(148, 163, 184, 0.1);
+  }
 
-.guest-panel{
-    width:90%;
-    margin:30px auto;
-    background:var(--card);
-    padding:20px;
-    border-radius:15px;
-    box-shadow:var(--shadow);
-}
+  #RemoveGuestBtn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid transparent;
+  }
 
-.panel-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-}
+  #RemoveGuestBtn:hover {
+    background: #ef4444;
+    color: white;
+  }
 
-.panel-header h2{
-    color:var(--text);
-}
+  /* Grid Layouts */
+  .guest-head, .guest-row {
+    display: grid;
+    grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(130px, 1fr) 44px;
+    gap: 14px;
+    align-items: center;
+  }
 
-#addGuestBtn{
-    background:#2563eb;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
-}
+  .guest-head {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--secondaryText);
+    padding: 0 10px 12px 10px;
+    border-bottom: 1px solid var(--border);
+  }
 
-/* .guest-head,
-.guest-row{
-    display:grid;
-    grid-template-columns:
-    80px 1fr 1fr 1fr 100px;
-    gap:10px;
-    margin-bottom:10px;
-} */
+  .guest-row {
+    margin: 12px 0;
+    padding: 6px 10px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+  }
 
-.guest-head,
-.guest-row{
-    display:grid;
-    grid-template-columns:
-    60px
-    minmax(150px,1fr)
-    minmax(150px,1fr)
-    minmax(120px,1fr)
-    80px;
+  .guest-row:hover {
+    background: rgba(148, 163, 184, 0.05);
+  }
 
-    gap:10px;
-    align-items:center;
-}
-
-
-.guest-head{
-    font-weight:bold;
-    color:var(--text);
-}
-
-/* .guest-row input{
-    padding:10px;
-    border:1px solid #ddd;
-    border-radius:8px;
-} */
-.guest-row{
-    margin: 10px
-}
-.guest-row input{
-    width:100%;
-    min-width:0;
-    padding:10px;
-    border:1px solid #ddd;
-    border-radius:8px;
-}
-
-.serial-box{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--text);
-}
-
-.deleteBtn{
-    background:#ef4444;
+  /* Modern Input Fields */
+  .guest-row input {
     width: 100%;
-    height:40px;
-    color:white;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-}
+    min-width: 0;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
 
-.guest-footer{
-    margin-top:15px;
-    color:var(--text);
-}
+  .guest-row input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: var(--card);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
 
-@media(max-width:900px){
+  .serial-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: var(--secondaryText);
+    font-size: 14px;
+  }
 
-    .guest-head{
-        display:none;
+  .deleteBtn {
+    background: transparent;
+    color: #ef4444;
+    width: 40px;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.05);
+  }
+
+  /* Mobile Responsive Adaptations */
+  @media (max-width: 900px) {
+    .guest-head {
+      display: none;
     }
 
-    .guest-row{
-        grid-template-columns:1fr;
+    .guest-row {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      margin-bottom: 16px;
+      position: relative;
     }
 
-    .deleteBtn{
-        width:100%;
+    .guest-row:hover {
+      background: var(--bg);
     }
 
-}
-
-@media(max-width:768px){
-
-    .navbar{
-        flex-direction:column;
-        gap:15px;
+    .serial-box {
+      justify-content: flex-start;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+      color: var(--accent);
     }
 
-    /* .stats-container{
-        grid-template-columns:1fr;
-    } */
-
-    .nav-links{
-        flex-wrap:wrap;
-        justify-content:center;
+    .serial-box::before {
+      content: "Guest #";
     }
-}
 
-.panel-buttons{
-    display:flex;
-    gap:10px;
-}
+    .deleteBtn {
+      width: 100%;
+      height: 42px;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      margin-top: 6px;
+    }
 
-#saveGuestBtn{
-    background:#16a34a;
-    color:white;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.25s;
-}
+    .deleteBtn::after {
+      
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+  }
 
-#saveGuestBtn:hover{
-    background:#15803d;
-    transform:translateY(-2px);
-}
-  
+  @media (max-width: 640px) {
+    .navbar {
+      margin: 10px 10px 0 10px;
+      padding: 14px 20px;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .nav-links {
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    #themeToggle {
+      margin-right: 0;
+      width: 100%;
+    }
+
+    .guest-panel {
+      width: 94%;
+      padding: 18px;
+      margin: 20px auto;
+    }
+
+    .panel-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .guest-stats-bar {
+      text-align: center;
+      justify-content: center;
+    }
+
+    .panel-buttons {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .panel-buttons button {
+      width: 100%;
+    }
+  }
 </style>
-
-
 </head>
 <body>
 
-     <nav class="navbar">
-
+    <nav class="navbar">
         <div class="logo">
             ✨ EventEase
         </div>
 
         <div class="nav-links">
-        
-           <a id="dashboard" href="../../dashboard.html">Dashboard</a>
-            
-            <a id="AIpanel"  href="../AI_plan.html"> AI Panel </a>
-           
-           
-            
- 
+            <a id="dashboard" href="../../dashboard.html">Dashboard</a>
+            <a id="AIpanel" href="../AI_plan.html">AI Panel</a>
         </div>
+        
         <button id="themeToggle">
-    🌙
-</button>
-
-    
-
+            🌙
+        </button>
     </nav>
 
+    <!-- Guest Panel -->
+    <div class="guest-panel">
+        <div class="panel-header">
+            <h2>Guest List Manager</h2>
 
-<!-- guest panel -->
+            <div class="panel-buttons">
+                <button id="ExportGuestBtn">Export</button>
+                <button id="RemoveGuestBtn">Delete All</button>
+                <button id="saveGuestBtn">Save</button>
+                <button id="addGuestBtn">+ Add Guest</button>
+            </div>
+        </div>
 
-<div class="guest-panel">
+        <!-- Top Stat Banner -->
+        <div class="guest-stats-bar">
+            <span id="guestCount">
+                Total Guests: 0
+            </span>
+        </div>
 
-    <div class="panel-header">
-    <h2>🤵 Guest List Manager</h2>
-
-    <div class="panel-buttons">
-        <button id="saveGuestBtn">💾 Save</button>
-        <button id="addGuestBtn">+ Add Guest</button>
+        <div class="guest-head">
+            <div>S.No.</div>
+            <div>Name *</div>
+            <div>Address</div>
+            <div>Phone</div>
+            <div></div>
+        </div>
+        
+        <div id="guestContainer"></div>
     </div>
-</div>
-
-    <div class="guest-head">
-        <div>S.No.</div>
-        <div>Name *</div>
-        <div>Address</div>
-        <div>Phone</div>
-        <!-- <div>Action</div> -->
-    </div>
-    
-<div class="guest-footer">
-        <span id="guestCount">
-            Total Guests: 0
-        </span>
-    </div>
-
-    <div id="guestContainer"></div>
-
-    
-
-</div>
   
 <script type="module" src="guest_list_manager.js"></script>
 </body>
 </html>
-

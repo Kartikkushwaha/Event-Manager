@@ -1,46 +1,58 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Light Mode Variables */
-  --bg-color-1: #e0c3fc;
-  --bg-color-2: #8ec5fc;
-  --bg-color-3: #f0f2f5;
-  --text-main: #1d1d1f;
-  --text-muted: #86868b;
-  --nav-bg: rgba(255, 255, 255, 0.7);
-  --card-bg: rgba(255, 255, 255, 0.6);
-  --border-color: rgba(255, 255, 255, 0.5);
-  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  /* FAANG Light Mode - Apple / Stripe Inspired Clean Silica */
+  --bg-color-1: #f3e7ff;
+  --bg-color-2: #e0f2fe;
+  --bg-color-3: #f1f5f9;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --nav-bg: rgba(255, 255, 255, 0.75);
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --border-color: rgba(255, 255, 255, 0.8);
+  --border-highlight: rgba(99, 102, 241, 0.3);
+  --shadow-sm: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 12px 30px -10px rgba(31, 38, 135, 0.12);
+  --shadow-hover: 0 30px 60px -12px rgba(99, 102, 241, 0.2), 0 18px 36px -18px rgba(0, 0, 0, 0.1);
+  --accent-color: #4f46e5;
+  --accent-gradient: linear-gradient(135deg, #4f46e5, #2563eb);
 }
 
 [data-theme="dark"] {
-  /* Dark Mode Variables */
-  --bg-color-1: #0f2027;
-  --bg-color-2: #203a43;
-  --bg-color-3: #2c5364;
-  --text-main: #f5f5f7;
-  --text-muted: #a1a1a6;
-  --nav-bg: rgba(20, 20, 20, 0.7);
-  --card-bg: rgba(30, 30, 30, 0.6);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  /* FAANG Dark Mode - Linear / Vercel Inspired Deep Obsidian */
+  --bg-color-1: #0b0f19;
+  --bg-color-2: #111827;
+  --bg-color-3: #0f172a;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --nav-bg: rgba(15, 23, 42, 0.75);
+  --card-bg: rgba(30, 41, 59, 0.6);
+  --border-color: rgba(255, 255, 255, 0.12);
+  --border-highlight: rgba(129, 140, 248, 0.4);
+  --shadow-sm: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 30px -10px rgba(0, 0, 0, 0.6);
+  --shadow-hover: 0 30px 60px -12px rgba(99, 102, 241, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.8);
+  --accent-color: #818cf8;
+  --accent-gradient: linear-gradient(135deg, #818cf8, #3b82f6);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: linear-gradient(-45deg, var(--bg-color-1), var(--bg-color-2), var(--bg-color-3));
   background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  animation: gradientBG 18s ease infinite;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
-  transition: color 0.5s ease;
+  transition: color 0.5s ease, background 0.5s ease;
 }
 
 @keyframes gradientBG {
@@ -49,65 +61,77 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Premium Navbar */
+/* --- FAANG Floating Pill Navbar --- */
 .navbar {
   background: var(--nav-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 15px 40px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-  margin: 15px;
-  border-radius: 20px;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  margin: 20px auto;
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  border-radius: 100px;
   border: 1px solid var(--border-color);
   position: sticky;
-  top: 15px;
+  top: 20px;
   z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #2563eb;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .nav-links {
   display: flex;
-  gap: 30px;
+  gap: 32px;
+  align-items: center;
 }
 
 .nav-links a {
   text-decoration: none;
   color: var(--text-main);
   font-weight: 500;
-  font-size: 15px;
-  transition: color 0.3s ease;
+  font-size: 14px;
+  letter-spacing: -0.2px;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover {
-  color: #2563eb;
+  color: var(--accent-color);
 }
 
 .nav-controls {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
 }
 
 #themeToggle {
-  background: #2563eb;
+  background: var(--accent-gradient);
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 50px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #themeToggle:hover {
-  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
 }
 
 .mobile-menu-btn {
@@ -117,44 +141,54 @@ body {
   font-size: 24px;
   color: var(--text-main);
   cursor: pointer;
+  padding: 4px;
 }
 
-/* Main Content */
+/* --- Main Content --- */
 main {
   padding-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 120px);
 }
 
 .header-text {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding: 0 20px;
+  max-width: 700px;
 }
 
 .header-text h1 {
-  font-size: 3rem;
-  font-weight: 600;
-  letter-spacing: -1px;
-  margin-bottom: 10px;
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, var(--text-main) 0%, var(--text-muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .header-text p {
   color: var(--text-muted);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  letter-spacing: -0.2px;
 }
 
-/* Carousel Wrapper */
+/* --- Carousel Wrapper (With Huge Vertical Buffer for Hover Zoom) --- */
 .carousel-wrapper {
   width: 100%;
   max-width: 100vw;
   overflow-x: auto;
   text-align: center; 
   white-space: nowrap;
-  padding: 60px 0; 
+  /* 80px top & bottom padding prevents the zoomed card top from getting cut off */
+  padding: 80px 0 80px 0; 
+  margin: -20px 0;
   cursor: grab;
   -ms-overflow-style: none;  
   scrollbar-width: none;  
@@ -168,78 +202,90 @@ main {
   cursor: grabbing;
 }
 
-/* Card Container */
+/* --- Card Stacking & Spreading Container --- */
 .card-container {
   display: inline-flex;
   align-items: center;
   perspective: 1000px;
-  padding: 0 40px; 
-  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  padding: 0 60px; 
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card {
-  min-width: 280px; 
-  max-width: 280px;
-  height: 380px;
+  min-width: 300px; 
+  max-width: 300px;
+  height: 400px;
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border-color);
-  border-radius: 24px;
-  padding: 30px;
+  border-radius: 28px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow);
-  margin-left: -160px; 
-  transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  margin-left: -170px; /* Deep FAANG card overlap */
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   user-select: none; 
   cursor: pointer; 
   text-align: left;
   overflow: hidden; 
+  flex-shrink: 0;
 }
 
 .card:first-child {
   margin-left: 0;
 }
 
-/* Spreading Effect on Container Hover (Desktop Only) */
+/* --- Premium Stacking & Spreading Physics (Active on Desktop AND Half-Screen) --- */
 @media (hover: hover) and (pointer: fine) {
   .card-container:hover .card {
-    margin-left: 20px;
+    margin-left: 15px; /* Smoothly spreads out on container hover */
     transform: rotateY(0deg) scale(1);
   }
   .card-container:hover .card:first-child {
     margin-left: 0;
   }
+  
+  /* Individual Card Zoom */
   .card-container .card:hover {
     transform: scale(1.1) translateY(-20px);
-    z-index: 10;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    border-color: rgba(255,255,255,0.8);
+    z-index: 20;
+    box-shadow: var(--shadow-hover), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border-color: var(--border-highlight);
   }
+  
+  /* Cards to the right push aside gently */
   .card-container .card:hover ~ .card {
-    transform: translateX(30px);
+    transform: translateX(35px);
   }
 }
 
-/* Card Content */
+/* --- Card Content --- */
 .card-icon {
   font-size: 2.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .card h2 {
   font-size: 1.4rem;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   font-weight: 600;
+  letter-spacing: -0.5px;
   word-wrap: break-word;
 }
 
 .card p {
   color: var(--text-muted);
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.6;
   flex-grow: 1;
   white-space: normal; 
 }
@@ -247,10 +293,13 @@ main {
 .card-footer {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--accent-color);
   opacity: 0;
   transform: translateY(10px);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .card:hover .card-footer {
@@ -259,66 +308,94 @@ main {
 }
 
 
-/* --- RESPONSIVE MOBILE DESIGN --- */
-@media (max-width: 900px) {
-  .header-text h1 { font-size: 2.2rem; }
-  .card { margin-left: -100px; }
+/* --- RESPONSIVE BREAKPOINTS --- */
+
+/* 1. Tablet & Half-Screen Desktop (601px to 1024px) 
+      Cards STAY STACKED here and spread out on hover! */
+@media (max-width: 1024px) and (min-width: 601px) {
+  .header-text h1 { font-size: 2.8rem; }
+  
+  .card { 
+    min-width: 270px;
+    max-width: 270px;
+    height: 370px;
+    margin-left: -140px; /* Keeps them overlapping on half screen */
+  }
 }
 
+/* 2. Mobile & Small Tablets (768px and below) - Navbar & Menu Adjustments */
 @media (max-width: 768px) {
-  /* Navbar Mobile */
   .navbar {
-    padding: 15px 20px;
-    margin: 10px;
+    padding: 12px 24px;
+    border-radius: 24px;
   }
+  
   .mobile-menu-btn {
     display: block;
   }
+  
+  /* Dropdown Menu - Hidden by default */
   .nav-links {
     position: absolute;
-    top: 80px;
-    left: 10px;
-    right: 10px;
-    background: var(--card-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    top: 70px;
+    right: 0;
+    width: 220px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border-color);
     flex-direction: column;
     padding: 20px;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    gap: 20px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-hover);
+    gap: 16px;
     text-align: center;
+    
     /* Hide initially */
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-  }
-  .nav-links.active {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Cards Curvy Flow (Scroll Snap) for Mobile */
+  /* HOVER MAGIC: Shows menu when hovering over navbar OR the hamburger icon */
+  .navbar:hover .nav-links,
+  .mobile-menu-btn:hover ~ .nav-links,
+  .nav-links:hover,
+  .nav-links.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 3. Phones ONLY (600px and below) 
+      Here we disable stacking and switch to clean swipe cards */
+@media (max-width: 600px) {
+  .header-text h1 { font-size: 2.2rem; }
+  
   .carousel-wrapper {
     scroll-snap-type: x mandatory;
-    padding: 20px 0 40px 0; /* Extra padding for shadows */
+    padding: 40px 0 60px 0;
   }
+  
   .card-container {
     padding: 0 20px;
-    gap: 15px; /* Replaces overlap with a clean gap */
+    gap: 16px; 
   }
+  
   .card {
-    scroll-snap-align: center; /* Snaps perfectly to center */
-    margin-left: 0 !important; /* Removes overlap on mobile */
-    min-width: 80vw; /* Scales card dynamically to phone screen */
-    max-width: 80vw;
-    height: 350px;
+    scroll-snap-align: center;
+    margin-left: 0 !important; /* Unstacks cards for mobile swipe */
+    min-width: min(85vw, 300px);
+    max-width: min(85vw, 300px);
+    height: 360px;
   }
+  
   .card-footer {
-    opacity: 1; /* Always show footer on mobile since no hover */
+    opacity: 1;
     transform: translateY(0);
   }
 }
