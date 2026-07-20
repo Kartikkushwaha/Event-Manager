@@ -103,8 +103,8 @@ themeBtn.addEventListener("click", () => {
 // --- 3. Logout Handler ---
 document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
-    // Notice: We NO LONGER call localStorage.clear()! 
-    // Your saved photo, phone, and address remain stored in the browser safely tied to your email.
+    // We NO LONGER call localStorage.clear()! 
+    
     window.location.href = "index.html";
 });
 

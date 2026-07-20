@@ -117,21 +117,19 @@ body {
 }
 
 #themeToggle {
-  background: var(--accent-gradient);
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 100px;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: transparent;
+          border: 1px solid var(--border);
+          padding: 5px 12px;
+          border-radius: 20px;
+          cursor: pointer;
+          /* font-size: 1.2rem; */
+          transition: all 0.3s ease;
+          color: var(--text);
+          border: 1px solid grey;
 }
 
 #themeToggle:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+  background-color: var(--bg-color-1);
 }
 
 .mobile-menu-btn {

@@ -20,7 +20,7 @@ themeToggleBtn.addEventListener('click', () => {
 
 // Helper function to swap the emoji
 function updateThemeIcon(theme) {
-    themeIcon.textContent = theme === 'dark' ? '🌙' : '🌞';
+    themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
 }
 
 // --- SIDEBAR LOGIC (Updated to Event Listener) ---

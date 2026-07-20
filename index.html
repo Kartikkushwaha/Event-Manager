@@ -3,124 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventEase - Login page </title>
+    <title>EventEase — AI Powered Event Planning</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="ee_logo_bgremove.png">
 </head>
 <body>
 
-<header>
+<header class="header-wrapper">
     <nav class="navbar">
-        <div class="logo">✨ EventEase</div>
+        <div class="logo" data-view="home" style="cursor: pointer;">
+            <span class="logo-icon">✨</span>
+            <span class="logo-text">EventEase</span>
+        </div>
 
         <ul class="nav-links">
-            <li><a href="index_child_files/features.html">Features</a></li>
-            <li><a href="index_child_files/htw.html">How it Works</a></li>
-            <li><a href="index_child_files/abt.html">About</a></li>
-            <li><a href="index_child_files/cntus.html">Contact Us</a></li>
+            <li><a href="#home" class="nav-item active-link" data-view="home">Home</a></li>
+            <li><a href="#features" class="nav-item" data-view="features">Features</a></li>
+            <li><a href="#how-it-works" class="nav-item" data-view="htw">How it Works</a></li>
+            <li><a href="#about" class="nav-item" data-view="abt">About</a></li>
+            <li><a href="#contact" class="nav-item" data-view="cntus">Contact Us</a></li>
         </ul>
-        <button id="themeToggle">
-    🌙
-</button>
-
-        <!-- <div class="auth-buttons">
-            <a href="#" id="loginbtn" class="login">Login</a>
-            <a href="#" id="signupbtn" class="signup">Sign Up</a>
-        </div> -->
-        <!-- <div class="auth-buttons">
-    <a href="#" id="googleBtn" class="signup">
-        Sign in with Google
-    </a>
-</div> -->
+        
+        <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
     </nav>
 </header>
 
-<main class="hero">
+<!-- SPA VIEW CONTAINERS -->
+<div id="app-content" class="main-container">
 
-    <div class="hero-content">
+    <!-- 1. HOME VIEW -->
+    <main id="home" class="view-section active-view">
+        <div class="hero-layout">
+            <div class="hero-content">
+                <div class="badge-wrapper">
+                    <span class="tag">AI Powered Event Planning</span>
+                </div>
+                <h1>Plan Your Perfect Event With Machine Intelligence</h1>
+                <p class="description">
+                    Discover verified vendors, premier venues, and luxury services tailored precisely to your budget, location, and aesthetic preferences.
+                </p>
+                
+                <div class="cta-group">
+                    <button id="googleBtn" class="start-btn">Start Planning →</button>
+                    <p class="account-text">
+                        Create an account to synchronize event details, curations, and vendor communications.
+                    </p>
+                </div>
 
-        <span class="tag">AI Powered Event Planning</span>
+                <div class="event-selection">
+                    <h3>Select Event Category</h3>
+                    <div class="event-types">
+                        <button class="event-btn">💍 Wedding</button>
+                        <button class="event-btn">🎂 Birthday</button>
+                        <div class="dropdown">
+                            <button class="event-btn drop-btn">More ▼</button>
+                            <div class="dropdown-content">
+                                <a href="#">Baby Shower</a>
+                                <a href="#">Engagement</a>
+                                <a href="#">Corporate Event</a>
+                                <a href="#">Anniversary</a>
+                                <a href="#">Product Launch</a>
+                                <a href="#">Farewell Party</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <h1>Plan Your Perfect Event With AI</h1>
+                <div class="stats">
+                    <div class="stat-card">
+                        <h2 class="counter" data-target="10000">0</h2>
+                        <p>Events Curated</p>
+                    </div>
+                    <div class="stat-card">
+                        <h2 class="counter" data-target="5000">0</h2>
+                        <p>Verified Vendors</p>
+                    </div>
+                    <div class="stat-card">
+                        <h2 class="counter" data-target="50">0</h2>
+                        <p>Cities Covered</p>
+                    </div>
+                </div>
+            </div>
 
-        <p class="description">
-            Find vendors, venues, hotels and services near you
-            based on your budget, location and event type.
-        </p>
-
-        <button id="googleBtn" class="start-btn">
-            Start Planning →
-        </button>
-
-        <p class="account-text">
-            Create an account to save your event details,
-            wishlist and vendor recommendations.
-        </p>
-
-        <h3>Choose Your Event Type</h3>
-
-        <div class="event-types">
-            <button>💍 Wedding</button>
-            <button>🎂 Birthday</button>
-
-            <div class="dropdown">
-                <button class="drop-btn">
-                    More ▼
-                </button>
-
-                <div class="dropdown-content">
-                    <a href="#">Baby Shower</a>
-                    <a href="#">Engagement</a>
-                    <a href="#">Corporate Event</a>
-                    <a href="#">Anniversary</a>
-                    <a href="#">Product Launch</a>
-                    <a href="#">Farewell Party</a>
+            <div class="hero-visual">
+                <div class="image-box">
+                    <img src="Images/Hinduism-wed.webp" class="slide active" alt="Wedding Event">
+                    <img src="Images/birthday.webp" class="slide" alt="Birthday Event">
+                    <img src="Images/baby_shower.webp" class="slide" alt="Baby Shower Event">
+                    <img src="Images/corporate.jpg" class="slide" alt="Corporate Event">
                 </div>
             </div>
         </div>
+    </main>
 
-        <div class="stats">
+    <!-- 2. FEATURES VIEW -->
+    <section id="features" class="view-section">
+        <div class="features-layout">
+            <div class="section-header">
+                <span class="tag">System Capabilities</span>
+                <h1>Engineered For Seamless Event Execution</h1>
+                <p>
+                    EventEase combines generative AI, geospatial mapping, and intuitive project management tools into a singular, enterprise-grade planning platform.
+                </p>
+            </div>
 
-    <div class="stat-card">
-        <h2 class="counter" data-target="10000">0</h2>
-        <p>Events Planned</p>
-    </div>
+            <div class="features-grid">
+                <div class="feature-card highlight">
+                    <div class="icon">🤖</div>
+                    <h3>AI Planning Engine</h3>
+                    <p>Receive real-time, algorithmic event blueprints tailored to your exact budgetary constraints and thematic preferences.</p>
+                </div>
 
-    <div class="stat-card">
-        <h2 class="counter" data-target="5000">0</h2>
-        <p>Verified Vendors</p>
-    </div>
+                <div class="feature-card highlight">
+                    <div class="icon">💌</div>
+                    <h3>Generative Invitations</h3>
+                    <p>Harness custom typography and AI-generated imagery to craft bespoke digital and print invitations in seconds.</p>
+                </div>
 
-    <div class="stat-card">
-        <h2 class="counter" data-target="50">0</h2>
-        <p>Cities Covered</p>
-    </div>
+                <div class="feature-card">
+                    <div class="icon">🔒</div>
+                    <h3>Enterprise Security</h3>
+                    <p>Authenticate seamlessly via Google Workspace. Your personal itineraries, financial ledgers, and vendor contracts remain encrypted.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">🎨</div>
+                    <h3>Parametric Customization</h3>
+                    <p>Fine-tune every variable of your event architecture, from guest seating matrices to multi-day scheduling.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">📍</div>
+                    <h3>Geospatial Discovery</h3>
+                    <p>Integrate directly with Google Maps to evaluate venue proximity, transit logistics, and localized vendor ratings.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">👥</div>
+                    <h3>Collaborative Network</h3>
+                    <p>Access transparent, verified peer reviews and collaborative itineraries shared across our global host community.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">💰</div>
+                    <h3>Dynamic Budgeting</h3>
+                    <p>Track expenditures with predictive cost modeling that alerts you to potential budget overruns before they happen.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="icon">❤️</div>
+                    <h3>Intelligent Shortlisting</h3>
+                    <p>Bookmark, categorize, and compare top-tier vendors in side-by-side analytical matrices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. HOW IT WORKS VIEW PLACEHOLDER -->
+    <section id="htw" class="view-section">
+        <div class="placeholder-card">
+            <span class="tag">Workflow</span>
+            <h2>How It Works Section</h2>
+            <p>Ready for your custom HTML structure...</p>
+        </div>
+    </section>
+
+    <!-- 4. ABOUT VIEW PLACEHOLDER -->
+    <section id="abt" class="view-section">
+        <div class="placeholder-card">
+            <span class="tag">Our Mission</span>
+            <h2>About Us Section</h2>
+            <p>Ready for your custom HTML structure...</p>
+        </div>
+    </section>
+
+    <!-- 5. CONTACT US VIEW -->
+    <section id="cntus" class="view-section">
+        <div class="contact-layout">
+            <div class="contact-info">
+                <span class="tag">Direct Channel</span>
+                <h1>Initiate a Conversation With Our Team</h1>
+                <p>
+                    Whether you require enterprise onboarding, technical support, or bespoke event consulting, our specialists are available to assist.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">📧</div>
+                        <div>
+                            <h4>Email Support</h4>
+                            <p>support@eventease.com</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📞</div>
+                        <div>
+                            <h4>Direct Line</h4>
+                            <p>+91 1800 098 537</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <div>
+                            <h4>Headquarters</h4>
+                            <p>Sangrur, Punjab, India</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper">
+                <h2>Send a Transmission</h2>
+                <form class="contact-form">
+                    <div class="input-group">
+                        <input type="text" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Subject" required>
+                    </div>
+                    <div class="input-group">
+                        <textarea rows="5" placeholder="Detail your requirements..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Transmit Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
 
 </div>
 
-        </div>
-
-    </div>
-
-    <div class="image-box">
-        <img src="Images/Hinduism-wed.webp" class="slide active">
-        <img src="Images/birthday.webp" class="slide">
-        <img src="Images/baby_shower.webp" class="slide">
-        <img src="Images/corporate.jpg" class="slide">
-    </div>
-
-</main>
-
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 <script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-	createChat({
-		webhookUrl: 'https://eventease.app.n8n.cloud/webhook/406b7689-c21f-41d5-bd72-baba2765e243/chat'
-	});
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    createChat({
+        webhookUrl: 'https://eventease.app.n8n.cloud/webhook/406b7689-c21f-41d5-bd72-baba2765e243/chat'
+    });
 </script>
-
-    <script type="module" src="script.js"></script>
+<script type="module" src="script.js"></script>
 </body>
 </html>
-

@@ -1,5 +1,4 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
 import {
   getAuth,
   GoogleAuthProvider,
@@ -17,141 +16,109 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
 const provider = new GoogleAuthProvider();
 
+// ==========================================
+// SPA ROUTING ENGINE
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const navItems = document.querySelectorAll("[data-view]");
+    const views = document.querySelectorAll(".view-section");
 
+    function switchView(targetViewId) {
+        views.forEach(view => {
+            view.classList.remove("active-view");
+        });
 
-//for main page slide animation
-const slides = document.querySelectorAll(".slide");
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.classList.remove("active-link");
+        });
 
-let current = 0;
+        const targetView = document.getElementById(targetViewId);
+        if (targetView) {
+            targetView.classList.add("active-view");
+        }
 
-slides[current].classList.add("active");
+        const activeNavLink = document.querySelector(`.nav-links a[data-view="${targetViewId}"]`);
+        if (activeNavLink) {
+            activeNavLink.classList.add("active-link");
+        }
 
-setInterval(() => {
-
-    slides[current].classList.remove("active");
-
-    current++;
-
-    if(current >= slides.length){
-        current = 0;
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    slides[current].classList.add("active");
-
-}, 3000);
-
-// authentication 
-document.getElementById("googleBtn")
-.addEventListener("click", async (e) => {
-
-    e.preventDefault();
-
-    try {
-
-        const result =
-        await signInWithPopup(auth, provider);
-
-        const user = result.user;
-
-        localStorage.setItem(
-            "userName",
-            user.displayName
-        );
-
-        localStorage.setItem(
-            "userEmail",
-            user.email
-        );
-
-        localStorage.setItem(
-            "userPhoto",
-            user.photoURL || ""
-        );
-      
-      localStorage.setItem(
-    "userUID",
-    user.uid
-);
-
-        window.location.href =
-        "dashboard.html";
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-    }
-
+    navItems.forEach(item => {
+        item.addEventListener("click", (e) => {
+            e.preventDefault();
+            const targetViewId = item.getAttribute("data-view");
+            if (targetViewId) {
+                switchView(targetViewId);
+            }
+        });
+    });
 });
 
-// day and night mode 
-
-const themeBtn =
-document.getElementById(
-    "themeToggle"
-);
-
-const savedTheme =
-localStorage.getItem(
-    "theme"
-);
-
-if(savedTheme==="dark"){
-
-    document.body.classList.add(
-        "dark-mode"
-    );
-
-    themeBtn.textContent="☀️";
-
+// ==========================================
+// HERO SLIDE ANIMATION
+// ==========================================
+const slides = document.querySelectorAll(".slide");
+let current = 0;
+if (slides.length > 0) {
+    slides[current].classList.add("active");
+    setInterval(() => {
+        slides[current].classList.remove("active");
+        current = (current + 1) % slides.length;
+        slides[current].classList.add("active");
+    }, 4000);
 }
 
-themeBtn.addEventListener(
-    "click",
-    ()=>{
+// ==========================================
+// AUTHENTICATION
+// ==========================================
+const googleBtn = document.getElementById("googleBtn");
+if (googleBtn) {
+    googleBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
 
-        document.body.classList.toggle(
-            "dark-mode"
-        );
+            localStorage.setItem("userName", user.displayName);
+            localStorage.setItem("userEmail", user.email);
+            localStorage.setItem("userPhoto", user.photoURL || "");
+            localStorage.setItem("userUID", user.uid);
 
-        if(
-            document.body.classList.contains(
-                "dark-mode"
-            )
-        ){
-
-            localStorage.setItem(
-                "theme",
-                "dark"
-            );
-
-            themeBtn.textContent="☀️";
-
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            console.error(error);
         }
+    });
+}
 
-        else{
+// ==========================================
+// THEME CONTROLLER
+// ==========================================
+const themeBtn = document.getElementById("themeToggle");
+const savedTheme = localStorage.getItem("theme");
 
-            localStorage.setItem(
-                "theme",
-                "light"
-            );
+if (savedTheme === "dark") {
+    document.body.classList.add("dark-mode");
+    themeBtn.textContent = "☀️";
+}
 
-            themeBtn.textContent="🌙";
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeBtn.textContent = isDark ? "☀️" : "🌙";
+});
 
-        }
-
-    }
-);
-
-// counting animation for premium look
+// ==========================================
+// NUMBER COUNTER ANIMATION
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const counters = document.querySelectorAll(".counter");
-    const duration = 2500; // Total counting time in milliseconds (2.5 seconds)
+    const duration = 2000; 
 
     const startCounting = (counter) => {
         const target = +counter.getAttribute("data-target");
@@ -160,33 +127,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const updateCount = (currentTime) => {
             if (!startTime) startTime = currentTime;
             const elapsed = currentTime - startTime;
-
-            // Calculate progress as a percentage from 0.0 to 1.0
             const progress = Math.min(elapsed / duration, 1);
-
-            // Multiply target by the progress percentage
-            const currentCount = Math.floor(progress * target);
+            
+            // Ease-out quad formula for smoother deceleration
+            const easeOutProgress = 1 - (1 - progress) * (1 - progress);
+            const currentCount = Math.floor(easeOutProgress * target);
 
             counter.innerText = currentCount.toLocaleString() + "+";
 
-            // Continue the animation loop until 100% progress is reached
             if (progress < 1) {
                 requestAnimationFrame(updateCount);
             } else {
-                // Guarantee the exact final number is displayed at the end
                 counter.innerText = target.toLocaleString() + "+";
             }
         };
-
         requestAnimationFrame(updateCount);
     };
 
-    // Optional: Only start counting when the section scrolls into view
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 startCounting(entry.target);
-                observer.unobserve(entry.target); // Run animation once
+                observer.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });

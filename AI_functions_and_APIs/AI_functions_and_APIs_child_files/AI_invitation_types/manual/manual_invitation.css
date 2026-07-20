@@ -102,24 +102,19 @@ body {
 }
 
 .theme-toggle {
-    background:#2563eb;
-
-    color:white;
-
-    border:none;
-
-    padding:10px 15px;
-
-    border-radius:20px;
-
-    cursor:pointer;
-
-    margin-right:10px;
+   background: transparent;
+          border: 1px solid var(--border);
+          padding: 5px 12px;
+          border-radius: 20px;
+          cursor: pointer;
+          /* font-size: 1.2rem; */
+          transition: all 0.3s ease;
+          color: var(--text);
+          border: 1px solid grey;
 }
 
 .theme-toggle:hover {
-    background-color: white;
-    border: 1px solid black
+    background-color: var(--bg-color);
 
 }
 
