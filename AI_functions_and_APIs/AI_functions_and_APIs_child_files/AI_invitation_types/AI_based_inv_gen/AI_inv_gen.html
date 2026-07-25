@@ -5,8 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventEase - AI-Powered Creator</title>
     <link rel="icon" type="image/png" href="../../../../ee_logo_bgremove.png">
+    <link rel="stylesheet" href="AI_inv_gen.css">
 </head>
 <body>
-    
+     <div class="container">
+    <div class="controls">
+      <h1>AI Invitation Generator</h1>
+      <p class="subtitle">Describe your event to generate a downloadable high quality invitation card.</p>
+      
+      <label for="promptInput"><b>Please describe your invitation Card</b><br>Note: This Invitation generator is fully AI based, it will work only according to your thought.</label>
+      <textarea id="promptInput" placeholder="Create a wedding invitation card with heading 'Welcome to wedding' and other things as per you required..."></textarea>
+      
+      <button id="generateBtn" class="btn-main">Generate My Invitation</button>
+      <div id="statusText" class="status"></div>
+    </div>
+
+    <div class="preview-area">
+      <!-- Action Bar with instant PNG download -->
+      <div id="actionBar" class="action-bar">
+        <a id="downloadBtn" class="btn-download" download="invitation_card.png">Download Invitation Card</a>
+      </div>
+
+      <div class="invitation-card">
+        <span id="placeholderText" class="placeholder-text">Your generated Invitation card will appear here...</span>
+        <img id="imagePreview" alt="Generated Invitation Card" />
+      </div>
+    </div>
+  </div>
+<!-- using canvas for image output -->
+  <canvas id="hiddenCanvas" width="800" height="1100"></canvas>
+    <script type="module" src="AI_inv_gen.js"></script>
 </body>
 </html>
