@@ -1,39 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventEase - AI-Powered Creator</title>
-    <link rel="icon" type="image/png" href="../../../../ee_logo_bgremove.png">
+    <link rel="icon" type="image/png" href="ee_logo_bgremove.png">
     <link rel="stylesheet" href="AI_inv_gen.css">
 </head>
 <body>
-     <div class="container">
+  <!-- Floating Top Navbar Matching Screenshot -->
+  <header class="navbar-wrapper">
+    <nav class="navbar">
+      <div class="nav-brand">
+        <span class="sparkle">✨</span>
+        <span class="brand-name">EventEase</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#" class="nav-link">Dashboard</a></li>
+        <li><a href="#" class="nav-link">AI Panel</a></li>
+        <li><a href="#" class="nav-link active">AI Invitation Generator</a></li>
+      </ul>
+      <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+        <span id="themeIcon">☀️</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Left Panel: Input & Controls -->
     <div class="controls">
       <h1>AI Invitation Generator</h1>
-      <p class="subtitle">Describe your event to generate a downloadable high quality invitation card.</p>
+      <p class="subtitle">Describe your event to generate a downloadable high-quality invitation card.</p>
       
-      <label for="promptInput"><b>Please describe your invitation Card</b><br>Note: This Invitation generator is fully AI based, it will work only according to your thought.</label>
-      <textarea id="promptInput" placeholder="Create a wedding invitation card with heading 'Welcome to wedding' and other things as per you required..."></textarea>
+      <div class="input-group">
+        <label for="promptInput">
+          <b>Please describe your invitation Card</b>
+          <span class="note">Note: This generator is fully AI-based; specify colors, names, and themes for best results.</span>
+        </label>
+        <textarea id="promptInput" placeholder="Create a royal wedding invitation card with heading 'Welcome to our Wedding', gold accents, and names John and Jane..."></textarea>
+      </div>
       
-      <button id="generateBtn" class="btn-main">Generate My Invitation</button>
+      <button id="generateBtn" class="btn-main">
+        <span>Generate My Invitation</span>
+      </button>
       <div id="statusText" class="status"></div>
     </div>
 
+    <!-- Right Panel: Preview & Download -->
     <div class="preview-area">
-      <!-- Action Bar with instant PNG download -->
       <div id="actionBar" class="action-bar">
-        <a id="downloadBtn" class="btn-download" download="invitation_card.png">Download Invitation Card</a>
+        <a id="downloadBtn" class="btn-download" download="invitation_card.png">
+          <span>Download Invitation Card</span>
+        </a>
       </div>
 
       <div class="invitation-card">
-        <span id="placeholderText" class="placeholder-text">Your generated Invitation card will appear here...</span>
+        <div id="placeholderText" class="placeholder-text">
+          <span class="placeholder-icon">🎨</span>
+          <p>Your generated invitation card will appear here...</p>
+        </div>
         <img id="imagePreview" alt="Generated Invitation Card" />
       </div>
     </div>
-  </div>
-<!-- using canvas for image output -->
+  </main>
+
+  <!-- Hidden HTML5 Canvas used for off-screen PNG rendering -->
   <canvas id="hiddenCanvas" width="800" height="1100"></canvas>
-    <script type="module" src="AI_inv_gen.js"></script>
+  <script type="module" src="AI_inv_gen.js"></script>
 </body>
 </html>
