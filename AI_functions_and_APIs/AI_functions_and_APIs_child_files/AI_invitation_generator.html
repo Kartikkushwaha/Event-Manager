@@ -3,418 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventEase - Guest List Manager</title>
+    <title>EventEase - Invitation Generator</title>
     <link rel="icon" type="image/png" href="../../ee_logo_bgremove.png">
-<style>
-  :root {
-    --bg: #f8fafc;
-    --navbar: rgba(255, 255, 255, 0.85);
-    --card: #ffffff;
-    --text: #0f172a;
-    --secondaryText: #64748b;
-    --border: #e2e8f0;
-    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-    --accent: #2563eb;
-    --bgCore: #f8fafc;
-  }
 
-  .dark-mode {
-    --bg: #0b0f19;
-    --navbar: rgba(30, 41, 59, 0.8);
-    --card: #1e293b;
-    --text: #f8fafc;
-    --secondaryText: #94a3b8;
-    --border: #334155;
-    --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-    --accent: #3b82f6;
-    --bgCore: #0b0f19;
-  }
+    <style>
 
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
+        :root {
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    min-height: 100vh;
-  }
+            /* Light Mode Animated Gradient Colors */
 
-  /* Navbar */
-  .navbar {
-    background: var(--navbar);
-    padding: 16px 36px;
-    display: flex;
-    border-radius: 16px; 
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    position: sticky;
-    top: 15px;
-    z-index: 100;
-    margin: 15px 20px 0 20px;
-  }
+            --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
 
-  .logo {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px; 
-    color: var(--accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+           
 
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-  }
+            /* Glassmorphism Settings (Light) */
 
-  .nav-links a {
-    text-decoration: none;
-    color: var(--secondaryText);
-    font-weight: 500;
-    font-size: 15px;
-    transition: color 0.2s ease;
-  }
+            --glass-bg: rgba(255, 255, 255, 0.4);
 
-  .nav-links a:hover {
-    color: var(--accent);
-  }
+            --glass-border: rgba(255, 255, 255, 0.6);
 
-  /* theme button toggle */
-  #themeToggle {
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 5px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text);
-  }
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
 
-  #themeToggle:hover {
-    background-color: var(--bg);
-    transform: scale(1.02);
-  }
+           
 
-  /* Guest Panel */
-  .guest-panel {
-    width: 92%;
-    max-width: 1200px;
-    margin: 30px auto;
-    background: var(--card);
-    padding: 28px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-  }
+            /* Text & Buttons */
 
-  .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
+            --text: #1d1d1f;
 
-  .panel-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
+            --secondaryText: #49494b;
 
-  /* Top Stat Bar & Controls */
-  .guest-stats-bar {
-    background: rgba(37, 99, 235, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    padding: 12px 18px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-weight: 600;
-    color: var(--accent);
-    font-size: 15px;
-  }
+            --btn-bg: rgba(255, 255, 255, 0.8);
 
-  /* Sort Dropdown Styling */
-  .sort-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--text);
-  }
+            --btn-text: #1d1d1f;
 
-  .sort-dropdown {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-  }
+            --btn-hover: #ffffff;
 
-  .sort-dropdown:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  }
+        }
 
-  /* Refined Button Hierarchy */
-  .panel-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
 
-  .panel-buttons button {
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
 
-  #addGuestBtn, #saveGuestBtn {
-    background: var(--accent);
-    color: white;
-    border: 1px solid transparent;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-  }
+        .dark-mode {
 
-  #addGuestBtn:hover, #saveGuestBtn:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
+            /* Dark Mode Animated Gradient Colors */
 
-  #ExportGuestBtn {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
+            --bg-gradient: linear-gradient(-45deg, #002B30, #1B2A32, #080643, #020617);
 
-  #ExportGuestBtn:hover {
-    background: rgba(148, 163, 184, 0.1);
-  }
+           
 
-  #RemoveGuestBtn {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid transparent;
-  }
+            /* Glassmorphism Settings (Dark) */
 
-  #RemoveGuestBtn:hover {
-    background: #ef4444;
-    color: white;
-  }
+            --glass-bg: rgba(15, 23, 42, 0.4);
 
-  /* Grid Layouts */
-  .guest-head, .guest-row {
-    display: grid;
-    grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(130px, 1fr) 44px;
-    gap: 14px;
-    align-items: center;
-  }
+            --glass-border: rgba(255, 255, 255, 0.1);
 
-  .guest-head {
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--secondaryText);
-    padding: 0 10px 12px 10px;
-    border-bottom: 1px solid var(--border);
-  }
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 
-  .guest-row {
-    margin: 12px 0;
-    padding: 6px 10px;
-    border-radius: 12px;
-    transition: background-color 0.2s ease;
-  }
+           
 
-  .guest-row:hover {
-    background: rgba(148, 163, 184, 0.05);
-  }
+            /* Text & Buttons */
 
-  /* Modern Input Fields */
-  .guest-row input {
-    width: 100%;
-    min-width: 0;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    border-radius: 10px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-  }
+            --text: #f5f5f7;
 
-  .guest-row input:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: var(--card);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  }
+            --secondaryText: #a1a1a6;
 
-  .serial-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: var(--secondaryText);
-    font-size: 14px;
-  }
+            --btn-bg: rgba(255, 255, 255, 0.1);
 
-  .deleteBtn {
-    background: transparent;
-    color: #ef4444;
-    width: 40px;
-    height: 40px;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
+            --btn-text: #f5f5f7;
 
-  .deleteBtn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    transform: scale(1.05);
-  }
+            --btn-hover: rgba(255, 255, 255, 0.2);
 
-  /* Mobile Responsive Adaptations */
-  @media (max-width: 900px) {
-    .guest-head {
-      display: none;
-    }
+        }
 
-    .guest-row {
-      grid-template-columns: 1fr;
-      gap: 12px;
-      padding: 18px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      margin-bottom: 16px;
-      position: relative;
-    }
 
-    .guest-row:hover {
-      background: var(--bg);
-    }
 
-    .serial-box {
-      justify-content: flex-start;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4px;
-      color: var(--accent);
-    }
+        * {
 
-    .serial-box::before {
-      content: "Guest #";
-    }
+            margin: 0;
 
-    .deleteBtn {
-      width: 100%;
-      height: 42px;
-      background: rgba(239, 68, 68, 0.08);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      margin-top: 6px;
-    }
+            padding: 0;
 
-    .deleteBtn::after {
-      font-size: 14px;
-      font-weight: 600;
-      margin-left: 6px;
-    }
-  }
+            box-sizing: border-box;
 
-  @media (max-width: 640px) {
-    .navbar {
-      margin: 10px 10px 0 10px;
-      padding: 14px 20px;
-      flex-direction: column;
-      gap: 16px;
-    }
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
-    .nav-links {
-      width: 100%;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
+        }
 
-    #themeToggle {
-      margin-right: 0;
-      width: 100%;
-    }
 
-    .guest-panel {
-      width: 94%;
-      padding: 18px;
-      margin: 20px auto;
-    }
 
-    .panel-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+        /* --- Fluid Animated Background --- */
 
-    .guest-stats-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
-    }
+        body {
 
-    .sort-container {
-      width: 100%;
-      justify-content: space-between;
-    }
+            background: var(--bg-gradient);
 
-    .sort-dropdown {
-      flex-grow: 1;
-    }
+            background-size: 400% 400%;
 
-    .panel-buttons {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
+            animation: gradientFusion 15s ease infinite;
 
-    .panel-buttons button {
-      width: 100%;
-    }
-  }
-</style>
+            color: var(--text);
+
+            min-height: 100vh;
+
+            transition: color 0.4s ease;
+
+        }
+
+
+
+        @keyframes gradientFusion {
+
+            0% { background-position: 0% 50%; }
+
+            50% { background-position: 100% 50%; }
+
+            100% { background-position: 0% 50%; }
+
+        }
+
+
+
+        /* --- Glassmorphic Navbar --- */
+
+        .navbar {
+
+            background: var(--glass-bg);
+
+            padding: 16px 40px;
+
+            display: flex;
+
+            border-radius: 20px;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow: var(--glass-shadow);
+
+            border: 1px solid var(--glass-border);
+
+            backdrop-filter: blur(20px);
+
+            -webkit-backdrop-filter: blur(20px);
+
+            z-index: 100;
+
+            margin: 24px;
+
+            transition: all 0.4s ease;
+
+        }
+
+
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: 700;
+
+            letter-spacing: -0.5px;
+
+            color: var(--text);
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+
+        .nav-links {
+
+            display: flex;
+
+            gap: 35px;
+
+        }
+
+
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: var(--secondaryText);
+
+            font-weight: 500;
+
+            font-size: 15px;
+
+            letter-spacing: 0.3px;
+
+            transition: color 0.3s ease;
+
+        }
+
+
+
+        .nav-links a:hover {
+
+            color: var(--text);
+
+        }
+
+
+
+        /* Theme button toggle */
+
+        #themeToggle {
+
+            background: transparent;
+          border: 1px solid var(--border);
+          padding: 5px 12px;
+          border-radius: 20px;
+          cursor: pointer;
+          /* font-size: 1.2rem; */
+          transition: all 0.3s ease;
+          color: var(--text);
+          border: 1px solid grey;
+
+        }
+
+
+
+        #themeToggle:hover {
+
+            /* transform: scale(1.1) rotate(15deg); */
+
+            background: var(--btn-hover);
+
+        }
+
+
+
+        /* --- Glassmorphic Cards Section --- */
+
+        .card-container {
+
+            display: grid;
+
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+            gap: 35px;
+
+            padding: 50px 24px;
+
+            max-width: 1250px;
+
+            margin: 0 auto;
+
+        }
+
+
+
+        .card {
+
+            background: var(--glass-bg);
+
+            border-radius: 24px;
+
+            padding: 40px 30px;
+
+            box-shadow: var(--glass-shadow);
+
+            border: 1px solid var(--glass-border);
+
+            backdrop-filter: blur(20px);
+
+            -webkit-backdrop-filter: blur(20px);
+
+            display: flex;
+
+            flex-direction: column;
+
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+
+        }
+
+
+
+        .card:hover {
+
+            transform: translateY(-10px) scale(1.02);
+
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+
+        }
+
+
+
+        .card h3 {
+
+            color: var(--text);
+
+            font-size: 1.5rem;
+
+            font-weight: 700;
+
+            letter-spacing: -0.5px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+
+        .card p {
+
+            color: var(--secondaryText);
+
+            font-size: 0.95rem;
+
+            line-height: 1.7;
+
+            font-weight: 400;
+
+            flex-grow: 1;
+
+            margin-bottom: 7px; /* Kept exactly at 7px as requested */
+
+        }
+
+
+
+        .card-btn {
+
+            background: var(--btn-bg);
+
+            color: var(--btn-text);
+
+            text-decoration: none;
+
+            text-align: center;
+
+            padding: 14px 24px;
+
+            border-radius: 14px;
+
+            font-weight: 600;
+
+            font-size: 0.95rem;
+
+            border: 1px solid var(--glass-border);
+
+            cursor: pointer;
+
+            backdrop-filter: blur(10px);
+
+            -webkit-backdrop-filter: blur(10px);
+
+            transition: all 0.3s ease;
+
+        }
+
+
+
+        .card-btn:hover {
+
+            background: var(--btn-hover);
+
+            transform: translateY(-2px);
+
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+
+        }
+
+
+
+        /* --- Responsive Media Queries --- */
+
+        @media(max-width: 768px){
+
+            .navbar {
+
+                flex-direction: column;
+
+                gap: 20px;
+
+                padding: 20px;
+
+                border-radius: 16px;
+
+            }
+
+            .nav-links {
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 20px;
+
+            }
+
+            .card {
+
+                padding: 30px 20px;
+
+            }
+
+        }
+
+    </style>
+
 </head>
 <body>
 
@@ -433,51 +428,45 @@
         </button>
     </nav>
 
-    <!-- Guest Panel -->
-    <div class="guest-panel">
-        <div class="panel-header">
-            <h2>Guest List Manager</h2>
+   
 
-            <div class="panel-buttons">
-                <button id="ExportGuestBtn">Export</button>
-                <button id="RemoveGuestBtn">Delete All</button>
-                <button id="saveGuestBtn">Save</button>
-                <button id="addGuestBtn">+ Add Guest</button>
-            </div>
+   <div class="card-container">
+
+       
+
+        <div class="card">
+
+            <h3>AI-Powered Creator</h3>
+
+            <p>Leverage advanced artificial intelligence to instantly generate personalized and stunning invitations tailored specifically to your event's tone.</p>
+
+            <a href="AI_invitation_types/AI_based_inv_gen/AI_inv_gen.html" class="card-btn">Launch AI Generator</a>
         </div>
 
-        <!-- Top Stat Banner & Sort Dropdown -->
-        <div class="guest-stats-bar">
-            <span id="guestCount">
-                Total Guests: 0
-            </span>
-            
-            <div class="sort-container">
-                <label for="sortGuests">Sort by:</label>
-                <select id="sortGuests" class="sort-dropdown">
-                    <option value="time-newest">Newest to Oldest</option>
-                    <option value="time-oldest">Oldest to Newest</option>
-                    <option value="alpha-asc">Alphabet (A - Z)</option>
-                    <option value="alpha-desc">Alphabet (Z - A)</option>
-                </select>
-            </div>
+        
+        <div class="card">
+
+            <h3>Template-Based Creator</h3>
+
+            <p>Browse our curated collection of professional templates. Customize colors, fonts, and layouts to match your theme seamlessly and effortlessly.</p>
+
+            <a href="AI_invitation_types/template_invitations/templates_inv_gen.html" class="card-btn">Browse Templates</a>
+
         </div>
 
-        <div class="guest-head">
-            <div>S.No.</div>
-            <div>Name *</div>
-            <div>Address</div>
-            <div>Phone</div>
-            <div></div>
+           <div class="card">
+
+            <h3>Custom Manual Creator</h3>
+
+            <p>Take absolute control of your design. Start from a blank canvas and build your invitation from scratch utilizing our advanced editing tools.</p>
+
+            <a href="AI_invitation_types/manual/manual_invitation.html" class="card-btn">Start from Scratch</a>
+
         </div>
         
-        <div id="guestContainer"></div>
     </div>
 
-<!-- Include jsPDF and AutoTable libraries for PDF generation -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
-<script type="module" src="guest_list_manager.js"></script>
+<script type="module" src="AI_invitation_generator.js"></script>
 </body>
 </html>

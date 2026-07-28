@@ -25,10 +25,6 @@ onAuthStateChanged(auth, (user) => {
         loadGuestsFromFirestore(); 
     } else {
         currentUserUid = null;
-        // If not logged in, at least show one empty row so the UI isn't broken
-        if (document.getElementById("guestContainer").innerHTML.trim() === "") {
-            createGuest();
-        }
     }
 });
 
@@ -56,6 +52,7 @@ themeBtn.addEventListener("click", () => {
 const addGuestBtn = document.getElementById("addGuestBtn");
 const guestContainer = document.getElementById("guestContainer");
 const guestCount = document.getElementById("guestCount");
+const sortSelect = document.getElementById("sortGuests");
 
 function updateGuestNumbers() {
     const rows = document.querySelectorAll(".guest-row");
@@ -68,14 +65,16 @@ function updateGuestNumbers() {
     }
 }
 
-// Function to create a guest row (can be empty or pre-filled)
-function createGuest(name = "", address = "", phone = "") {
+// Function to create a guest row
+function createGuest(name = "", address = "", phone = "", prepend = false, id = null) {
     if (!guestContainer) return; 
 
     const row = document.createElement("div");
     row.classList.add("guest-row");
     
-    // Safely inject values to prevent "undefined" from showing up
+    // Assign a creation timestamp ID to track Newest/Oldest accurately
+    row.dataset.id = id || Date.now() + Math.random();
+    
     row.innerHTML = `
         <div class="serial-box"></div>
         <input type="text" class="guest-name" placeholder="Guest Name" value="${name || ""}" required>
@@ -89,7 +88,47 @@ function createGuest(name = "", address = "", phone = "") {
         updateGuestNumbers();
     });
 
-    guestContainer.appendChild(row);
+    // Insert at the top (row 1) if requested, otherwise append
+    if (prepend && guestContainer.firstChild) {
+        guestContainer.prepend(row);
+    } else {
+        guestContainer.appendChild(row);
+    }
+
+    updateGuestNumbers();
+}
+
+// --- SORTING LOGIC ---
+if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+        sortGuestList(sortSelect.value);
+    });
+}
+
+function sortGuestList(criteria) {
+    const rows = Array.from(document.querySelectorAll(".guest-row"));
+    
+    rows.sort((a, b) => {
+        if (criteria === "alpha-asc" || criteria === "alpha-desc") {
+            const nameA = a.querySelector(".guest-name").value.trim().toLowerCase();
+            const nameB = b.querySelector(".guest-name").value.trim().toLowerCase();
+            return criteria === "alpha-asc" 
+                ? nameA.localeCompare(nameB) 
+                : nameB.localeCompare(nameA);
+        } else if (criteria === "time-newest" || criteria === "time-oldest") {
+            const idA = parseFloat(a.dataset.id);
+            const idB = parseFloat(b.dataset.id);
+            // time-newest: highest timestamp (most recent) at the top
+            // time-oldest: lowest timestamp (earliest added) at the top
+            return criteria === "time-newest" ? idB - idA : idA - idB;
+        }
+        return 0;
+    });
+
+    // Re-insert rows into container in sorted order
+    rows.forEach(row => guestContainer.appendChild(row));
+    
+    // Update visual S.No sequentially from top to bottom
     updateGuestNumbers();
 }
 
@@ -105,30 +144,23 @@ async function loadGuestsFromFirestore() {
             const data = docSnap.data();
             
             if (data.guests && Array.isArray(data.guests) && data.guests.length > 0) {
-                // Clear out the loading state/empty rows
                 guestContainer.innerHTML = ""; 
                 
-                // Rebuild the rows from the database
-                data.guests.forEach(guest => {
-                    createGuest(guest.name, guest.address, guest.phone);
+                // Rebuild rows preserving their original saved ID and order
+                data.guests.forEach((guest, index) => {
+                    createGuest(guest.name, guest.address, guest.phone, false, guest.id || (Date.now() + index));
                 });
-                return; // Stop here on success
             }
         }
-        
-        // If the document doesn't exist yet, or the guest array is empty
-        if (guestContainer.innerHTML.trim() === "") createGuest();
-        
     } catch (error) {
         console.error("Error loading guests:", error);
-        // If Firebase blocks the read, show an empty row anyway so the app is usable
-        if (guestContainer.innerHTML.trim() === "") createGuest();
         alert("Failed to load your saved data. Check your Firebase Security Rules (allow read).");
     }
 }
 
+// When user clicks '+ Add Guest', insert at the TOP (prepend = true)
 if (addGuestBtn) {
-    addGuestBtn.addEventListener("click", () => createGuest());
+    addGuestBtn.addEventListener("click", () => createGuest("", "", "", true));
 }
 
 
@@ -143,7 +175,6 @@ if (saveGuestBtn) {
             return;
         }
 
-        // Change button text to show it's working
         const originalText = saveGuestBtn.textContent;
         saveGuestBtn.textContent = "Saving...";
 
@@ -154,9 +185,11 @@ if (saveGuestBtn) {
             const name = row.querySelector(".guest-name").value.trim();
             const address = row.querySelector(".guest-address").value.trim();
             const phone = row.querySelector(".guest-phone").value.trim();
+            const id = parseFloat(row.dataset.id);
 
             if (name) {
-                guestList.push({ name, address, phone });
+                // Save the dataset ID so Newest/Oldest sorting remains consistent across sessions
+                guestList.push({ name, address, phone, id });
             }
         });
 
@@ -183,22 +216,17 @@ const removeAllBtn = document.getElementById("RemoveGuestBtn");
 
 if (removeAllBtn) {
     removeAllBtn.addEventListener("click", async () => {
-        // 1. Ask for confirmation to prevent accidental clicks
         const isConfirmed = confirm("Are you sure you want to delete ALL guests? This cannot be undone.");
         
         if (isConfirmed) {
-            // 2. Clear the screen immediately
             guestContainer.innerHTML = ""; 
-            createGuest(); // Add one blank row back so the UI isn't completely empty
             updateGuestNumbers();
 
-            // 3. Immediately wipe the data from Firebase if logged in
             if (currentUserUid) {
                 removeAllBtn.textContent = "Deleting...";
                 
                 try {
                     const userDocRef = doc(db, "users", currentUserUid);
-                    // Overwrite the guests array with an empty array in the cloud
                     await setDoc(userDocRef, {
                         guests: [],
                         lastUpdated: new Date().toISOString()
@@ -225,38 +253,33 @@ if (exportBtn) {
         const rows = document.querySelectorAll(".guest-row");
         const guestData = [];
 
-        // 1. Gather all valid guest rows from the screen
+        // Traverses the screen in exact visual DOM order
         rows.forEach((row) => {
             const name = row.querySelector(".guest-name").value.trim();
             const address = row.querySelector(".guest-address").value.trim();
             const phone = row.querySelector(".guest-phone").value.trim();
 
-            // Only include rows where the user actually entered a name
             if (name) {
                 guestData.push([guestData.length + 1, name, address || "-", phone || "-"]);
             }
         });
 
-        // 2. Prevent exporting an empty list
         if (guestData.length === 0) {
             alert("Your guest list is empty! Please add at least one guest before exporting.");
             return;
         }
 
-        // 3. Verify that the library loaded correctly
         if (!window.jspdf) {
             alert("PDF library is still loading or missing. Please check your HTML script tags.");
             return;
         }
 
-        // 4. Initialize the PDF Document
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
-        // 5. Add Document Branding & Title (EventEase Theme)
         doc.setFont("helvetica", "bold");
         doc.setFontSize(18);
-        doc.setTextColor(37, 99, 235); // EventEase Blue (#2563eb)
+        doc.setTextColor(37, 99, 235); 
         doc.text("EventEase - Guest List", 14, 20);
 
         doc.setFont("helvetica", "normal");
@@ -264,36 +287,34 @@ if (exportBtn) {
         doc.setTextColor(100);
         doc.text(`Total Guests: ${guestData.length} | Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
 
-        // 6. Generate the Styled Table
         doc.autoTable({
             startY: 34,
             head: [["S.No.", "Guest Name", "Address", "Phone Number"]],
             body: guestData,
             theme: "grid",
             headStyles: {
-                fillColor: [37, 99, 235], // EventEase Blue header
+                fillColor: [37, 99, 235],
                 textColor: 255,
                 fontStyle: "bold",
                 halign: "left"
             },
             alternateRowStyles: {
-                fillColor: [248, 250, 252] // Light grey alternate rows
+                fillColor: [248, 250, 252] 
             },
             styles: {
                 font: "helvetica",
                 fontSize: 10,
                 cellPadding: 6,
-                textColor: [15, 23, 42] // Dark slate text
+                textColor: [15, 23, 42] 
             },
             columnStyles: {
-                0: { cellWidth: 18, halign: "center" }, // S.No.
-                1: { cellWidth: 50 },                   // Name
-                2: { cellWidth: "auto" },               // Address (takes remaining space)
-                3: { cellWidth: 42 }                    // Phone
+                0: { cellWidth: 18, halign: "center" },
+                1: { cellWidth: 50 },                 
+                2: { cellWidth: "auto" },               
+                3: { cellWidth: 42 }                    
             }
         });
 
-        // 7. Automatically Trigger the File Download
         doc.save("EventEase_Guest_List.pdf");
     });
 }

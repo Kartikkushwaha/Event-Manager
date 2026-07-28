@@ -91,16 +91,15 @@
     color: var(--accent);
   }
 
-  /* theme button toggle (UNTOUCHED) */
+  /* theme button toggle */
   #themeToggle {
     background: transparent;
-          border: 1px solid var(--border);
-          padding: 5px 12px;
-          border-radius: 20px;
-          cursor: pointer;
-          /* font-size: 1.2rem; */
-          transition: all 0.3s ease;
-          color: var(--text);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text);
   }
 
   #themeToggle:hover {
@@ -137,7 +136,7 @@
     letter-spacing: -0.3px;
   }
 
-  /* Top Stat Bar */
+  /* Top Stat Bar & Controls */
   .guest-stats-bar {
     background: rgba(37, 99, 235, 0.08);
     border: 1px solid rgba(37, 99, 235, 0.2);
@@ -147,9 +146,38 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     font-weight: 600;
     color: var(--accent);
     font-size: 15px;
+  }
+
+  /* Sort Dropdown Styling */
+  .sort-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .sort-dropdown {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .sort-dropdown:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
   }
 
   /* Refined Button Hierarchy */
@@ -324,7 +352,6 @@
     }
 
     .deleteBtn::after {
-      
       font-size: 14px;
       font-weight: 600;
       margin-left: 6px;
@@ -363,8 +390,18 @@
     }
 
     .guest-stats-bar {
-      text-align: center;
-      justify-content: center;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .sort-container {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .sort-dropdown {
+      flex-grow: 1;
     }
 
     .panel-buttons {
@@ -409,11 +446,21 @@
             </div>
         </div>
 
-        <!-- Top Stat Banner -->
+        <!-- Top Stat Banner & Sort Dropdown -->
         <div class="guest-stats-bar">
             <span id="guestCount">
                 Total Guests: 0
             </span>
+            
+            <div class="sort-container">
+                <label for="sortGuests">Sort by:</label>
+                <select id="sortGuests" class="sort-dropdown">
+                    <option value="time-newest">Newest to Oldest</option>
+                    <option value="time-oldest">Oldest to Newest</option>
+                    <option value="alpha-asc">Alphabet (A - Z)</option>
+                    <option value="alpha-desc">Alphabet (Z - A)</option>
+                </select>
+            </div>
         </div>
 
         <div class="guest-head">
@@ -426,6 +473,7 @@
         
         <div id="guestContainer"></div>
     </div>
+
 <!-- Include jsPDF and AutoTable libraries for PDF generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>

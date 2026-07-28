@@ -26,8 +26,7 @@ function updateThemeIcon(theme) {
 // ==========================================
 // 2. AI INVITATION GENERATOR LOGIC
 // ==========================================
-const GEMINI_API_KEY = "AQ.Ab8RN6JGqqHw8filNvgiZJA3sNNfwfENa6-Yccp83CJEJmhl7w"; 
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
+const API_URL = "http://localhost:8000/api/generate";
 
 const generateBtn = document.getElementById("generateBtn");
 const promptInput = document.getElementById("promptInput");
@@ -56,48 +55,29 @@ generateBtn.addEventListener("click", async () => {
   imagePreview.style.display = "none";
   actionBar.style.display = "none";
 
-  const systemInstruction = `You are a layout designer. Analyze the user's invitation prompt and extract the content into a strict JSON format so it can be painted onto an image canvas.
-  Return ONLY a JSON object with this exact structure (no markdown, no backticks, just raw JSON):
-  {
-    "bgColor1": "#HexCode (primary background color requested, e.g. #D4AF37 for gold or #1a237e for navy)",
-    "bgColor2": "#HexCode (secondary gradient color, e.g. #C0C0C0 for silver or #000000)",
-    "textColor": "#HexCode (best contrasting color for text, e.g. #FFFFFF or #2C2A29)",
-    "heading": "The main invitation title (e.g. INVITING YOU TO BIRTHDAY)",
-    "subheading": "Name or primary highlight (e.g. Kartik Kumar)",
-    "details": ["Line 1 of details", "Line 2 of details", "Line 3 of details"]
-  }
-  User Prompt: ${userPrompt}`;
-
   try {
     const response = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: systemInstruction }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 1000,
-          responseMimeType: "application/json"
-        }
-      })
+      body: JSON.stringify({ prompt: userPrompt })
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error?.message || "Failed to communicate with API.");
+      throw new Error(errorData.detail || "Failed to communicate with API.");
     }
 
     const data = await response.json();
-    let rawJson = data.candidates[0].content.parts[0].text;
-    
-    // Clean out any unexpected formatting
-    rawJson = rawJson.replace(/```json/gi, '').replace(/```/gi, '').trim();
-    const designData = JSON.parse(rawJson);
+    const designData = data.designData;
 
     // ==========================================
     // 3. PAINTING THE PNG IMAGE (HTML5 CANVAS)
     // ==========================================
     statusText.textContent = "Rendering high-resolution PNG...";
+
+    // Explicitly set high-resolution canvas dimensions so text isn't pushed off-screen!
+    canvas.width = 800;
+    canvas.height = 1100;
 
     // Draw Background Gradient
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);

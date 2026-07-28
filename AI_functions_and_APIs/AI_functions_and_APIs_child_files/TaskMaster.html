@@ -1,1 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventEase - TaskMaster AI (TomTom + Radius + Landmarks)</title>
+    <link rel="icon" type="image/png" href="../../ee_logo_bgremove.png">
+    
+    <!-- Load Leaflet (Works seamlessly with TomTom REST APIs) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #333;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      h2 { margin-top: 0; }
+
+      #status-panel {
+        background-color: #e9ecef;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        border-left: 4px solid #0d6efd;
+      }
+
+      /* Radius Slider Container */
+      .radius-box {
+        background: white;
+        padding: 14px 18px;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .radius-box label {
+        font-weight: bold;
+        font-size: 14px;
+        color: #0d6efd;
+        min-width: 180px;
+      }
+
+      .slider {
+        flex-grow: 1;
+        cursor: pointer;
+        accent-color: #0d6efd;
+        height: 6px;
+      }
+
+      /* Path Guider Status Banner */
+      #route-panel {
+        display: none;
+        background-color: #d1e7dd;
+        color: #0f5132;
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        border-left: 4px solid #198754;
+        font-weight: bold;
+      }
+
+      /* Controls above map */
+      .map-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+
+      .recenter-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: background-color 0.2s ease;
+      }
+      .recenter-btn:hover { background-color: #bb2d3b; }
+
+      .filter-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .filter-btn {
+        padding: 8px 14px;
+        border: 1px solid #ced4da;
+        border-radius: 20px;
+        background-color: white;
+        color: #333;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-btn:hover { background-color: #e9ecef; }
+      .filter-btn.active {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+      }
+
+      /* Map Container */
+      #map {
+        height: 480px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #e0e0e0;
+        margin-bottom: 20px;
+        z-index: 1;
+      }
+
+      h3 { margin-bottom: 10px; }
+
+      #results-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .place-card {
+        background: white;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        cursor: pointer;
+        transition: transform 0.1s ease, border-color 0.1s ease;
+      }
+      
+      .place-card:hover {
+        border-color: #0d6efd;
+        transform: translateY(-2px);
+      }
+
+      .place-card h4 {
+        margin: 0 0 6px 0;
+        font-size: 15px;
+        color: #0d6efd;
+      }
+
+      .place-card p {
+        margin: 4px 0;
+        font-size: 13px;
+        color: #555;
+      }
+
+      .guide-btn {
+        margin-top: 8px;
+        display: inline-block;
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .guide-btn:hover { background-color: #0b5ed7; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Find Event Services & Path Guider</h2>
+      
+      <!-- Status message for the user -->
+      <div id="status-panel">Requesting your location from the browser...</div>
+      
+      <!-- Interactive Search Radius Slider (1 km to 20 km) -->
+      <div class="radius-box">
+        <label for="radius-slider">
+          Search Radius: <span id="radius-val" style="font-size: 16px;">5</span> km</label>
+        <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider" oninput="onRadiusChange(this.value)">
+      </div>
+
+      <!-- Route Guider details display -->
+      <div id="route-panel"></div>
+
+      <!-- Map Control Buttons (Recenter & Satellite Toggle) -->
+      <div class="map-controls">
+        <button class="recenter-btn" onclick="recenterMap()">Go to My Location</button>
+        <button class="filter-btn" id="map-style-btn" onclick="toggleMapStyle()" style="background-color: #343a40; color: white; border-color: #343a40;">
+          Switch to Satellite + Landmarks
+        </button>
+      </div>
+
+      <!-- Category Filters -->
+      <div class="filter-container" id="filter-container">
+        <button class="filter-btn" onclick="searchTomTom('Sweet shop', this)">Sweet Shops</button>
+        <button class="filter-btn" onclick="searchTomTom('Florist flower', this)">Flower Shops</button>
+        <button class="filter-btn" onclick="searchTomTom('Hotel banquet lawn restaurant', this)">Hotels & Lawns</button>
+        <button class="filter-btn" onclick="searchTomTom('Park', this)">Parks</button>
+        <button class="filter-btn" onclick="searchTomTom('Clothing mall', this)">Cloth Shops/Malls</button>
+        <button class="filter-btn" onclick="searchTomTom('Supermarket grocery catering', this)">Catering & Grocery</button>
+        <button class="filter-btn" onclick="searchTomTom('Jewelry store', this)">Jewelry Stores</button>
+        <button class="filter-btn" onclick="searchTomTom('Gift shop', this)">Gift Shops</button>
+      </div>
+
+      <!-- The map container -->
+      <div id="map"></div>
+
+      <!-- Results list container -->
+      <h3 id="results-title">Nearby Results (Within 5 km)</h3>
+      <div id="results-list">
+        <p style="color: #6c757d; font-size: 14px;">Select a category above to search TomTom within your chosen radius.</p>
+      </div>
+    </div>
+
+    <!-- Map & Geolocation Logic -->
+    <script>
+      
+      const TOMTOM_API_KEY = "wZdUSKtu4k5se7wnC1MvMsLQ3x0j6kNv";
+      
+
+      let map;
+      let userLocation = { lat: 30.1320, lng: 75.8000 }; // Default fallback (Sunam area)
+      let userMarker = null; // Reference to the user's GPS marker
+      let markersLayer;
+      let currentRouteLine = null; 
+      
+      // Radius state management
+      let currentRadiusKm = 5; 
+      let radiusCircle = null; 
+      let activeQuery = null;  
+
+      // Map Layer state management
+      let isSatellite = false;
+      let streetLayer, satLayer, hybridLabelsLayer;
+
+      // Create a RED ICON specifically for the User's Location
+      const redIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      function initMap() {
+        const statusPanel = document.getElementById("status-panel");
+        
+        // Initialize Map
+        map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
+
+        // 1. Street Map Layer (Contains basic roads & landmarks)
+        streetLayer = L.tileLayer(`https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?key=${TOMTOM_API_KEY}`, {
+          maxZoom: 19,
+          attribution: '© TomTom'
+        });
+
+        // 2. Satellite Imagery Layer (Raw photography)
+        satLayer = L.tileLayer(`https://api.tomtom.com/map/1/tile/sat/main/{z}/{x}/{y}.jpg?key=${TOMTOM_API_KEY}`, {
+          maxZoom: 19,
+          attribution: '© TomTom & Maxar'
+        });
+
+        // 3. Hybrid Overlay (Adds Roads & Landmark POI Labels on top of Satellite!)
+        hybridLabelsLayer = L.tileLayer(`https://api.tomtom.com/map/1/tile/hybrid/main/{z}/{x}/{y}.png?key=${TOMTOM_API_KEY}`, {
+          maxZoom: 19
+        });
+
+        // Add street layer by default
+        streetLayer.addTo(map);
+
+        markersLayer = L.layerGroup().addTo(map);
+
+        // Geolocation Check
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              };
+
+              map.setView([userLocation.lat, userLocation.lng], 14);
+
+              // Drop RED marker for the User Location
+              userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon })
+                .addTo(map)
+                .bindPopup("<b>📍 You are here! (Current Location)</b>")
+                .openPopup();
+
+              updateVisualCircle();
+
+              statusPanel.textContent = "Location found! Select your radius and pick a category below.";
+              statusPanel.style.borderLeftColor = "#198754";
+            },
+            (error) => {
+              statusPanel.textContent = "Geolocation denied/failed. Using default location.";
+              statusPanel.style.borderLeftColor = "#dc3545";
+
+              userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon })
+                .addTo(map)
+                .bindPopup("<b>📍 Default Location</b>");
+                
+              updateVisualCircle();
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+          );
+        } else {
+          statusPanel.textContent = "Your browser does not support HTML5 Geolocation.";
+          statusPanel.style.borderLeftColor = "#dc3545";
+        }
+      }
+
+      // NEW: Recenter camera smoothly back to the user's GPS pin
+      function recenterMap() {
+        if (!map || !userLocation) return;
+        map.flyTo([userLocation.lat, userLocation.lng], 15, { duration: 1.2 });
+        if (userMarker) userMarker.openPopup();
+      }
+
+      // Toggle between Street and Satellite + Landmark Labels
+      function toggleMapStyle() {
+        const btn = document.getElementById("map-style-btn");
+        if (isSatellite) {
+          map.removeLayer(satLayer);
+          map.removeLayer(hybridLabelsLayer);
+          map.addLayer(streetLayer);
+          btn.innerHTML = "Switch to Satellite + Landmarks";
+          btn.style.backgroundColor = "#343a40";
+          btn.style.borderColor = "#343a40";
+          isSatellite = false;
+        } else {
+          map.removeLayer(streetLayer);
+          map.addLayer(satLayer);
+          map.addLayer(hybridLabelsLayer); // Superimposes roads and POI labels!
+          btn.innerHTML = "Switch to Street View";
+          btn.style.backgroundColor = "#0d6efd";
+          btn.style.borderColor = "#0d6efd";
+          isSatellite = true;
+        }
+      }
+
+      // Triggered whenever the user moves the slider
+      function onRadiusChange(val) {
+        currentRadiusKm = parseInt(val);
+        document.getElementById("radius-val").textContent = currentRadiusKm;
+        document.getElementById("results-title").textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
+        
+        updateVisualCircle();
+
+        if (activeQuery) {
+          const activeBtn = document.querySelector('.filter-btn.active');
+          searchTomTom(activeQuery, activeBtn);
+        }
+      }
+
+      // Draws or updates the visual boundary circle on the map
+      function updateVisualCircle() {
+        if (!map) return;
+        if (radiusCircle) map.removeLayer(radiusCircle);
+
+        radiusCircle = L.circle([userLocation.lat, userLocation.lng], {
+          color: '#0d6efd',
+          fillColor: '#0d6efd',
+          fillOpacity: 0.08,
+          weight: 1.5,
+          radius: currentRadiusKm * 1000
+        }).addTo(map);
+
+        map.fitBounds(radiusCircle.getBounds(), { padding: [30, 30] });
+      }
+
+      // Function to search TomTom POI Search API within chosen radius
+      async function searchTomTom(query, buttonElement) {
+        activeQuery = query; 
+
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        if (buttonElement) buttonElement.classList.add('active');
+
+        const resultsList = document.getElementById("results-list");
+        const routePanel = document.getElementById("route-panel");
+        resultsList.innerHTML = `<p>Searching TomTom Places within <b>${currentRadiusKm} km</b>...</p>`;
+        routePanel.style.display = "none"; 
+
+        markersLayer.clearLayers();
+        if (currentRouteLine) map.removeLayer(currentRouteLine);
+
+        const radiusMeters = currentRadiusKm * 1000;
+
+        const url = `https://api.tomtom.com/search/2/poiSearch/${encodeURIComponent(query)}.json?key=${TOMTOM_API_KEY}&lat=${userLocation.lat}&lon=${userLocation.lng}&radius=${radiusMeters}&limit=20`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          resultsList.innerHTML = ""; 
+
+          if (data && data.results && data.results.length > 0) {
+            data.results.forEach((place) => {
+              const shopName = place.poi ? place.poi.name : "Unnamed Shop";
+              const address = place.address ? place.address.freeformAddress : "Address not available";
+              const distKm = (place.dist / 1000).toFixed(1); 
+              const lat = place.position.lat;
+              const lon = place.position.lon;
+
+              // Search results remain standard BLUE pins
+              const marker = L.marker([lat, lon]).bindPopup(`
+                <b>${shopName}</b><br>
+                📍 ${address}<br>
+                📏 ${distKm} km away<br>
+                <button class="guide-btn" onclick="drawRoute(${lat}, ${lon}, '${shopName.replace(/'/g, "")}')">🗺️ Guide Me Here</button>
+              `);
+              markersLayer.addLayer(marker);
+
+              const card = document.createElement("div");
+              card.className = "place-card";
+              card.innerHTML = `
+                <h4>${shopName}</h4>
+                <p>📍 ${address}</p>
+                <p>📏 <b>${distKm} km away</b> from your location</p>
+                <button class="guide-btn">🗺️ Show Path Guider</button>
+              `;
+
+              card.addEventListener("click", () => {
+                drawRoute(lat, lon, shopName);
+                marker.openPopup();
+              });
+
+              resultsList.appendChild(card);
+            });
+            
+            updateVisualCircle();
+          } else {
+            resultsList.innerHTML = `<p style="color: #6c757d;">No places found matching this category within ${currentRadiusKm} km. Try increasing the radius slider above!</p>`;
+          }
+        } catch (error) {
+          console.error("TomTom API Error:", error);
+          resultsList.innerHTML = `<p style="color: #dc3545;">⚠️ Error connecting to TomTom API. Please check your internet connection or console logs.</p>`;
+        }
+      }
+
+      // =========================================================================
+      // PATH GUIDER FUNCTION
+      // =========================================================================
+      async function drawRoute(destLat, destLon, shopName) {
+        const routePanel = document.getElementById("route-panel");
+        routePanel.style.display = "block";
+        routePanel.innerHTML = `⏳ Calculating fastest guiding path to <b>${shopName}</b>...`;
+
+        if (currentRouteLine) map.removeLayer(currentRouteLine);
+
+        const routingUrl = `https://api.tomtom.com/routing/1/calculateRoute/${userLocation.lat},${userLocation.lng}:${destLat},${destLon}/json?key=${TOMTOM_API_KEY}&routeType=fastest&traffic=false`;
+
+        try {
+          const response = await fetch(routingUrl);
+          const data = await response.json();
+
+          if (data && data.routes && data.routes.length > 0) {
+            const route = data.routes[0];
+            const points = route.legs[0].points;
+            
+            const lengthKm = (route.summary.lengthInMeters / 1000).toFixed(1);
+            const timeMins = Math.round(route.summary.travelTimeInSeconds / 60);
+
+            routePanel.innerHTML = `🗺️ <b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving). Follow the blue line on the map!`;
+
+            const latLngs = points.map(p => [p.latitude, p.longitude]);
+
+            currentRouteLine = L.polyline(latLngs, {
+              color: '#0d6efd',
+              weight: 6,
+              opacity: 0.8,
+              dashArray: '5, 10'
+            }).addTo(map);
+
+            map.fitBounds(currentRouteLine.getBounds(), { padding: [50, 50] });
+          } else {
+            routePanel.innerHTML = `⚠️ Could not calculate a driving path to this location.`;
+          }
+        } catch (error) {
+          console.error("Routing Error:", error);
+          routePanel.innerHTML = `⚠️ Error generating path guider route.`;
+        }
+      }
+
+      window.onload = initMap;
+    </script>
+  </body>
+</html>

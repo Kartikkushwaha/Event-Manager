@@ -28,6 +28,10 @@ document.getElementById("AI_invitationBtn").addEventListener("click", () => {
     window.location.href = "AI_functions_and_APIs_child_files/AI_invitation_generator.html";
 });
 
+document.getElementById("TaskMaster").addEventListener("click", () => {
+    window.location.href = "AI_functions_and_APIs_child_files/TaskMaster.html";
+});
+
 document.getElementById("SyncSphere").addEventListener("click", () => {
     window.location.href = "AI_functions_and_APIs_child_files/SyncSphere.html";
 });
