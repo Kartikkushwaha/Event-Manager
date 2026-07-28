@@ -69,14 +69,14 @@ def generate_invitation(request: PromptRequest):
         
         # If Google rejects the request, print the exact error to your terminal!
         if response.status_code != 200:
-            print(f"❌ GOOGLE API ERROR [{response.status_code}]:", response.text)
+            print(f" GOOGLE API ERROR [{response.status_code}]:", response.text)
             raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
         
         data = response.json()
         
         # Check if Gemini returned valid candidates
         if "candidates" not in data or not data["candidates"]:
-            print("❌ GEMINI BLOCKED RESPONSE:", data)
+            print(" GEMINI BLOCKED RESPONSE:", data)
             raise HTTPException(status_code=500, detail="AI failed to return a valid layout design.")
 
         raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
@@ -84,20 +84,20 @@ def generate_invitation(request: PromptRequest):
         # Bulletproof JSON extraction: find ONLY what is between { and }
         match = re.search(r"\{.*\}", raw_text, re.DOTALL)
         if not match:
-            print("❌ AI DID NOT RETURN JSON. RAW TEXT:", raw_text)
+            print(" AI DID NOT RETURN JSON. RAW TEXT:", raw_text)
             raise HTTPException(status_code=500, detail="AI did not return a valid JSON object.")
 
         clean_json = match.group(0)
         design_data = json.loads(clean_json)
         
-        print("✅ SUCCESS! Sending design data to browser.")
+        print(" SUCCESS! Sending design data to browser.")
         return {"success": True, "designData": design_data}
         
     except HTTPException as he:
         raise he
     except json.JSONDecodeError as jde:
-        print("❌ JSON PARSE ERROR:", str(jde))
+        print("JSON PARSE ERROR:", str(jde))
         raise HTTPException(status_code=500, detail="Failed to parse layout JSON from AI.")
     except Exception as e:
-        print("❌ BACKEND CRASH:", str(e))
+        print(" BACKEND CRASH:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
