@@ -1,6 +1,4 @@
-// ==========================================
-// 1. THEME MANAGEMENT (Day/Night Mode)
-// ==========================================
+// theme logic
 const themeToggleBtn = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
 const htmlElement = document.documentElement;
@@ -132,7 +130,7 @@ generateBtn.addEventListener("click", async () => {
 
     downloadBtn.href = pngUrl;
     actionBar.style.display = "block";
-    statusText.textContent = "Your Invitation card generated successfully! 🎉";
+    statusText.textContent = "Your Invitation card generated successfully! ";
 
   } catch (error) {
     console.error("Error generating image:", error);
