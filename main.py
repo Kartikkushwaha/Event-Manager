@@ -7,27 +7,21 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-# Load environment variables from .env
 load_dotenv()
 
 app = FastAPI(title="AI Invitation Generator API")
 
-# Enable CORS so your local HTML/JS frontend can talk to this server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict this to your exact frontend domain
+    allow_origins=["*"],  # restrict this to exact frontend domain
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-# FIXED: Using the universally supported and stable gemini-1.5-flash model
-# Change this line in main.py to use the current stable model:
-# This alias always routes to Google's active, stable Flash model automatically:
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
 
-# Define the expected structure of the incoming request body
 class PromptRequest(BaseModel):
     prompt: str
 
@@ -60,28 +54,27 @@ def generate_invitation(request: PromptRequest):
     }
 
     try:
-        # Call the Google Gemini API securely from the Python server
+       
         response = requests.post(
             API_URL,
             headers={"Content-Type": "application/json"},
             json=payload
         )
-        
-        # If Google rejects the request, print the exact error to your terminal!
+    
         if response.status_code != 200:
             print(f" GOOGLE API ERROR [{response.status_code}]:", response.text)
             raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
         
         data = response.json()
         
-        # Check if Gemini returned valid candidates
+      
         if "candidates" not in data or not data["candidates"]:
             print(" GEMINI BLOCKED RESPONSE:", data)
             raise HTTPException(status_code=500, detail="AI failed to return a valid layout design.")
 
         raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
         
-        # Bulletproof JSON extraction: find ONLY what is between { and }
+        
         match = re.search(r"\{.*\}", raw_text, re.DOTALL)
         if not match:
             print(" AI DID NOT RETURN JSON. RAW TEXT:", raw_text)
