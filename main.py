@@ -2,15 +2,17 @@ import os
 import json
 import re
 import requests
+import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel
 
 # Load environment variables from .env
 load_dotenv()
 
-app = FastAPI(title="AI Invitation Generator API")
+app = FastAPI(title="EventEase Unified API")
 
 # Enable CORS so your local HTML/JS frontend can talk to this server
 app.add_middleware(
@@ -22,8 +24,13 @@ app.add_middleware(
 )
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")
 
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+
+# ==========================================
+# GEMINI: INVITATION GENERATOR ENDPOINTS
+# ==========================================
 
 # Define the expected structure of the incoming request body
 class PromptRequest(BaseModel):
@@ -31,7 +38,6 @@ class PromptRequest(BaseModel):
 
 @app.post("/api/generate")
 def generate_invitation(request: PromptRequest):
-    
     
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Please provide an event prompt.")
@@ -99,3 +105,45 @@ def generate_invitation(request: PromptRequest):
     except Exception as e:
         print(" BACKEND CRASH:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
+
+# ==========================================
+# TOMTOM: MAPS, POI SEARCH, & ROUTING ENDPOINTS
+# ==========================================
+
+@app.get("/api/search")
+async def search_poi(query: str, lat: float, lon: float, radius: int):
+    url = f"https://api.tomtom.com/search/2/poiSearch/{query}.json"
+    params = {
+        "key": TOMTOM_API_KEY,
+        "lat": lat,
+        "lon": lon,
+        "radius": radius,
+        "limit": 20
+    }
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, params=params)
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="TomTom Search API error")
+        return response.json()
+
+@app.get("/api/route")
+async def get_route(start_lat: float, start_lon: float, dest_lat: float, dest_lon: float):
+    url = f"https://api.tomtom.com/routing/1/calculateRoute/{start_lat},{start_lon}:{dest_lat},{dest_lon}/json"
+    params = {
+        "key": TOMTOM_API_KEY,
+        "routeType": "fastest",
+        "traffic": "false"
+    }
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, params=params)
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail="TomTom Routing API error")
+        return response.json()
+
+@app.get("/api/tiles/{layer}/{style}/{z}/{x}/{y}.{ext}")
+async def get_tile(layer: str, style: str, z: int, x: int, y: int, ext: str):
+    """Proxies map tiles so the frontend doesn't need the API key for Leaflet."""
+    url = f"https://api.tomtom.com/map/1/tile/{layer}/{style}/{z}/{x}/{y}.{ext}?key={TOMTOM_API_KEY}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        return Response(content=response.content, media_type=response.headers.get("Content-Type"))

@@ -11,7 +11,78 @@
 
     <nav class="navbar">
         <div class="logo">
-            ✨ EventEase
+            <!-- EventEase Logo Start -->
+<div class="eventease-glowing-logo">
+    
+    <!-- SVG Symbol -->
+    <!-- TO CHANGE SYMBOL SIZE: Adjust 'width' and 'height' values below. (Do not change the viewBox) -->
+    <svg class="logo-symbol" viewBox="0 0 100 64" width="75" height="48" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left Dark Circle -->
+        <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
+        <!-- Right Cyan Circle -->
+        <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
+        <!-- Center Overlap Lens (Blue) -->
+        <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
+    </svg>
+
+    <!-- Logo Text -->
+    <div class="logo-text">
+        <span class="text-event">Event</span><span class="text-ease">Ease</span>
+    </div>
+
+    <!-- Inline CSS for Styling and Glow Effects -->
+    <style>
+        .eventease-glowing-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            
+            /* TO CHANGE SPACING BETWEEN SYMBOL AND TEXT: Adjust the 'gap' value below */
+            gap: 6px; 
+            
+            /* TO CHANGE BORDER SIZE AROUND THE LOGO: Adjust the 'padding' below (top, right, bottom, left) */
+            padding: 8px 24px 8px 16px; 
+            
+            background-color: transparent;
+            
+            /* 1px Glowing Border */
+            border: 1px solid #00E5FF;
+            border-radius: 50px;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), 
+                        inset 0 0 12px rgba(0, 229, 255, 0.3);
+            
+            /* Ensures it scales to fit content */
+            width: max-content;
+            font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+            user-select: none;
+        }
+
+        /* Subtle glow on the SVG symbol */
+        .logo-symbol {
+            filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
+        }
+
+        .logo-text {
+            /* TO CHANGE TEXT SIZE: Adjust the 'font-size' value below */
+            font-size: 28px; 
+            
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        .text-event {
+            color: #7dece7;
+            /* Subtle glow for the dark text to ensure it stands out */
+        }
+
+        .text-ease {
+            color: #0088FF;
+            /* Bright blue glow for the second half of the text */
+        }
+    </style>
+</div>
+<!-- EventEase Logo End -->
         </div>
         <div class="nav-links">
             <a id="dashboard" href="../dashboard.html">Dashboard</a>
