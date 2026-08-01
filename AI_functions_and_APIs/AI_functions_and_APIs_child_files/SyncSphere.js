@@ -273,7 +273,7 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
         // --- NEW FEATURE 1: CHECK IF REFERRAL CODE ALREADY EXISTS ---
         const codeDoc = await getDoc(doc(db, "referral_codes", code));
         if (codeDoc.exists()) {
-            alert("Already in use. Please create a unique one!");
+            alert("Already in use. Please create a unique referral code!");
             return; // Stop the creation process
         }
 
@@ -480,3 +480,39 @@ document.getElementById('btn-delete-comm').addEventListener('click', async (even
         }
     }
 });
+
+// -----------------------------------------
+// 11. LEAVE COMMUNITY LOGIC (SELF-REMOVE)
+// -----------------------------------------
+const leaveCommBtn = document.getElementById('btn-leave-comm');
+if (leaveCommBtn) {
+    leaveCommBtn.addEventListener('click', async () => {
+        if (!activeCommunityId) return;
+
+        if (confirm("Are you sure you want to leave this community? You will need to request access again if you wish to rejoin.")) {
+            try {
+                // 1. Remove the current user's email from the members array
+                await updateDoc(doc(db, "communities", activeCommunityId), {
+                    members: arrayRemove(currentUser.email)
+                });
+
+                alert("You have left the community.");
+
+                // 2. Disconnect active listeners to prevent permission errors
+                if (unsubscribeMessages) unsubscribeMessages();
+                if (unsubscribeCommunity) unsubscribeCommunity();
+
+                // 3. Reset the UI back to an unselected state
+                activeCommunityId = null;
+                chatTitle.innerText = "Select a Community";
+                chatActions.classList.add('hidden');
+                chatInputArea.classList.add('hidden');
+                chatMessages.innerHTML = '';
+
+            } catch (error) {
+                console.error("Error leaving community:", error);
+                alert("Failed to leave the community. Check console for details.");
+            }
+        }
+    });
+}
