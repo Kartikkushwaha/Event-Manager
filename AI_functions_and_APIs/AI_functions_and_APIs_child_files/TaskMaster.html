@@ -416,7 +416,7 @@
       async function drawRoute(destLat, destLon, shopName) {
         const routePanel = document.getElementById("route-panel");
         routePanel.style.display = "block";
-        routePanel.innerHTML = `⏳ Calculating fastest guiding path to <b>${shopName}</b>...`;
+        routePanel.innerHTML = ` Calculating fastest guiding path to <b>${shopName}</b>...`;
 
         if (currentRouteLine) map.removeLayer(currentRouteLine);
 
@@ -434,7 +434,7 @@
             const lengthKm = (route.summary.lengthInMeters / 1000).toFixed(1);
             const timeMins = Math.round(route.summary.travelTimeInSeconds / 60);
 
-            routePanel.innerHTML = `🗺️ <b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving). Follow the blue line on the map!`;
+            routePanel.innerHTML = ` <b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving). Follow the blue line on the map!`;
 
             const latLngs = points.map(p => [p.latitude, p.longitude]);
 
@@ -447,11 +447,11 @@
 
             map.fitBounds(currentRouteLine.getBounds(), { padding: [50, 50] });
           } else {
-            routePanel.innerHTML = `⚠️ Could not calculate a driving path to this location.`;
+            routePanel.innerHTML = ` Could not calculate a driving path to this location.`;
           }
         } catch (error) {
           console.error("Routing Error:", error);
-          routePanel.innerHTML = `⚠️ Error generating path guider route from backend.`;
+          routePanel.innerHTML = `Error generating path guider route from backend.`;
         }
       }
 

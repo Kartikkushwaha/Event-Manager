@@ -22,11 +22,10 @@ app.add_middleware(
 )
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-# FIXED: Using the universally supported and stable gemini-1.5-flash model
-# Change this line in main.py to use the current stable model:
-# This alias always routes to Google's active, stable Flash model automatically:
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  # Add this line right here
 
+# FIXED: Using the universally supported and stable gemini-1.5-flash model
+API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
 # ==========================================
 # GEMINI: INVITATION GENERATOR ENDPOINTS
 # ==========================================
