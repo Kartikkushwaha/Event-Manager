@@ -77,8 +77,16 @@
         /* Buttons & Badges */
         .action-btn { background-color: #10b981; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 13px; white-space: nowrap; }
         .action-btn:hover { background-color: #059669; }
+
         .action-btn.outline { background-color: transparent; color: #2563eb; border: 1px solid #2563eb; }
+
         .action-btn.outline:hover { background-color: #eff6ff; }
+        #btn-leave-comm{
+             background-color: transparent; color: #ed8787; border: 1px solid #ed8787;
+            border-radius: 6px; }
+        #btn-leave-comm:hover{
+                        background-color: rgb(244, 239, 239);
+            }
         .btn-danger { color: #dc2626 !important; border-color: #dc2626 !important; }
         .btn-danger:hover { background-color: #fef2f2 !important; }
         .admin-badge { color: #dc2626; font-weight: bold; font-size: 10px; margin-left: 5px; vertical-align: super; }
@@ -193,6 +201,7 @@
                     <h2 id="chat-title" class="chat-header-title">Select a Community</h2>
                 </div>
                 <div class="header-actions hidden" id="chat-actions">
+                    <button id="btn-leave-comm" class="action-btn">Leave Community</button>
                     <button class="action-btn outline btn-danger hidden" id="btn-delete-comm">Delete</button>
                     <button class="action-btn outline" id="btn-view-members">Members</button>
                     <button class="action-btn" id="btn-add-member">+ User</button>
