@@ -125,10 +125,11 @@ function renderEvents(){
             }
         });
 
-        AIbutton.addEventListener("click", () => {
-            window.location.href = "../AI_functions_and_APIs/AI_plan.html";
-        });
-
+       AIbutton.addEventListener("click", () => {
+    // Save the specific event ID so the next pages know which event was clicked
+    localStorage.setItem("currentEventId", event.id);
+    window.location.href = "../AI_functions_and_APIs/AI_plan.html";
+});
         container.appendChild(card);
     });
 }

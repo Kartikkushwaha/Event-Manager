@@ -1,461 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EventEase - TaskMaster AI (TomTom + Radius + Landmarks)</title>
-    <link rel="icon" type="image/png" href="../../ee_logo_bgremove.png">
-    
-    <!-- Load Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskMaster AI Panel</title>
+  <link rel="stylesheet" href="TaskMaster.css">
+  
+  <!-- Load Leaflet for the Map -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
 
-    <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background-color: #f8f9fa;
-        color: #333;
-      }
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-      }
-      h2 { margin-top: 0; }
-      #status-panel {
-        background-color: #e9ecef;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        border-left: 4px solid #0d6efd;
-      }
-      .radius-box {
-        background: white;
-        padding: 14px 18px;
-        border-radius: 8px;
-        border: 1px solid #dee2e6;
-        margin-bottom: 16px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-      }
-      .radius-box label {
-        font-weight: bold;
-        font-size: 14px;
-        color: #0d6efd;
-        min-width: 180px;
-      }
-      .slider {
-        flex-grow: 1;
-        cursor: pointer;
-        accent-color: #0d6efd;
-        height: 6px;
-      }
-      #route-panel {
-        display: none;
-        background-color: #d1e7dd;
-        color: #0f5132;
-        padding: 12px 16px;
-        border-radius: 6px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        border-left: 4px solid #198754;
-        font-weight: bold;
-      }
-      .map-controls {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-      }
-      .recenter-btn {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: background-color 0.2s ease;
-      }
-      .recenter-btn:hover { background-color: #bb2d3b; }
-      .filter-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 16px;
-      }
-      .filter-btn {
-        padding: 8px 14px;
-        border: 1px solid #ced4da;
-        border-radius: 20px;
-        background-color: white;
-        color: #333;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      .filter-btn:hover { background-color: #e9ecef; }
-      .filter-btn.active {
-        background-color: #0d6efd;
-        color: white;
-        border-color: #0d6efd;
-      }
-      #map {
-        height: 480px;
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background-color: #e0e0e0;
-        margin-bottom: 20px;
-        z-index: 1;
-      }
-      h3 { margin-bottom: 10px; }
-      #results-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 12px;
-        max-height: 400px;
-        overflow-y: auto;
-        padding-right: 4px;
-      }
-      .place-card {
-        background: white;
-        padding: 12px;
-        border-radius: 6px;
-        border: 1px solid #dee2e6;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        cursor: pointer;
-        transition: transform 0.1s ease, border-color 0.1s ease;
-      }
-      .place-card:hover {
-        border-color: #0d6efd;
-        transform: translateY(-2px);
-      }
-      .place-card h4 {
-        margin: 0 0 6px 0;
-        font-size: 15px;
-        color: #0d6efd;
-      }
-      .place-card p {
-        margin: 4px 0;
-        font-size: 13px;
-        color: #555;
-      }
-      .guide-btn {
-        margin-top: 8px;
-        display: inline-block;
-        background-color: #0d6efd;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        cursor: pointer;
-      }
-      .guide-btn:hover { background-color: #0b5ed7; }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Find Event Services & Path Guider</h2>
-      
-      <div id="status-panel">Requesting your location from the browser...</div>
-      
-      <div class="radius-box">
-        <label for="radius-slider">
-          Search Radius: <span id="radius-val" style="font-size: 16px;">5</span> km</label>
-        <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider" oninput="onRadiusChange(this.value)">
-      </div>
-
-      <div id="route-panel"></div>
-
-      <div class="map-controls">
-        <button class="recenter-btn" onclick="recenterMap()">Go to My Location</button>
-        <button class="filter-btn" id="map-style-btn" onclick="toggleMapStyle()" style="background-color: #343a40; color: white; border-color: #343a40;">
-          Switch to Satellite + Landmarks
-        </button>
-      </div>
-
-      <div class="filter-container" id="filter-container">
-        <button class="filter-btn" onclick="searchTomTom('Sweet shop', this)">Sweet Shops</button>
-        <button class="filter-btn" onclick="searchTomTom('Florist flower', this)">Flower Shops</button>
-        <button class="filter-btn" onclick="searchTomTom('Hotel banquet lawn restaurant', this)">Hotels & Lawns</button>
-        <button class="filter-btn" onclick="searchTomTom('Park', this)">Parks</button>
-        <button class="filter-btn" onclick="searchTomTom('Clothing mall', this)">Cloth Shops/Malls</button>
-        <button class="filter-btn" onclick="searchTomTom('Supermarket grocery catering', this)">Catering & Grocery</button>
-        <button class="filter-btn" onclick="searchTomTom('Jewelry store', this)">Jewelry Stores</button>
-        <button class="filter-btn" onclick="searchTomTom('Gift shop', this)">Gift Shops</button>
-      </div>
-
-      <div id="map"></div>
-
-      <h3 id="results-title">Nearby Results (Within 5 km)</h3>
-      <div id="results-list">
-        <p style="color: #6c757d; font-size: 14px;">Select a category above to search within your chosen radius.</p>
-      </div>
+  <!-- SPA Navbar -->
+  <nav class="navbar">
+    <div class="nav-brand">
+  <span class="logo-icon" style="font-size: 1.8rem;">💠</span>
+  <div class="brand-text-wrapper">
+    <span class="brand-main">TaskMaster AI</span>
+    <span class="brand-sub">Powered by EventEase</span>
+  </div>
+</div>
+    <div class="nav-tabs">
+      <button id="tab-budget" class="nav-tab active">📊 Budget Monitor</button>
+      <button id="tab-market" class="nav-tab">🛒 My Market</button>
     </div>
+  </nav>
 
-    <script>
-      // The API key is gone! All requests now point to your FastAPI backend.
-      const BACKEND_URL = "http://localhost:8000/api";
+  <!-- Main Content Container -->
+  <div class="container">
 
-      let map;
-      let userLocation = { lat: 30.1320, lng: 75.8000 };
-      let userMarker = null;
-      let markersLayer;
-      let currentRouteLine = null; 
-      
-      let currentRadiusKm = 5; 
-      let radiusCircle = null; 
-      let activeQuery = null;  
-
-      let isSatellite = false;
-      let streetLayer, satLayer, hybridLabelsLayer;
-
-      const redIcon = L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });
-
-      function initMap() {
-        const statusPanel = document.getElementById("status-panel");
-        map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
-
-        // Fetching tiles securely through your backend
-        streetLayer = L.tileLayer(`${BACKEND_URL}/tiles/basic/main/{z}/{x}/{y}.png`, {
-          maxZoom: 19,
-          attribution: '© TomTom (via EventEase)'
-        });
-
-        satLayer = L.tileLayer(`${BACKEND_URL}/tiles/sat/main/{z}/{x}/{y}.jpg`, {
-          maxZoom: 19,
-          attribution: '© TomTom & Maxar'
-        });
-
-        hybridLabelsLayer = L.tileLayer(`${BACKEND_URL}/tiles/hybrid/main/{z}/{x}/{y}.png`, {
-          maxZoom: 19
-        });
-
-        streetLayer.addTo(map);
-        markersLayer = L.layerGroup().addTo(map);
-
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-              };
-
-              map.setView([userLocation.lat, userLocation.lng], 14);
-
-              userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon })
-                .addTo(map)
-                .bindPopup("<b>📍 You are here! (Current Location)</b>")
-                .openPopup();
-
-              updateVisualCircle();
-
-              statusPanel.textContent = "Location found! Select your radius and pick a category below.";
-              statusPanel.style.borderLeftColor = "#198754";
-            },
-            (error) => {
-              statusPanel.textContent = "Geolocation denied/failed. Using default location.";
-              statusPanel.style.borderLeftColor = "#dc3545";
-
-              userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon })
-                .addTo(map)
-                .bindPopup("<b>📍 Default Location</b>");
-                
-              updateVisualCircle();
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-          );
-        } else {
-          statusPanel.textContent = "Your browser does not support HTML5 Geolocation.";
-          statusPanel.style.borderLeftColor = "#dc3545";
-        }
-      }
-
-      function recenterMap() {
-        if (!map || !userLocation) return;
-        map.flyTo([userLocation.lat, userLocation.lng], 15, { duration: 1.2 });
-        if (userMarker) userMarker.openPopup();
-      }
-
-      function toggleMapStyle() {
-        const btn = document.getElementById("map-style-btn");
-        if (isSatellite) {
-          map.removeLayer(satLayer);
-          map.removeLayer(hybridLabelsLayer);
-          map.addLayer(streetLayer);
-          btn.innerHTML = "Switch to Satellite + Landmarks";
-          btn.style.backgroundColor = "#343a40";
-          btn.style.borderColor = "#343a40";
-          isSatellite = false;
-        } else {
-          map.removeLayer(streetLayer);
-          map.addLayer(satLayer);
-          map.addLayer(hybridLabelsLayer); 
-          btn.innerHTML = "Switch to Street View";
-          btn.style.backgroundColor = "#0d6efd";
-          btn.style.borderColor = "#0d6efd";
-          isSatellite = true;
-        }
-      }
-
-      function onRadiusChange(val) {
-        currentRadiusKm = parseInt(val);
-        document.getElementById("radius-val").textContent = currentRadiusKm;
-        document.getElementById("results-title").textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
+    <!-- 1. BUDGET MONITOR VIEW (Unchanged) -->
+    <section id="budget-view" class="spa-view active">
+      <div class="card fade-in">
         
-        updateVisualCircle();
+        <div class="card-header-wrapper">
+          <div class="header-left">
+            <h2 class="card-title">Budget Monitor</h2>
+            <p class="subtitle">Track and allocate your event finances dynamically.</p>
+            <div class="action-buttons">
+              <button id="reset-btn" class="btn btn-secondary">Reset</button>
+              <button id="save-btn" class="btn btn-primary">Save Changes</button>
+            </div>
+          </div>
+          
+          <!-- Wrapper to keep both cards side-by-side -->
+          <div class="widgets-wrapper">
+            
+            <!-- Existing Active Event Details -->
+            <div class="event-corner-widget">
+              <h4>📍 Active Event Details</h4>
+              <div class="widget-row"><span class="widget-label">Event Name:</span><span class="widget-value" id="corner-event-name">Loading...</span></div>
+              <div class="widget-row"><span class="widget-label">Event Category:</span><span class="widget-value" id="corner-event-category">Loading...</span></div>
+              <div class="widget-row"><span class="widget-label">Theme/Type:</span><span class="widget-value" id="corner-event-theme">Loading...</span></div>
+              <div class="widget-row"><span class="widget-label">Religion:</span><span class="widget-value" id="corner-event-religion">Loading...</span></div>
+              <div class="widget-row"><span class="widget-label">Place:</span><span class="widget-value" id="corner-place-name">Loading...</span></div>
+              <div class="widget-divider"></div>
+              <div class="widget-row"><span class="widget-label">Total Budget:</span><span class="widget-value highlight" id="corner-budget-val">Loading...</span></div>
+            </div>
 
-        if (activeQuery) {
-          const activeBtn = document.querySelector('.filter-btn.active');
-          searchTomTom(activeQuery, activeBtn);
-        }
-      }
+            <!-- AI Suggestion Card -->
+            <div class="suggestion-widget">
+              <h4> AI Suggestion</h4>
+              <div class="suggestion-content" id="ai-suggestion-box">
+                <p class="placeholder-text">Waiting for event details to generate smart suggestions...</p>
+              </div>
+              <button id="generate-suggestion-btn" class="btn btn-primary suggestion-btn">Generate Suggestion</button>
+            </div>
 
-      function updateVisualCircle() {
-        if (!map) return;
-        if (radiusCircle) map.removeLayer(radiusCircle);
+          </div>
+        </div>
 
-        radiusCircle = L.circle([userLocation.lat, userLocation.lng], {
-          color: '#0d6efd',
-          fillColor: '#0d6efd',
-          fillOpacity: 0.08,
-          weight: 1.5,
-          radius: currentRadiusKm * 1000
-        }).addTo(map);
+        <!-- Interactive Budget Controls -->
+        <div class="inputs-grid">
+          <div class="input-box"><label for="guest-count-input">👥 Guest Count</label><input type="number" id="guest-count-input" class="input-control" min="1" placeholder="e.g. 150"></div>
+          <div class="input-box"><label for="total-budget-input">💵 Total Budget (INR)</label><input type="number" id="total-budget-input" class="input-control" min="0" placeholder="e.g. 500000"></div>
+        </div>
 
-        map.fitBounds(radiusCircle.getBounds(), { padding: [30, 30] });
-      }
+        <!-- Calculated Summary Box -->
+        <div class="summary-banner">
+          <div class="summary-left">
+            <div class="label">Estimated Cost Per Guest</div>
+            <div class="big-value" id="cost-per-guest-display">INR 0.00</div>
+          </div>
+          <div class="meta-info">
+            <div>Total Guests: <strong id="meta-guest-count">0</strong></div>
+            <div>Total Budget: <strong id="meta-total-budget">0</strong></div>
+          </div>
+        </div>
 
-      // Updated to fetch from FastAPI Search Endpoint
-      async function searchTomTom(query, buttonElement) {
-        activeQuery = query; 
+      </div>
+    </section>
 
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        if (buttonElement) buttonElement.classList.add('active');
-
-        const resultsList = document.getElementById("results-list");
-        const routePanel = document.getElementById("route-panel");
-        resultsList.innerHTML = `<p>Searching Places within <b>${currentRadiusKm} km</b>...</p>`;
-        routePanel.style.display = "none"; 
-
-        markersLayer.clearLayers();
-        if (currentRouteLine) map.removeLayer(currentRouteLine);
-
-        const radiusMeters = currentRadiusKm * 1000;
+    <!-- 2. MY MARKET VIEW (Updated with SaaS features) -->
+    <section id="market-view" class="spa-view">
+      <div class="card fade-in">
+        <div class="header-left" style="margin-bottom: 1.5rem;">
+          <h2 class="card-title">My Market Central</h2>
+          <p class="subtitle">Discover vendors, manage local logistics, and save important event notes.</p>
+        </div>
         
-        // Backend search route
-        const url = `${BACKEND_URL}/search?query=${encodeURIComponent(query)}&lat=${userLocation.lat}&lon=${userLocation.lng}&radius=${radiusMeters}`;
+        <!-- SaaS Tabs -->
+        <div class="saas-nav">
+          <button class="saas-tab active" id="tab-explore">🌍 Explore Market</button>
+          <button class="saas-tab" id="tab-search">🛍️ Search Products</button>
+          <button class="saas-tab" id="tab-notebook">📝 Notebook</button>
+        </div>
 
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
+        <!-- VIEW 1: Explore Market (Map) -->
+        <div id="view-explore" class="market-sub-view active">
+          <div id="status-panel">Requesting your location from the browser...</div>
+          
+          <div class="radius-box">
+            <label for="radius-slider">Search Radius: <span id="radius-val" style="font-size: 16px;">5</span> km</label>
+            <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider">
+          </div>
 
-          resultsList.innerHTML = ""; 
+          <div id="route-panel"></div>
 
-          if (data && data.results && data.results.length > 0) {
-            data.results.forEach((place) => {
-              const shopName = place.poi ? place.poi.name : "Unnamed Shop";
-              const address = place.address ? place.address.freeformAddress : "Address not available";
-              const distKm = (place.dist / 1000).toFixed(1); 
-              const lat = place.position.lat;
-              const lon = place.position.lon;
+          <div class="map-controls">
+            <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
+            <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Switch to Satellite + Landmarks</button>
+          </div>
 
-              const marker = L.marker([lat, lon]).bindPopup(`
-                <b>${shopName}</b><br>
-                📍 ${address}<br>
-                📏 ${distKm} km away<br>
-                <button class="guide-btn" onclick="drawRoute(${lat}, ${lon}, '${shopName.replace(/'/g, "")}')">🗺️ Guide Me Here</button>
-              `);
-              markersLayer.addLayer(marker);
+          <div class="filter-container" id="filter-container">
+            <button class="filter-btn poi-btn" data-query="Sweet shop">Sweet Shops</button>
+            <button class="filter-btn poi-btn" data-query="Florist flower">Flower Shops</button>
+            <button class="filter-btn poi-btn" data-query="Hotel banquet lawn restaurant">Hotels & Lawns</button>
+            <button class="filter-btn poi-btn" data-query="Park">Parks</button>
+            <button class="filter-btn poi-btn" data-query="Clothing mall">Cloth Shops/Malls</button>
+            <button class="filter-btn poi-btn" data-query="Supermarket grocery catering">Catering & Grocery</button>
+            <button class="filter-btn poi-btn" data-query="Jewelry store">Jewelry Stores</button>
+            <button class="filter-btn poi-btn" data-query="Gift shop">Gift Shops</button>
+          </div>
 
-              const card = document.createElement("div");
-              card.className = "place-card";
-              card.innerHTML = `
-                <h4>${shopName}</h4>
-                <p>📍 ${address}</p>
-                <p>📏 <b>${distKm} km away</b> from your location</p>
-                <button class="guide-btn">🗺️ Show Path Guider</button>
-              `;
+          <div id="map"></div>
 
-              card.addEventListener("click", () => {
-                drawRoute(lat, lon, shopName);
-                marker.openPopup();
-              });
+          <h3 id="results-title">Nearby Results (Within 5 km)</h3>
+          <div id="results-list">
+            <p style="color: #6c757d; font-size: 14px;">Select a category above to search within your chosen radius.</p>
+          </div>
+        </div>
 
-              resultsList.appendChild(card);
-            });
-            
-            updateVisualCircle();
-          } else {
-            resultsList.innerHTML = `<p style="color: #6c757d;">No places found matching this category within ${currentRadiusKm} km. Try increasing the radius slider above!</p>`;
-          }
-        } catch (error) {
-          console.error("Backend API Error:", error);
-          resultsList.innerHTML = `<p style="color: #dc3545;">⚠️ Error connecting to the backend server. Please ensure FastAPI is running.</p>`;
-        }
-      }
+        <!-- VIEW 2: Search Products -->
+        <div id="view-search" class="market-sub-view">
+          <div style="text-align: center; padding: 40px; color: #64748b; background: #f8f9fa; border-radius: 8px; border: 1px dashed #cbd5e1;">
+            <h3 style="color: #334155; margin-bottom: 10px;">🛍️ Product Search</h3>
+            <p>Vendor catalogs and direct product searching will be integrated here soon.</p>
+          </div>
+        </div>
 
-      // Updated to fetch from FastAPI Routing Endpoint
-      async function drawRoute(destLat, destLon, shopName) {
-        const routePanel = document.getElementById("route-panel");
-        routePanel.style.display = "block";
-        routePanel.innerHTML = ` Calculating fastest guiding path to <b>${shopName}</b>...`;
+        <!-- VIEW 3: Notebook -->
+        <div id="view-notebook" class="market-sub-view">
+          <div class="notebook-wrapper">
+            <h3 style="margin: 0; color: #1e293b;">Event Organizer Notes</h3>
+            <p style="margin: 0 0 10px 0; color: #64748b; font-size: 14px;">Jot down vendor contact numbers, budget ideas, and to-do lists. Your notes save on your event card.</p>
+            <textarea id="event-notes" placeholder="e.g., Call the florist at 5 PM regarding the rose arrangement..."></textarea>
+            <div>
+              <button class="btn btn-primary" id="save-notes-btn">Save Notes</button>
+              <span id="notebook-status" style="margin-left: 15px; font-size: 13px; color: #10b981; font-weight: 500;"></span>
+            </div>
+          </div>
+        </div>
 
-        if (currentRouteLine) map.removeLayer(currentRouteLine);
+      </div>
+    </section>
+  </div>
 
-        // Backend route calculation
-        const routingUrl = `${BACKEND_URL}/route?start_lat=${userLocation.lat}&start_lon=${userLocation.lng}&dest_lat=${destLat}&dest_lon=${destLon}`;
-
-        try {
-          const response = await fetch(routingUrl);
-          const data = await response.json();
-
-          if (data && data.routes && data.routes.length > 0) {
-            const route = data.routes[0];
-            const points = route.legs[0].points;
-            
-            const lengthKm = (route.summary.lengthInMeters / 1000).toFixed(1);
-            const timeMins = Math.round(route.summary.travelTimeInSeconds / 60);
-
-            routePanel.innerHTML = ` <b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving). Follow the blue line on the map!`;
-
-            const latLngs = points.map(p => [p.latitude, p.longitude]);
-
-            currentRouteLine = L.polyline(latLngs, {
-              color: '#0d6efd',
-              weight: 6,
-              opacity: 0.8,
-              dashArray: '5, 10'
-            }).addTo(map);
-
-            map.fitBounds(currentRouteLine.getBounds(), { padding: [50, 50] });
-          } else {
-            routePanel.innerHTML = ` Could not calculate a driving path to this location.`;
-          }
-        } catch (error) {
-          console.error("Routing Error:", error);
-          routePanel.innerHTML = `Error generating path guider route from backend.`;
-        }
-      }
-
-      window.onload = initMap;
-    </script>
-  </body>
+  <script type="module" src="TaskMaster.js"></script>
+</body>
 </html>

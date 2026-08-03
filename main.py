@@ -26,12 +26,20 @@ TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  # Add this line right here
 
 # FIXED: Using the universally supported and stable gemini-1.5-flash model
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+
+
+
+
+
+
 # ==========================================
 # GEMINI: INVITATION GENERATOR ENDPOINTS
 # ==========================================
 
 class PromptRequest(BaseModel):
     prompt: str
+
+
 
 @app.post("/api/generate")
 def generate_invitation(request: PromptRequest):
@@ -102,9 +110,20 @@ def generate_invitation(request: PromptRequest):
         print(" BACKEND CRASH:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
+
+
+
+
+
 # ==========================================
 # TOMTOM: MAPS, POI SEARCH, & ROUTING ENDPOINTS
 # ==========================================
+
+
+
+
+
+
 
 @app.get("/api/search")
 async def search_poi(query: str, lat: float, lon: float, radius: int):
@@ -143,3 +162,78 @@ async def get_tile(layer: str, style: str, z: int, x: int, y: int, ext: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         return Response(content=response.content, media_type=response.headers.get("Content-Type"))
+
+
+
+
+
+# ==========================================
+# GEMINI: EVENT SUGGESTION ENDPOINT (FIXED)
+# ==========================================
+
+@app.post("/api/suggest")
+def generate_suggestion(request: PromptRequest):
+    if not request.prompt.strip():
+        raise HTTPException(status_code=400, detail="Please provide a prompt.")
+
+    system_instruction = f"""You are an expert event planning assistant. 
+    Analyze the user's query and provide 4 to 6 highly specific, practical and person suggestions.
+    Return ONLY a JSON object with this exact structure (no markdown fences, no backticks):
+    {{
+      "suggestions": [
+        {{
+          "item": "Name of the item/concept",
+          "description": "Short explanation of how it is used in this specific event context"
+        }}
+      ]
+    }}
+    User Query: {request.prompt}"""
+
+    payload = {
+        "contents": [{"parts": [{"text": system_instruction}]}],
+        "generationConfig": {
+            "temperature": 0.4,
+            "maxOutputTokens": 1500,  # Increased to prevent truncation
+            "responseMimeType": "application/json" 
+        }
+    }
+
+    try:
+        response = requests.post(
+            API_URL,
+            headers={"Content-Type": "application/json"},
+            json=payload
+        )
+        
+        if response.status_code != 200:
+            raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
+        
+        data = response.json()
+        
+        if "candidates" not in data or not data["candidates"]:
+            raise HTTPException(status_code=500, detail="AI failed to return a valid suggestion.")
+
+        raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        
+        # 1. Cleanly strip markdown fences without eating actual JSON contents
+        clean_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.IGNORECASE)
+        clean_text = re.sub(r"\s*```$", "", clean_text).strip()
+
+        # 2. Extract valid JSON structure if extra text exists
+        if not (clean_text.startswith("{") and clean_text.endswith("}")):
+            match = re.search(r"\{.*\}", clean_text, re.DOTALL)
+            if match:
+                clean_text = match.group(0)
+
+        # 3. Parse JSON safely
+        structured_data = json.loads(clean_text)
+
+        return {"success": True, "data": structured_data}
+        
+    except json.JSONDecodeError as e:
+        print(f"JSON PARSE ERROR: {e}")
+        print(f"RAW TEXT RECEIVED:\n{raw_text}\n")
+        raise HTTPException(status_code=500, detail="Failed to parse AI JSON response.")
+    except Exception as e:
+        print(" BACKEND CRASH:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
