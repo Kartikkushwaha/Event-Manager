@@ -24,6 +24,7 @@
     <div class="nav-tabs">
       <button id="tab-budget" class="nav-tab active">📊 Budget Monitor</button>
       <button id="tab-market" class="nav-tab">🛒 My Market</button>
+      <button id="theme-toggle" class="nav-tab">🌙</button>
     </div>
   </nav>
 
@@ -73,8 +74,8 @@
 
         <!-- Interactive Budget Controls -->
         <div class="inputs-grid">
-          <div class="input-box"><label for="guest-count-input">👥 Guest Count</label><input type="number" id="guest-count-input" class="input-control" min="1" placeholder="e.g. 150"></div>
-          <div class="input-box"><label for="total-budget-input">💵 Total Budget (INR)</label><input type="number" id="total-budget-input" class="input-control" min="0" placeholder="e.g. 500000"></div>
+          <div class="input-box"><label for="guest-count-input"> Guest Count</label><input type="number" id="guest-count-input" class="input-control" min="1" placeholder="e.g. 150"></div>
+          <div class="input-box"><label for="total-budget-input"> Total Budget (INR)</label><input type="number" id="total-budget-input" class="input-control" min="0" placeholder="e.g. 500000"></div>
         </div>
 
         <!-- Calculated Summary Box -->
@@ -102,9 +103,9 @@
         
         <!-- SaaS Tabs -->
         <div class="saas-nav">
-          <button class="saas-tab active" id="tab-explore">🌍 Explore Market</button>
-          <button class="saas-tab" id="tab-search">🛍️ Search Products</button>
-          <button class="saas-tab" id="tab-notebook">📝 Notebook</button>
+          <button class="saas-tab active" id="tab-explore"> Explore Market</button>
+          <button class="saas-tab" id="tab-search"> Search Products</button>
+          <button class="saas-tab" id="tab-notebook"> Notebook</button>
         </div>
 
         <!-- VIEW 1: Explore Market (Map) -->
@@ -119,9 +120,11 @@
           <div id="route-panel"></div>
 
           <div class="map-controls">
-            <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
-            <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Switch to Satellite + Landmarks</button>
-          </div>
+  <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
+  <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Switch to Satellite + Landmarks</button>
+  <!-- NEW: Shop Wishlist Toggle Button -->
+  <button class="filter-btn" id="view-shop-wishlist-btn" style="background-color: #f59e0b; color: white; border-color: #f59e0b; margin-left: auto;">View Shop Wishlist</button>
+</div>
 
           <div class="filter-container" id="filter-container">
             <button class="filter-btn poi-btn" data-query="Sweet shop">Sweet Shops</button>
@@ -143,12 +146,59 @@
         </div>
 
         <!-- VIEW 2: Search Products -->
-        <div id="view-search" class="market-sub-view">
-          <div style="text-align: center; padding: 40px; color: #64748b; background: #f8f9fa; border-radius: 8px; border: 1px dashed #cbd5e1;">
-            <h3 style="color: #334155; margin-bottom: 10px;">🛍️ Product Search</h3>
-            <p>Vendor catalogs and direct product searching will be integrated here soon.</p>
-          </div>
-        </div>
+<div id="view-search" class="market-sub-view">
+  <div class="search-layout">
+    
+    <!-- Left Sidebar: Common Suggestions -->
+    <aside class="search-sidebar">
+      <h3>Common Suggestions</h3>
+      <ul class="suggestion-list" id="suggestion-list">
+        <li>Men wear for functions</li>
+        <li>Women wear for functions</li>
+        <li>Seating and Tables</li>
+        <li>Lighting</li>
+        <li>Sound and speakers</li>
+        <li>Sweets</li>
+        <li>Snacks</li>
+        <li>Cold drinks</li>
+        <li>Recycle Bags/Dustbins</li>
+      </ul>
+    </aside>
+
+    <!-- Center: Search Bar & Product Results -->
+    <main class="search-main">
+  <div class="search-bar-container">
+    <input type="text" id="product-search-bar" placeholder="Search products..." />
+    <button id="product-search-btn">Search</button>
+  </div>
+  
+  <!-- New Action Bar for the Back Button (Hidden by default) -->
+  <div id="search-action-bar" style="display: none; margin-bottom: 15px;">
+     <button id="back-to-search-btn" class="btn btn-secondary" style="width: 100%;">← Back to Search Results</button>
+  </div>
+  
+  <!-- Active Product Results -->
+  <div class="product-results" id="product-results">
+    <p class="placeholder-msg">Search for a product or click a suggestion on the left to see results.</p>
+  </div>
+  
+  <!-- New Cart/Wishlist Results Container (Hidden by default) -->
+  <div class="product-results" id="saved-results" style="display: none;">
+  </div>
+</main>
+
+    <!-- Right Side: Cart & Wishlist -->
+    <aside class="search-right-panel">
+      <div class="panel-btn" id="my-cart-btn">
+        🛒 My Cart <span class="badge" id="cart-count">0</span>
+      </div>
+      <div class="panel-btn" id="wishlist-btn">
+        ❤️ Wishlist <span class="badge" id="wishlist-count">0</span>
+      </div>
+    </aside>
+    
+  </div>
+</div>
 
         <!-- VIEW 3: Notebook -->
         <div id="view-notebook" class="market-sub-view">
@@ -165,6 +215,22 @@
 
       </div>
     </section>
+  </div>
+
+ <!-- ==========================================
+       SHOP WISHLIST MODAL (Separate Popup)
+       ========================================== -->
+  <div id="shop-wishlist-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px;">
+      <button id="close-shop-wishlist-modal" class="modal-close">&times;</button>
+      <div class="modal-header">
+        <h2 class="modal-title">⭐ Shops / Vendors Wishlist</h2>
+        <div class="modal-category">Saved places for this event</div>
+      </div>
+      <div id="shop-wishlist-container" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px;">
+        <!-- Saved shops will be injected here -->
+      </div>
+    </div>
   </div>
 
   <script type="module" src="TaskMaster.js"></script>

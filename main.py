@@ -15,21 +15,18 @@ app = FastAPI(title="EventEase Unified API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # restrict this to exact frontend domain
+    allow_origins=["*"],  # restrict this to exact frontend domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  # Add this line right here
+TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  
+SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY") # Added ScraperAPI Key
 
 # FIXED: Using the universally supported and stable gemini-1.5-flash model
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
-
-
-
-
 
 
 # ==========================================
@@ -38,8 +35,6 @@ API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash
 
 class PromptRequest(BaseModel):
     prompt: str
-
-
 
 @app.post("/api/generate")
 def generate_invitation(request: PromptRequest):
@@ -69,7 +64,6 @@ def generate_invitation(request: PromptRequest):
     }
 
     try:
-       
         response = requests.post(
             API_URL,
             headers={"Content-Type": "application/json"},
@@ -82,13 +76,11 @@ def generate_invitation(request: PromptRequest):
         
         data = response.json()
         
-      
         if "candidates" not in data or not data["candidates"]:
             print(" GEMINI BLOCKED RESPONSE:", data)
             raise HTTPException(status_code=500, detail="AI failed to return a valid layout design.")
 
         raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-        
         
         match = re.search(r"\{.*\}", raw_text, re.DOTALL)
         if not match:
@@ -111,19 +103,9 @@ def generate_invitation(request: PromptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-
-
-
 # ==========================================
 # TOMTOM: MAPS, POI SEARCH, & ROUTING ENDPOINTS
 # ==========================================
-
-
-
-
-
-
 
 @app.get("/api/search")
 async def search_poi(query: str, lat: float, lon: float, radius: int):
@@ -162,9 +144,6 @@ async def get_tile(layer: str, style: str, z: int, x: int, y: int, ext: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
         return Response(content=response.content, media_type=response.headers.get("Content-Type"))
-
-
-
 
 
 # ==========================================
@@ -236,4 +215,54 @@ def generate_suggestion(request: PromptRequest):
         raise HTTPException(status_code=500, detail="Failed to parse AI JSON response.")
     except Exception as e:
         print(" BACKEND CRASH:", str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ==========================================
+# SCRAPERAPI: E-COMMERCE PRODUCT SEARCH
+# ==========================================
+
+@app.get("/api/products/search")
+async def search_ecommerce_products(query: str):
+    """
+    Searches for products across various sites using ScraperAPI's Google Shopping structured endpoint.
+    This safely returns JSON data containing prices, stores (Amazon, Flipkart, etc.), and product links.
+    """
+    if not SCRAPER_API_KEY:
+        raise HTTPException(status_code=500, detail="ScraperAPI key is missing in environment variables.")
+    
+    if not query.strip():
+        raise HTTPException(status_code=400, detail="Search query cannot be empty.")
+
+    # Using ScraperAPI's structured Google Shopping API to get results from multiple stores
+    scraper_url = "https://api.scraperapi.com/structured/google/shopping"
+    
+    params = {
+        "api_key": SCRAPER_API_KEY,
+        "query": query,
+        "country": "in",  # Targets India for accurate Amazon.in / Flipkart results
+        "tld": "co.in",
+    }
+
+    try:
+        # Increase timeout because scraping can take a few seconds
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            response = await client.get(scraper_url, params=params)
+            
+            if response.status_code != 200:
+                print(f"ScraperAPI Error [{response.status_code}]: {response.text}")
+                raise HTTPException(status_code=response.status_code, detail="Failed to fetch products from ScraperAPI.")
+            
+            data = response.json()
+            
+            # Format and return the shopping results
+            if "shopping_results" in data:
+                return {"success": True, "results": data["shopping_results"]}
+            else:
+                return {"success": True, "results": []}
+
+    except httpx.ReadTimeout:
+        raise HTTPException(status_code=504, detail="ScraperAPI request timed out. Try again.")
+    except Exception as e:
+        print("ScraperAPI Backend Crash:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
