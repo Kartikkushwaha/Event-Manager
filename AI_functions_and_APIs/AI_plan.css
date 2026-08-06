@@ -127,7 +127,7 @@ body::after {
 .nav-links {
     display: flex;
     gap: 30px;
-    justify-self: center; /* Centers links perfectly */
+    justify-content: center;
 }
 
 .nav-links a {
@@ -385,7 +385,7 @@ body::after {
 
 .overview-title::before {
     content: "";
-    flex: 1; 
+    flex: 1;
     height: 1px; 
     margin-right: 20px;
     max-width: 100px; 

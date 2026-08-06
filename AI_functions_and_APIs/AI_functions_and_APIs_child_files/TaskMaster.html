@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TaskMaster AI Panel</title>
   <link rel="stylesheet" href="TaskMaster.css">
-  
-  <!-- Load Leaflet for the Map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
@@ -15,12 +13,12 @@
   <!-- SPA Navbar -->
   <nav class="navbar">
     <div class="nav-brand">
-  <span class="logo-icon" style="font-size: 1.8rem;">💠</span>
-  <div class="brand-text-wrapper">
-    <span class="brand-main">TaskMaster AI</span>
-    <span class="brand-sub">Powered by EventEase</span>
-  </div>
-</div>
+      <span class="logo-icon" style="font-size: 1.8rem;">💠</span>
+      <div class="brand-text-wrapper">
+        <span class="brand-main">TaskMaster AI</span>
+        <span class="brand-sub">Powered by EventEase</span>
+      </div>
+    </div>
     <div class="nav-tabs">
       <button id="tab-budget" class="nav-tab active">📊 Budget Monitor</button>
       <button id="tab-market" class="nav-tab">🛒 My Market</button>
@@ -31,7 +29,7 @@
   <!-- Main Content Container -->
   <div class="container">
 
-    <!-- 1. BUDGET MONITOR VIEW (Unchanged) -->
+    <!-- 1. BUDGET MONITOR VIEW -->
     <section id="budget-view" class="spa-view active">
       <div class="card fade-in">
         
@@ -40,15 +38,13 @@
             <h2 class="card-title">Budget Monitor</h2>
             <p class="subtitle">Track and allocate your event finances dynamically.</p>
             <div class="action-buttons">
-              <button id="reset-btn" class="btn btn-secondary">Reset</button>
+              
               <button id="save-btn" class="btn btn-primary">Save Changes</button>
             </div>
           </div>
           
-          <!-- Wrapper to keep both cards side-by-side -->
           <div class="widgets-wrapper">
-            
-            <!-- Existing Active Event Details -->
+            <!-- Active Event Details -->
             <div class="event-corner-widget">
               <h4>📍 Active Event Details</h4>
               <div class="widget-row"><span class="widget-label">Event Name:</span><span class="widget-value" id="corner-event-name">Loading...</span></div>
@@ -64,21 +60,18 @@
             <div class="suggestion-widget">
               <h4> AI Suggestion</h4>
               <div class="suggestion-content" id="ai-suggestion-box">
-                <p class="placeholder-text">Waiting for event details to generate smart suggestions...</p>
+                <p class="placeholder-text">Waiting for your click to generate smart suggestions...</p>
               </div>
               <button id="generate-suggestion-btn" class="btn btn-primary suggestion-btn">Generate Suggestion</button>
             </div>
-
           </div>
         </div>
 
-        <!-- Interactive Budget Controls -->
         <div class="inputs-grid">
           <div class="input-box"><label for="guest-count-input"> Guest Count</label><input type="number" id="guest-count-input" class="input-control" min="1" placeholder="e.g. 150"></div>
           <div class="input-box"><label for="total-budget-input"> Total Budget (INR)</label><input type="number" id="total-budget-input" class="input-control" min="0" placeholder="e.g. 500000"></div>
         </div>
 
-        <!-- Calculated Summary Box -->
         <div class="summary-banner">
           <div class="summary-left">
             <div class="label">Estimated Cost Per Guest</div>
@@ -90,10 +83,24 @@
           </div>
         </div>
 
+        <!-- My Orders Section for Budget Monitor -->
+        <hr class="widget-divider" style="margin: 2.5rem 0 1.5rem 0; border: none; height: 1px; background: var(--border-color);">
+        <h3 style="margin-bottom: 1rem;">My Orders Tracker</h3>
+        <div id="budget-orders-summary" style="padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+          <p style="color: var(--text-muted);">No items currently in your orders.</p>
+        </div>
+
+        <!-- NEW: Final Budget Allocation Breakdown -->
+        <hr class="widget-divider" style="margin: 2.5rem 0 1.5rem 0; border: none; height: 1px; background: var(--border-color);">
+        <h3 style="margin-bottom: 1rem;">Budget Division</h3>
+        <div id="budget-allocation-container" class="budget-allocation-box">
+          <!-- JS will populate the list mathematically here based on your sketch -->
+        </div>
+
       </div>
     </section>
 
-    <!-- 2. MY MARKET VIEW (Updated with SaaS features) -->
+    <!-- 2. MY MARKET VIEW -->
     <section id="market-view" class="spa-view">
       <div class="card fade-in">
         <div class="header-left" style="margin-bottom: 1.5rem;">
@@ -101,14 +108,13 @@
           <p class="subtitle">Discover vendors, manage local logistics, and save important event notes.</p>
         </div>
         
-        <!-- SaaS Tabs -->
         <div class="saas-nav">
           <button class="saas-tab active" id="tab-explore"> Explore Market</button>
           <button class="saas-tab" id="tab-search"> Search Products</button>
           <button class="saas-tab" id="tab-notebook"> Notebook</button>
         </div>
 
-        <!-- VIEW 1: Explore Market (Map) -->
+        <!-- VIEW 1: Explore Market -->
         <div id="view-explore" class="market-sub-view active">
           <div id="status-panel">Requesting your location from the browser...</div>
           
@@ -117,14 +123,20 @@
             <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider">
           </div>
 
+          <!-- Manual Search Field -->
+          <div style="margin-bottom: 16px; background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+            <label style="font-weight: 600; font-size: 14px; color: var(--text-main); white-space: nowrap;">What are you looking for?</label>
+            <input type="text" id="manual-map-search" class="input-control" placeholder="e.g. Caterer, DJ, Photographer..." style="flex: 1; min-width: 200px;" />
+            <button id="manual-map-search-btn" class="btn btn-primary" style="white-space: nowrap;">Search Map</button>
+          </div>
+
           <div id="route-panel"></div>
 
           <div class="map-controls">
-  <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
-  <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Switch to Satellite + Landmarks</button>
-  <!-- NEW: Shop Wishlist Toggle Button -->
-  <button class="filter-btn" id="view-shop-wishlist-btn" style="background-color: #f59e0b; color: white; border-color: #f59e0b; margin-left: auto;">View Shop Wishlist</button>
-</div>
+            <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
+            <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Satellite View</button>
+            <button class="filter-btn" id="view-shop-wishlist-btn" style="background-color: #0e72e6; color: white; margin-left: auto;">View Shop Wishlist</button>
+          </div>
 
           <div class="filter-container" id="filter-container">
             <button class="filter-btn poi-btn" data-query="Sweet shop">Sweet Shops</button>
@@ -138,67 +150,73 @@
           </div>
 
           <div id="map"></div>
-
           <h3 id="results-title">Nearby Results (Within 5 km)</h3>
-          <div id="results-list">
-            <p style="color: #6c757d; font-size: 14px;">Select a category above to search within your chosen radius.</p>
-          </div>
+          <div id="results-list"><p style="color: #6c757d; font-size: 14px;">Select a category above to search within your chosen radius.</p></div>
         </div>
 
         <!-- VIEW 2: Search Products -->
-<div id="view-search" class="market-sub-view">
-  <div class="search-layout">
-    
-    <!-- Left Sidebar: Common Suggestions -->
-    <aside class="search-sidebar">
-      <h3>Common Suggestions</h3>
-      <ul class="suggestion-list" id="suggestion-list">
-        <li>Men wear for functions</li>
-        <li>Women wear for functions</li>
-        <li>Seating and Tables</li>
-        <li>Lighting</li>
-        <li>Sound and speakers</li>
-        <li>Sweets</li>
-        <li>Snacks</li>
-        <li>Cold drinks</li>
-        <li>Recycle Bags/Dustbins</li>
-      </ul>
-    </aside>
+        <div id="view-search" class="market-sub-view">
+          <div class="search-layout">
+            
+            <aside class="search-sidebar">
+              <h3>Common Suggestions</h3>
+              <ul class="suggestion-list" id="suggestion-list">
+                <li>Men wear for functions</li>
+                <li>Women wear for functions</li>
+                <li>Seating and Tables</li>
+                <li>Lighting</li>
+                <li>Sound and speakers</li>
+                <li>Sweets</li>
+                <li>Snacks</li>
+                <li>Cold drinks</li>
+                <li>Recycle Bags/Dustbins</li>
+              </ul>
+            </aside>
 
-    <!-- Center: Search Bar & Product Results -->
-    <main class="search-main">
-  <div class="search-bar-container">
-    <input type="text" id="product-search-bar" placeholder="Search products..." />
-    <button id="product-search-btn">Search</button>
-  </div>
-  
-  <!-- New Action Bar for the Back Button (Hidden by default) -->
-  <div id="search-action-bar" style="display: none; margin-bottom: 15px;">
-     <button id="back-to-search-btn" class="btn btn-secondary" style="width: 100%;">← Back to Search Results</button>
-  </div>
-  
-  <!-- Active Product Results -->
-  <div class="product-results" id="product-results">
-    <p class="placeholder-msg">Search for a product or click a suggestion on the left to see results.</p>
-  </div>
-  
-  <!-- New Cart/Wishlist Results Container (Hidden by default) -->
-  <div class="product-results" id="saved-results" style="display: none;">
-  </div>
-</main>
+            <main class="search-main">
+              <div class="search-bar-container">
+                <input type="text" id="product-search-bar" placeholder="Search products..." />
+                <button id="product-search-btn">Search</button>
+              </div>
+              
+              <!-- Action Bar with Sort & Category Dropdown -->
+              <div id="search-action-bar" style="display: none; margin-bottom: 15px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <button id="back-to-search-btn" class="btn btn-secondary">← Back to Search</button>
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                  <!-- Category Filter -->
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <label for="category-filter-select" style="font-weight: 600; font-size: 0.9rem;">Category:</label>
+                    <select id="category-filter-select" class="input-control" style="width: auto; padding: 6px 12px; font-size: 0.9rem; cursor: pointer;">
+                      <option value="all">All Items</option>
+                    </select>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <label for="saved-sort-select" style="font-weight: 600; font-size: 0.9rem;">Sort By:</label>
+                    <select id="saved-sort-select" class="input-control" style="width: auto; padding: 6px 12px; font-size: 0.9rem; cursor: pointer;">
+                      <option value="time-desc">Time (Newest to Oldest)</option>
+                      <option value="time-asc">Time (Oldest to Newest)</option>
+                      <option value="price-desc">Price (Highest to Lowest)</option>
+                      <option value="price-asc">Price (Lowest to Highest)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="product-results" id="product-results">
+                <p class="placeholder-msg">Search for a product or click a suggestion on the left to see results.</p>
+              </div>
+              <div class="product-results" id="saved-results" style="display: none;"></div>
+            </main>
 
-    <!-- Right Side: Cart & Wishlist -->
-    <aside class="search-right-panel">
-      <div class="panel-btn" id="my-cart-btn">
-        🛒 My Cart <span class="badge" id="cart-count">0</span>
-      </div>
-      <div class="panel-btn" id="wishlist-btn">
-        ❤️ Wishlist <span class="badge" id="wishlist-count">0</span>
-      </div>
-    </aside>
-    
-  </div>
-</div>
+            <!-- Right Panel adding Orders option -->
+            <aside class="search-right-panel">
+              <div class="panel-btn" id="my-orders-btn">📦 My Orders <span class="badge" id="orders-count">0</span></div>
+              <div class="panel-btn" id="my-cart-btn">🛒 My Cart <span class="badge" id="cart-count">0</span></div>
+              <div class="panel-btn" id="wishlist-btn">❤️ Wishlist <span class="badge" id="wishlist-count">0</span></div>
+            </aside>
+            
+          </div>
+        </div>
 
         <!-- VIEW 3: Notebook -->
         <div id="view-notebook" class="market-sub-view">
@@ -217,18 +235,15 @@
     </section>
   </div>
 
- <!-- ==========================================
-       SHOP WISHLIST MODAL (Separate Popup)
-       ========================================== -->
+ <!-- SHOP WISHLIST MODAL -->
   <div id="shop-wishlist-modal" class="modal-overlay">
     <div class="modal-content" style="max-width: 600px;">
       <button id="close-shop-wishlist-modal" class="modal-close">&times;</button>
       <div class="modal-header">
-        <h2 class="modal-title">⭐ Shops / Vendors Wishlist</h2>
+        <h2 class="modal-title"> Shops / Vendors Wishlist</h2>
         <div class="modal-category">Saved places for this event</div>
       </div>
       <div id="shop-wishlist-container" style="max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 10px;">
-        <!-- Saved shops will be injected here -->
       </div>
     </div>
   </div>
