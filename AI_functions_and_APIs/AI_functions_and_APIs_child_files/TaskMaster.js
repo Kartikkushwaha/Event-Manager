@@ -16,6 +16,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
 const db = initializeFirestore(app, { localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()}) });
 
+// Global Backend Config
+const BACKEND_URL = "http://localhost:8000/api";
+
 // DOM Bindings
 const guestCountInput = document.getElementById('guest-count-input');
 const totalBudgetInput = document.getElementById('total-budget-input');
@@ -54,7 +57,7 @@ let mapInitialized = false;
 let currentSavedList = '';
 let currentSavedListName = '';
 
-// FORMATTING FIX: Strips all non-digits securely to treat "3.089" and "3,089" correctly as INR
+// FORMATTING FIX
 function extractPriceNumber(priceStr) {
   if (!priceStr) return 0;
   let cleanStr = String(priceStr).replace(/[^0-9]/g, '');
@@ -64,42 +67,43 @@ function formatPrice(num) {
   return '₹ ' + num.toLocaleString('en-IN');
 }
 
-tabBudget.addEventListener('click', () => {
-    tabBudget.classList.add('active'); tabMarket.classList.remove('active');
-    viewBudget.classList.add('active'); viewMarket.classList.remove('active');
-});
+// SAFEGUARDED EVENT LISTENERS
+if (tabBudget && tabMarket && viewBudget && viewMarket) {
+    tabBudget.addEventListener('click', () => {
+        tabBudget.classList.add('active'); tabMarket.classList.remove('active');
+        viewBudget.classList.add('active'); viewMarket.classList.remove('active');
+    });
 
-tabMarket.addEventListener('click', () => {
-    tabMarket.classList.add('active'); tabBudget.classList.remove('active');
-    viewMarket.classList.add('active'); viewBudget.classList.remove('active');
-    if (!mapInitialized) { setTimeout(() => { initMap(); mapInitialized = true; }, 100); } 
-    else if (map && document.getElementById('view-explore').classList.contains('active')) { setTimeout(() => map.invalidateSize(), 100); }
-});
+    tabMarket.addEventListener('click', () => {
+        tabMarket.classList.add('active'); tabBudget.classList.remove('active');
+        viewMarket.classList.add('active'); viewBudget.classList.remove('active');
+        if (!mapInitialized) { setTimeout(() => { initMap(); mapInitialized = true; }, 100); } 
+        else if (map && document.getElementById('view-explore').classList.contains('active')) { setTimeout(() => map.invalidateSize(), 100); }
+    });
+}
 
 // Helper for Dictionary lists
 function getListDict(listName) {
   if (!savedEventData) return {};
   let data = savedEventData[listName];
   if (!data) return {};
-  // Backward compatibility: If it's a flat array, convert it silently to a dictionary format under 'General'
   if (Array.isArray(data)) {
       savedEventData[listName] = { 'General': data };
       return savedEventData[listName];
   }
   return data;
 }
-// Helper to flatten dictionary into an array for total cost counts
+
 function getAllItems(listName) {
   const dict = getListDict(listName);
   return Object.values(dict).flat();
 }
 
-// NEW FUNCTION: Populates the full Budget Division list dynamically based on your sketch
 function updateBudgetAllocation() {
   const container = document.getElementById('budget-allocation-container');
   if (!container) return;
 
-  const totalBudget = parseFloat(totalBudgetInput.value) || 0;
+  const totalBudget = parseFloat(totalBudgetInput ? totalBudgetInput.value : 0) || 0;
   const items = getAllItems('orders');
   let totalCost = 0;
   
@@ -167,7 +171,6 @@ function updateBudgetOrdersSummary() {
           ordersSummary.innerHTML = html;
       }
   }
-  // Call update to the final allocation table too
   updateBudgetAllocation();
 }
 
@@ -195,20 +198,21 @@ function populateUI(data) {
   
   const budgetVal = data.budget ? extractPriceNumber(data.budget) : 0;
   document.getElementById('corner-budget-val').textContent = formatPrice(budgetVal);
-  guestCountInput.value = data.guestCount || 1; 
-  totalBudgetInput.value = budgetVal;
+  
+  if (guestCountInput) guestCountInput.value = data.guestCount || 1; 
+  if (totalBudgetInput) totalBudgetInput.value = budgetVal;
+  
   calculateCostPerGuest();
   updateBudgetOrdersSummary();
 }
 
-// SAVE BUTTON FUNCTIONALITY
 async function saveEventData() {
   if (!activeUid || !currentEventId) {
     alert("Missing user session or active event ID!");
     return;
   }
-  const updatedBudget = parseFloat(totalBudgetInput.value) || 0;
-  const updatedGuests = parseInt(guestCountInput.value) || 1;
+  const updatedBudget = parseFloat(totalBudgetInput ? totalBudgetInput.value : 0) || 0;
+  const updatedGuests = parseInt(guestCountInput ? guestCountInput.value : 1) || 1;
   saveBtn.textContent = "Saving..."; saveBtn.disabled = true;
   try {
     const eventRef = doc(db, "users", activeUid, "events", currentEventId);
@@ -228,32 +232,35 @@ async function saveEventData() {
   }
 }
 
-// BIND SAVE BUTTON LISTENER
-if (saveBtn) {
-  saveBtn.addEventListener('click', saveEventData);
-}
+if (saveBtn) saveBtn.addEventListener('click', saveEventData);
 
 function calculateCostPerGuest() {
-  const guestCount = parseFloat(guestCountInput.value) || 0;
-  const totalBudget = parseFloat(totalBudgetInput.value) || 0;
+  const guestCount = parseFloat(guestCountInput ? guestCountInput.value : 0) || 0;
+  const totalBudget = parseFloat(totalBudgetInput ? totalBudgetInput.value : 0) || 0;
   const costPerGuest = guestCount > 0 ? (totalBudget / guestCount) : 0;
-  document.getElementById('cost-per-guest-display').textContent = formatPrice(costPerGuest);
-  document.getElementById('meta-guest-count').textContent = guestCount;
-  document.getElementById('meta-total-budget').textContent = totalBudget.toLocaleString('en-IN');
-  // Refresh the final division dynamically when total budget value is modified
+  
+  const costDisplay = document.getElementById('cost-per-guest-display');
+  const metaGuestCount = document.getElementById('meta-guest-count');
+  const metaTotalBudget = document.getElementById('meta-total-budget');
+  
+  if (costDisplay) costDisplay.textContent = formatPrice(costPerGuest);
+  if (metaGuestCount) metaGuestCount.textContent = guestCount;
+  if (metaTotalBudget) metaTotalBudget.textContent = totalBudget.toLocaleString('en-IN');
+  
   updateBudgetAllocation();
 }
-guestCountInput.addEventListener('input', calculateCostPerGuest);
-totalBudgetInput.addEventListener('input', calculateCostPerGuest);
+
+if (guestCountInput) guestCountInput.addEventListener('input', calculateCostPerGuest);
+if (totalBudgetInput) totalBudgetInput.addEventListener('input', calculateCostPerGuest);
 
 const suggestionBtn = document.getElementById('generate-suggestion-btn');
 const suggestionBox = document.getElementById('ai-suggestion-box');
 if (suggestionBtn) {
     suggestionBtn.addEventListener('click', async () => {
-        const theme = document.getElementById('corner-event-theme').textContent.trim();
-        const category = document.getElementById('corner-event-category').textContent.trim();
-        const religion = document.getElementById('corner-event-religion').textContent.trim();
-        const place = document.getElementById('corner-place-name').textContent.trim();
+        const theme = document.getElementById('corner-event-theme')?.textContent.trim() || "";
+        const category = document.getElementById('corner-event-category')?.textContent.trim() || "";
+        const religion = document.getElementById('corner-event-religion')?.textContent.trim() || "";
+        const place = document.getElementById('corner-place-name')?.textContent.trim() || "";
         const invalidValues = ["not specified", "not required", "no choice required", "others", "loading..."];
         const isValid = (val) => val && !invalidValues.includes(val.toLowerCase());
 
@@ -265,23 +272,32 @@ if (suggestionBtn) {
         prompt += "?";
 
         suggestionBtn.textContent = "Consulting AI..."; suggestionBtn.disabled = true;
-        suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #3b82f6;">Generating suggestions for: <em>"${prompt}"</em>...</p>`;
+        if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #3b82f6;">Generating suggestions for: <em>"${prompt}"</em>...</p>`;
+        
         try {
-            const response = await fetch('http://localhost:8000/api/suggest', { 
+            // FIXED URL
+            const response = await fetch(`${BACKEND_URL}/suggest`, { 
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt })
             });
             const result = await response.json();
-            if (response.ok && result.success && result.data && result.data.suggestions) {
-                let htmlContent = '<div style="display: flex; flex-direction: column; gap: 10px;">';
-                result.data.suggestions.forEach(sug => {
-                    htmlContent += `<div style="background: var(--card-bg); padding: 10px 12px; border-radius: 8px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"><strong style="color: var(--primary); display: block; font-size: 0.95rem; margin-bottom: 2px;">${sug.item}</strong><span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${sug.description}</span></div>`;
-                });
-                htmlContent += '</div>';
-                suggestionBox.innerHTML = htmlContent;
-            } else {
-                suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Error: ${result.detail || "Could not generate valid suggestions."}</p>`;
+            
+            if (suggestionBox) {
+                if (response.ok && result.success && result.data && result.data.suggestions) {
+                    let htmlContent = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+                    result.data.suggestions.forEach(sug => {
+                        htmlContent += `<div style="background: var(--card-bg); padding: 10px 12px; border-radius: 8px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"><strong style="color: var(--primary); display: block; font-size: 0.95rem; margin-bottom: 2px;">${sug.item}</strong><span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${sug.description}</span></div>`;
+                    });
+                    htmlContent += '</div>';
+                    suggestionBox.innerHTML = htmlContent;
+                } else {
+                    suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Error: ${result.detail || "Could not generate valid suggestions."}</p>`;
+                }
             }
-        } catch (error) { suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Failed to connect to the server.</p>`; } finally { suggestionBtn.textContent = "Generate Suggestion"; suggestionBtn.disabled = false; }
+        } catch (error) { 
+            if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Failed to connect to the server.</p>`; 
+        } finally { 
+            suggestionBtn.textContent = "Generate Suggestion"; suggestionBtn.disabled = false; 
+        }
     });
 }
 
@@ -308,14 +324,18 @@ function loadEventNotes() { if (notesArea) notesArea.value = localStorage.getIte
 loadEventNotes();
 if (saveNotesBtn) {
     saveNotesBtn.addEventListener('click', () => {
-      if (!currentEventId) { notesStatus.style.color = "#ef4444"; notesStatus.textContent = " No event selected!"; return; }
+      if (!currentEventId) { 
+          if(notesStatus) { notesStatus.style.color = "#ef4444"; notesStatus.textContent = " No event selected!"; }
+          return; 
+      }
       localStorage.setItem(getNoteStorageKey(), notesArea.value);
-      notesStatus.style.color = "#10b981"; notesStatus.textContent = "✓ Notes saved for this event!";
-      setTimeout(() => { notesStatus.textContent = ""; }, 3000);
+      if(notesStatus) {
+          notesStatus.style.color = "#10b981"; notesStatus.textContent = "✓ Notes saved for this event!";
+          setTimeout(() => { notesStatus.textContent = ""; }, 3000);
+      }
     });
 }
 
-const BACKEND_URL = "http://localhost:8000/api";
 let map, userMarker, destMarker, markersLayer, currentRouteLine, radiusCircle;
 let userLocation = { lat: 30.2941, lng: 75.6738 }; 
 let currentRadiusKm = 5; 
@@ -379,8 +399,12 @@ document.getElementById('map-style-btn')?.addEventListener('click', (e) => {
 
 document.getElementById('radius-slider')?.addEventListener('input', (e) => {
   currentRadiusKm = parseInt(e.target.value);
-  document.getElementById("radius-val").textContent = currentRadiusKm;
-  document.getElementById("results-title").textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
+  const radiusVal = document.getElementById("radius-val");
+  const resultsTitle = document.getElementById("results-title");
+  
+  if (radiusVal) radiusVal.textContent = currentRadiusKm;
+  if (resultsTitle) resultsTitle.textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
+  
   updateVisualCircle();
   if (activeQuery) { const activeBtn = document.querySelector('.filter-btn.active'); searchTomTom(activeQuery, activeBtn); }
 });
@@ -397,7 +421,8 @@ document.querySelectorAll('.poi-btn').forEach(btn => {
 });
 
 document.getElementById('manual-map-search-btn')?.addEventListener('click', () => {
-    const query = document.getElementById('manual-map-search')?.value.trim();
+    const searchInputEl = document.getElementById('manual-map-search');
+    const query = searchInputEl ? searchInputEl.value.trim() : "";
     if(query) { searchTomTom(query, null); }
 });
 
@@ -447,9 +472,9 @@ async function searchTomTom(query, buttonElement) {
   if (resultsList) resultsList.innerHTML = `<p>Searching Places within <b>${currentRadiusKm} km</b>...</p>`;
   if (routePanel) routePanel.style.display = "none"; 
 
-  markersLayer.clearLayers();
-  if (currentRouteLine) map.removeLayer(currentRouteLine);
-  if (destMarker) map.removeLayer(destMarker);
+  if (markersLayer) markersLayer.clearLayers();
+  if (currentRouteLine && map) map.removeLayer(currentRouteLine);
+  if (destMarker && map) map.removeLayer(destMarker);
 
   try {
     const response = await fetch(`${BACKEND_URL}/search?query=${encodeURIComponent(query)}&lat=${userLocation.lat}&lon=${userLocation.lng}&radius=${currentRadiusKm * 1000}`);
@@ -549,12 +574,10 @@ async function saveItemToFirebase(listName, itemData, buttonElement) {
 
   buttonElement.style.background = "#10b981"; buttonElement.style.color = "white"; buttonElement.style.borderColor = "#10b981"; buttonElement.disabled = true;
   
-  // Create Category based on Search Key
   const searchKey = window.lastSearchQuery || 'General';
 
   if (!savedEventData[listName]) savedEventData[listName] = {};
   if (Array.isArray(savedEventData[listName])) {
-      // Legacy conversion fallback in case old lists exist
       savedEventData[listName] = { 'General': savedEventData[listName] };
   }
   if (!savedEventData[listName][searchKey]) savedEventData[listName][searchKey] = [];
@@ -586,7 +609,8 @@ async function fetchProducts(query) {
 
   productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #3b82f6;"><h3 style="margin-bottom: 10px;">⏳ Searching for "${query}"...</h3><p style="color: var(--text-muted);">Scanning Amazon, Flipkart, and other stores...</p></div>`;
   try {
-    const response = await fetch(`http://localhost:8000/api/products/search?query=${encodeURIComponent(query)}`);
+    // FIXED URL
+    const response = await fetch(`${BACKEND_URL}/products/search?query=${encodeURIComponent(query)}`);
     const data = await response.json();
     productResults.innerHTML = ''; 
     if (data.success && data.results && data.results.length > 0) {
@@ -644,37 +668,39 @@ function renderSavedList(listName, displayName) {
   if (savedResults) savedResults.style.display = 'grid';
   if (searchActionBar) searchActionBar.style.display = 'flex';
   
-  // Data restructuring and Category Setup
   const dict = getListDict(listName);
   const categorySelect = document.getElementById('category-filter-select');
-  const existingCategoryValue = categorySelect.value || 'all';
-
-  categorySelect.innerHTML = '<option value="all">All Items</option>';
-  Object.keys(dict).forEach(k => {
-      if(dict[k].length > 0) {
-         categorySelect.innerHTML += `<option value="${k}">${k.toUpperCase()}</option>`;
-      }
-  });
   
-  // Try to retain user category
-  categorySelect.value = Object.keys(dict).includes(existingCategoryValue) ? existingCategoryValue : 'all';
-  categorySelect.onchange = (e) => { renderSavedList(listName, displayName); };
+  if (categorySelect) {
+      const existingCategoryValue = categorySelect.value || 'all';
 
-  // Generate lists for display and calculation independently 
+      categorySelect.innerHTML = '<option value="all">All Items</option>';
+      Object.keys(dict).forEach(k => {
+          if(dict[k].length > 0) {
+             categorySelect.innerHTML += `<option value="${k}">${k.toUpperCase()}</option>`;
+          }
+      });
+      
+      categorySelect.value = Object.keys(dict).includes(existingCategoryValue) ? existingCategoryValue : 'all';
+      categorySelect.onchange = (e) => { renderSavedList(listName, displayName); };
+  }
+
   let itemsToDisplay = [];
   const allItemsUnfiltered = [];
   
   Object.keys(dict).forEach(cat => {
       dict[cat].forEach(item => {
-          const itemWithCat = { ...item, _category: cat }; // Embed category for deletion purposes
+          const itemWithCat = { ...item, _category: cat }; 
           allItemsUnfiltered.push(itemWithCat);
-          if (categorySelect.value === 'all' || categorySelect.value === cat) {
+          if (!categorySelect || categorySelect.value === 'all' || categorySelect.value === cat) {
               itemsToDisplay.push(itemWithCat);
           }
       });
   });
 
-  const sortVal = document.getElementById('saved-sort-select')?.value || 'time-desc';
+  const sortSelectEl = document.getElementById('saved-sort-select');
+  const sortVal = sortSelectEl ? sortSelectEl.value : 'time-desc';
+  
   itemsToDisplay.sort((a, b) => {
     let priceA = extractPriceNumber(a.price);
     let priceB = extractPriceNumber(b.price);
@@ -689,8 +715,7 @@ function renderSavedList(listName, displayName) {
 
   if (itemsToDisplay.length === 0) {
     if (savedResults) savedResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); background: var(--card-bg); border-radius: 8px; border: 1px dashed var(--border-color);"><h3>No items to show in ${displayName}.</h3><p>Change your filter or search and add more products.</p></div>`;
-    // We still want to show the receipt card if there are items overall but they are hidden due to filter
-    if(allItemsUnfiltered.length > 0) appendReceiptCard(allItemsUnfiltered, displayName, savedResults);
+    if(allItemsUnfiltered.length > 0 && savedResults) appendReceiptCard(allItemsUnfiltered, displayName, savedResults);
     return;
   }
 
@@ -701,7 +726,6 @@ function renderSavedList(listName, displayName) {
         let numericPrice = extractPriceNumber(item.price);
         let formattedStr = formatPrice(numericPrice);
         
-        // Render "Add to Orders" inside Cart and Wishlist views
         const addToOrdersHtml = listName !== 'orders' 
             ? `<button class="add-to-orders-btn" style="background: #f59e0b; color: white; border: none; padding: 8px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">Add to Orders</button>` 
             : '';
@@ -723,12 +747,10 @@ function renderSavedList(listName, displayName) {
           </div>
         `;
         
-        // Setup listener for the Add to Orders button if it exists
         if (listName !== 'orders') {
           card.querySelector('.add-to-orders-btn').addEventListener('click', (e) => {
             const firebasePayload = { name: item.name, price: item.price, source: item.source, link: item.link };
             
-            // Temporarily store the original search category to ensure it saves properly in Orders
             const tempSearchQuery = window.lastSearchQuery;
             window.lastSearchQuery = item._category; 
             saveItemToFirebase('orders', firebasePayload, e.target);
@@ -755,13 +777,11 @@ function renderSavedList(listName, displayName) {
   }
 }
 
-// Ensure calculation logic handles ALL items (independent of filters) as requested
 function appendReceiptCard(allSectionItems, displayName, container) {
   let sectionTotalCostSum = 0;
   let receiptListingsHTML = "";
   let grandTotalEverything = 0;
 
-  // 1. Calc the Specific List (even if filtered out of view)
   allSectionItems.forEach(item => {
     let numericPrice = extractPriceNumber(item.price);
     sectionTotalCostSum += numericPrice;
@@ -769,7 +789,6 @@ function appendReceiptCard(allSectionItems, displayName, container) {
     receiptListingsHTML += `<li style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>${item.name}</span><span style="font-weight: 600; color: var(--text-main);">${formattedStr}</span></li>`;
   });
 
-  // 2. Calc the Grand Total of ALL sections (Cart + Wishlist + Orders) regardless of which is viewed
   ['cart', 'wishlist', 'orders'].forEach(list => {
       const listItems = getAllItems(list);
       listItems.forEach(i => grandTotalEverything += extractPriceNumber(i.price));
@@ -799,7 +818,7 @@ const ordersBtn = document.getElementById('my-orders-btn');
 const wishlistBtn = document.getElementById('wishlist-btn');
 const allSuggestions = document.querySelectorAll('.suggestion-list li');
 
-if (searchBtn) { searchBtn.onclick = () => { const query = searchInput.value.trim(); if (query) fetchProducts(query); }; }
+if (searchBtn && searchInput) { searchBtn.onclick = () => { const query = searchInput.value.trim(); if (query) fetchProducts(query); }; }
 if (searchInput) { searchInput.onkeypress = (e) => { if (e.key === 'Enter') { const query = e.target.value.trim(); if (query) fetchProducts(query); } }; }
 allSuggestions.forEach(item => { item.onclick = (e) => { const query = e.target.textContent; if (searchInput) searchInput.value = query; fetchProducts(query); }; });
 
