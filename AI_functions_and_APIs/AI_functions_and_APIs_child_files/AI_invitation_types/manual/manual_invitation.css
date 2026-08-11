@@ -45,17 +45,19 @@ body {
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* Allows sections to drop down */
+    gap: 15px; /* Adds space between sections when they wrap */
     z-index: 10; 
     flex-shrink: 0; 
     transition: background-color 0.3s ease;
-    height: 100px;
+    height: auto;
+    min-height: 80px;
     margin: 10px;
     border-radius: 14px;
 }
 
 .header-left, .header-right {
-    flex: 1; 
+    flex: 1 1 auto; /* Allows flexible resizing and wrapping */
 }
 
 .header-right {
@@ -67,55 +69,84 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 1 1 auto;
 }
 
+/* --- GLOWING LOGO STYLES --- */
 .logo {
-    font-size: 28px;
-    font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 6px;
+    margin: 0;
 }
 
-.logo-icon { font-size: px; color: #fbbf24; }
-.logo-text { color: var(--logo-color); }
+.eventease-glowing-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; 
+    padding: 8px 24px 8px 16px; 
+    background-color: transparent;
+    border: 1px solid #00E5FF;
+    border-radius: 50px;
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), inset 0 0 12px rgba(0, 229, 255, 0.3);
+    width: max-content;
+    font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+    user-select: none;
+}
 
+.logo-symbol {
+    width: 50px;
+    height: 32px;
+    filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
+}
+
+.logo-text {
+    font-size: 22px; 
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.text-event {
+    color: #7dece7;
+}
+
+.text-ease {
+    color: #0088FF;
+}
+
+/* --- NAV LINKS & TOGGLES --- */
 .nav-links {
     display: flex;
+    flex-wrap: wrap; /* Allows individual links to wrap freely */
+    justify-content: center;
     gap: 35px; 
-    
-
 }
-
 
 .nav-link {
     color: var(--nav-link-color);
     text-decoration: none;
     font-weight: 600;
-   font-size: 15px;
+    font-size: 15px;
     transition: color 0.2s;
 }
 
 .nav-link:hover {
     color: var(--logo-color);
-    
 }
 
 .theme-toggle {
-   background: transparent;
-          border: 1px solid var(--border);
-          padding: 5px 12px;
-          border-radius: 20px;
-          cursor: pointer;
-          /* font-size: 1.2rem; */
-          transition: all 0.3s ease;
-          color: var(--text);
-          border: 1px solid grey;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-color);
 }
 
 .theme-toggle:hover {
     background-color: var(--bg-color);
-
 }
 
 /* --- TOOLS BAR STYLES --- */
@@ -150,14 +181,11 @@ body {
     transform: translateY(-2px); 
 }
 
-/* --- MAIN WORKSPACE & CANVAS --- */
-h2.title-text { 
-    color: var(--text-color); 
-    margin: 0; 
-    font-size: 24px; 
-    text-align: center; 
+.menu-icon {
+    font-size: 18px;
 }
 
+/* --- MAIN WORKSPACE & CANVAS --- */
 .main-workspace { 
     flex: 1; 
     overflow-y: auto; 
@@ -216,7 +244,7 @@ h2.title-text {
     left: -400px; 
     width: 380px; 
     height: 100vh; 
-    background-color: var(--nav-bg); /* Links to theme */
+    background-color: var(--nav-bg);
     color: var(--text-color);
     z-index: 50; 
     overflow-y: auto; 
@@ -261,7 +289,16 @@ h2.title-text {
     color: #d9534f; 
 }
 
-/* --- TOOL BUTTONS & INPUTS --- */
+/* --- UTILITY & COMPONENT STYLES --- */
+.mt-10 { margin-top: 10px; }
+.mt-15 { margin-top: 15px; }
+.mb-10 { margin-bottom: 10px; }
+
+.divider {
+    border: 0.5px solid var(--border-color); 
+    margin: 10px 0;
+}
+
 .controls-inner { 
     display: flex; 
     flex-direction: column; 
@@ -269,6 +306,81 @@ h2.title-text {
     padding-bottom: 30px; 
 }
 
+.section { 
+    padding: 15px; 
+    border: 1px solid var(--border-color); 
+    border-radius: 6px; 
+    background-color: var(--bg-color); 
+}
+
+.section-highlight-blue {
+    background: #e8f4f8; 
+    border-color: #b6d4fe;
+}
+
+.section-highlight-yellow {
+    background-color: #fff9e6; 
+    border-color: #ffe699;
+}
+
+.section-title { 
+    font-size: 14px; 
+    text-transform: uppercase; 
+    color: var(--logo-color); 
+    font-weight: bold; 
+    margin-bottom: 10px; 
+    border-bottom: 2px solid var(--logo-color); 
+    padding-bottom: 5px; 
+}
+
+.title-yellow {
+    color: #d49a00; 
+    border-bottom-color: #d49a00;
+}
+
+.section-subtitle {
+    font-size: 11px; 
+    color: #777; 
+    margin: 0 0 10px 0;
+}
+
+.text-color-box {
+    background: #e8eaf6; 
+    padding: 10px; 
+    border-radius: 6px; 
+}
+
+.text-color-label {
+    margin-top: 0; 
+    color: #3f51b5;
+}
+
+.premium-text-label {
+    color: #d4af37; 
+    font-weight: bold; 
+}
+
+/* SMART DARK MODE OVERRIDES */
+[data-theme="dark"] .section, 
+[data-theme="dark"] .section-highlight-blue, 
+[data-theme="dark"] .section-highlight-yellow,
+[data-theme="dark"] .text-color-box {
+    background-color: var(--toggle-bg) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] .section-title, 
+[data-theme="dark"] .title-yellow {
+    color: var(--logo-color) !important;
+    border-bottom-color: var(--logo-color) !important;
+}
+[data-theme="dark"] .premium-text-label {
+    color: #fbbf24 !important; 
+}
+[data-theme="dark"] .text-color-label {
+    color: var(--text-color) !important; 
+}
+
+/* --- BUTTONS --- */
 button.tool-btn { 
     padding: 8px 12px; 
     background-color: #007bff; 
@@ -282,21 +394,16 @@ button.tool-btn {
 }
 
 button.tool-btn:hover { background-color: #0056b3; }
-
 .btn-secondary { background-color: #6c757d; }
 .btn-secondary:hover { background-color: #5a6268; }
-
-.btn-success { 
-    background-color: #28a745; 
-    width: 100%; 
-    padding: 12px; 
-    font-size: 16px; 
-    margin-bottom: 5px; 
-}
+.btn-success { background-color: #28a745; }
 .btn-success:hover { background-color: #218838; }
-
 .btn-danger { background-color: #dc3545; }
 .btn-danger:hover { background-color: #c82333; }
+.btn-warning { background-color: #ff9800; }
+.btn-warning:hover { background-color: #e68a00; }
+.btn-add-text { background-color: #28a745; }
+.btn-full { width: 100%; }
 
 .btn-group { 
     display: flex; 
@@ -312,10 +419,11 @@ button.tool-btn:hover { background-color: #0056b3; }
     padding: 6px; 
 }
 
+/* --- INPUTS & FORMS --- */
 label { 
     font-size: 13px; 
     font-weight: 600; 
-    color: var(--text-color); /* Links to theme */
+    color: var(--text-color);
     margin-bottom: 3px; 
     margin-top: 8px; 
     display: block; 
@@ -325,8 +433,8 @@ label {
 select, input[type="file"], input[type="color"], input[type="range"] { 
     width: 100%; 
     padding: 6px; 
-    background-color: var(--bg-color); /* Links to theme */
-    color: var(--text-color); /* Links to theme */
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
     border: 1px solid var(--border-color); 
     border-radius: 4px; 
     box-sizing: border-box; 
@@ -338,37 +446,6 @@ input[type="color"] {
     height: 35px; 
     cursor: pointer; 
     border: none; 
-}
-
-.section { 
-    padding: 15px; 
-    border: 1px solid var(--border-color); 
-    border-radius: 6px; 
-    background-color: var(--bg-color); /* Links to theme */
-}
-
-.section-title { 
-    font-size: 14px; 
-    text-transform: uppercase; 
-    color: var(--logo-color); 
-    font-weight: bold; 
-    margin-bottom: 10px; 
-    border-bottom: 2px solid var(--logo-color); 
-    padding-bottom: 5px; 
-}
-
-/* SMART DARK MODE OVERRIDES */
-/* Overrides your inline HTML styling so it doesn't look weird in dark mode */
-[data-theme="dark"] .section {
-    background-color: var(--toggle-bg) !important;
-    border-color: var(--border-color) !important;
-}
-[data-theme="dark"] .section-title {
-    color: var(--logo-color) !important;
-    border-bottom-color: var(--logo-color) !important;
-}
-[data-theme="dark"] label[style*="color: #d4af37;"] {
-    color: #fbbf24 !important; /* Brighter gold for dark mode */
 }
 
 .flex-row { 
@@ -391,67 +468,59 @@ option.f-birthstone { font-family: 'Birthstone', cursive; }
 option.f-yesteryear { font-family: 'Yesteryear', cursive; }
 option.f-sacramento { font-family: 'Sacramento', cursive; }
 
-/* --- RESPONSIVE MEDIA QUERIES --- */
 
-/* For Tablets and smaller screens (Max: 768px) */
-@media (max-width: 768px) {
+/* ==========================================
+   RESPONSIVE DESIGN (FIXED - NO SCALING DOWN)
+   ========================================== */
+
+/* Tier 1: Tablets & Half-screen Laptops (< 992px) */
+@media (max-width: 992px) {
     .app-header {
-        padding: 12px 15px;
-    }
-    
-    .logo {
-        font-size: 18px;
+        justify-content: center; /* Center everything when wrapping starts */
     }
 
-    .nav-links {
-        gap: 20px; 
+    .header-left, .header-center, .header-right {
+        display: flex;
+        justify-content: center;
+        flex: 1 1 auto; /* Allows sections to drop to the next line smoothly */
     }
-    
-    .nav-link {
-        font-size: 12px;
-    }
-    
+
     .desktop-text {
         display: none; 
     }
-    
-    .menu-btn {
-        padding: 10px 14px;
-    }
-    
-    /* Notice I removed the sidebar 100% width rule from here! */
 }
 
-/* For Mobile Phones ONLY (Max: 480px) */
-@media (max-width: 480px) {
+/* Tier 2: Smartphones (< 600px) */
+@media (max-width: 600px) {
     .app-header {
-        gap: 10px;
+        flex-direction: column; /* Force vertical stacking on very small screens */
+        padding: 15px 20px; /* Keep original comfortable padding */
+        gap: 20px;
     }
 
-    .header-left, .header-right {
-        flex: 0 0 auto; 
-    }
-
-    .header-center {
-        order: 3; 
-        flex: 1 1 100%; 
-        padding-top: 10px;
-        border-top: 1px solid var(--border-color);
+    .header-left, .header-center, .header-right {
+        width: 100%;
+        justify-content: center;
     }
 
     .nav-links {
-        flex-wrap: wrap; 
-        justify-content: center;
-        gap: 15px;
+        gap: 25px; /* Keep spacing comfortable for touch targets */
     }
 
     .tools-bar {
-        padding: 10px 15px;
+        justify-content: center; /* Center tools bar contents on mobile */
     }
 
-    /* Sidebar goes full width ONLY on true mobile screens */
+    .main-workspace {
+        padding: 5px 10px 10px 10px; 
+    }
+
     .sidebar { 
         width: 100%; 
-        left: -100%; /* Keeps it hidden until opened */
+        left: -100%; 
+    }
+    
+    .sidebar.open {
+        left: 0;
     }
 }

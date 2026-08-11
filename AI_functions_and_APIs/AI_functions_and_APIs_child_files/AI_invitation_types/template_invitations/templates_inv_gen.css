@@ -82,13 +82,41 @@ body {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.logo {
-  font-size: 22px;
+/* --- GLOWING LOGO STYLES --- */
+.eventease-glowing-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px; 
+  padding: 6px 20px 6px 12px; 
+  background-color: transparent;
+  border: 1px solid #00E5FF;
+  border-radius: 50px;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), inset 0 0 12px rgba(0, 229, 255, 0.3);
+  width: max-content;
+  font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
+  user-select: none;
+}
+
+.logo-symbol {
+  width: 50px;
+  height: 32px;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
+}
+
+.logo-text {
+  font-size: 22px; 
   font-weight: 700;
   letter-spacing: -0.5px;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.text-event {
+  color: #7dece7;
+}
+
+.text-ease {
+  color: #0088FF;
 }
 
 .nav-links {
@@ -118,14 +146,12 @@ body {
 
 #themeToggle {
   background: transparent;
-          border: 1px solid var(--border);
-          padding: 5px 12px;
-          border-radius: 20px;
-          cursor: pointer;
-          /* font-size: 1.2rem; */
-          transition: all 0.3s ease;
-          color: var(--text);
-          border: 1px solid grey;
+  border: 1px solid var(--border-color); /* Fixed to use a valid variable */
+  padding: 5px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-main); /* Fixed to use a valid variable */
 }
 
 #themeToggle:hover {
@@ -308,8 +334,7 @@ main {
 
 /* --- RESPONSIVE BREAKPOINTS --- */
 
-/* 1. Tablet & Half-Screen Desktop (601px to 1024px) 
-      Cards STAY STACKED here and spread out on hover! */
+/* 1. Tablet & Half-Screen Desktop (601px to 1024px) */
 @media (max-width: 1024px) and (min-width: 601px) {
   .header-text h1 { font-size: 2.8rem; }
   
@@ -317,22 +342,37 @@ main {
     min-width: 270px;
     max-width: 270px;
     height: 370px;
-    margin-left: -140px; /* Keeps them overlapping on half screen */
+    margin-left: -140px; 
   }
 }
 
-/* 2. Mobile & Small Tablets (768px and below) - Navbar & Menu Adjustments */
+/* 2. Mobile & Small Tablets (768px and below) */
 @media (max-width: 768px) {
   .navbar {
     padding: 12px 24px;
     border-radius: 24px;
   }
   
+  /* Scale down the glowing logo for mobile to prevent overflow */
+  .eventease-glowing-logo {
+    padding: 4px 12px 4px 8px;
+    gap: 4px;
+  }
+  
+  .logo-text {
+    font-size: 16px;
+  }
+  
+  .logo-symbol {
+    width: 35px;
+    height: 24px;
+  }
+
   .mobile-menu-btn {
     display: block;
   }
   
-  /* Dropdown Menu - Hidden by default */
+  /* Dropdown Menu */
   .nav-links {
     position: absolute;
     top: 70px;
@@ -349,7 +389,6 @@ main {
     gap: 16px;
     text-align: center;
     
-    /* Hide initially */
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -357,7 +396,6 @@ main {
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* HOVER MAGIC: Shows menu when hovering over navbar OR the hamburger icon */
   .navbar:hover .nav-links,
   .mobile-menu-btn:hover ~ .nav-links,
   .nav-links:hover,
@@ -369,8 +407,7 @@ main {
   }
 }
 
-/* 3. Phones ONLY (600px and below) 
-      Here we disable stacking and switch to clean swipe cards */
+/* 3. Phones ONLY (600px and below) */
 @media (max-width: 600px) {
   .header-text h1 { font-size: 2.2rem; }
   
@@ -386,7 +423,7 @@ main {
   
   .card {
     scroll-snap-align: center;
-    margin-left: 0 !important; /* Unstacks cards for mobile swipe */
+    margin-left: 0 !important; 
     min-width: min(85vw, 300px);
     max-width: min(85vw, 300px);
     height: 360px;

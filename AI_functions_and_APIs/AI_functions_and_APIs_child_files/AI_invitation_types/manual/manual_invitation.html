@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EventEase - Custom Manual Creator</title>
     
-    <link rel="icon" type="image/png" href="../../../../ee_logo_bgremove.png">
+    <link rel="icon" type="image/png" href="../../../../logo.png">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700&family=Poppins:wght@400;600&family=Tiro+Devanagari+Hindi&family=Pacifico&family=Oswald:wght@400;600&family=Lavishly+Yours&family=Imperial+Script&family=Birthstone&family=Yesteryear&family=Sacramento&display=swap" rel="stylesheet">
@@ -17,8 +17,24 @@
    <header class="app-header">
        <div class="header-left">
            <div class="logo">
-               <span class="logo-icon">✨</span>
-               <span class="logo-text">EventEase</span>
+               <!-- EventEase Logo Start -->
+        <div class="eventease-glowing-logo">
+            <!-- SVG Symbol -->
+            <svg class="logo-symbol" viewBox="0 0 100 64" xmlns="http://www.w3.org/2000/svg">
+                <!-- Left Dark Circle -->
+                <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
+                <!-- Right Cyan Circle -->
+                <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
+                <!-- Center Overlap Lens (Blue) -->
+                <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
+            </svg>
+
+            <!-- Logo Text -->
+            <div class="logo-text">
+                <span class="text-event">Event</span><span class="text-ease">Ease</span>
+            </div>
+        </div>
+        <!-- EventEase Logo End -->
            </div>
        </div>
 
@@ -60,7 +76,7 @@
 
        <div class="controls-inner">
            <div class="section" style="background: #e8f4f8; border-color: #b6d4fe;">
-               <button class="tool-btn btn-success" onclick="downloadCard()">💾 Download Invitation</button>
+               <button class="tool-btn btn-success" onclick="downloadCard()">Download Invitation</button>
                <div class="btn-group">
                    <button class="tool-btn btn-danger" onclick="deleteSelected()">🗑️ Delete Selected</button>
                    <button class="tool-btn btn-danger" style="background-color: #ff9800;" onclick="clearCanvas()">⚠️ Clear All</button>
