@@ -1,12 +1,13 @@
 import os
 import json
 import re
+import time  # Added for exponential backoff
 import requests
 import httpx
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel
 
 load_dotenv()
@@ -15,7 +16,7 @@ app = FastAPI(title="EventEase Unified API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # restrict this to exact frontend domain in production
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -23,9 +24,8 @@ app.add_middleware(
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  
-SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY") # Added ScraperAPI Key
+SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY") 
 
-# FIXED: Using the universally supported and stable gemini-1.5-flash model
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
 
 
@@ -64,16 +64,31 @@ def generate_invitation(request: PromptRequest):
     }
 
     try:
-        response = requests.post(
-            API_URL,
-            headers={"Content-Type": "application/json"},
-            json=payload
-        )
-    
-        if response.status_code != 200:
-            print(f" GOOGLE API ERROR [{response.status_code}]:", response.text)
-            raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
-        
+        # Implemented Exponential Backoff Retry Logic
+        max_retries = 3
+        for attempt in range(max_retries):
+            response = requests.post(
+                API_URL,
+                headers={"Content-Type": "application/json"},
+                json=payload
+            )
+            
+            # Handle server overload
+            if response.status_code == 503:
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)  # Wait 1s, then 2s, then fail
+                    continue
+                else:
+                    
+                    return {"success": False, "detail": "Please try again..."}
+            
+            # Handle other API errors
+            elif response.status_code != 200:
+                print(f" GOOGLE API ERROR [{response.status_code}]:", response.text)
+                raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
+            
+            break # Break the loop if successful
+
         data = response.json()
         
         if "candidates" not in data or not data["candidates"]:
@@ -139,7 +154,6 @@ async def get_route(start_lat: float, start_lon: float, dest_lat: float, dest_lo
 
 @app.get("/api/tiles/{layer}/{style}/{z}/{x}/{y}.{ext}")
 async def get_tile(layer: str, style: str, z: int, x: int, y: int, ext: str):
-    """Proxies map tiles so the frontend doesn't need the API key for Leaflet."""
     url = f"https://api.tomtom.com/map/1/tile/{layer}/{style}/{z}/{x}/{y}.{ext}?key={TOMTOM_API_KEY}"
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
@@ -147,7 +161,7 @@ async def get_tile(layer: str, style: str, z: int, x: int, y: int, ext: str):
 
 
 # ==========================================
-# GEMINI: EVENT SUGGESTION ENDPOINT (FIXED)
+# GEMINI: EVENT SUGGESTION ENDPOINT
 # ==========================================
 
 @app.post("/api/suggest")
@@ -172,21 +186,33 @@ def generate_suggestion(request: PromptRequest):
         "contents": [{"parts": [{"text": system_instruction}]}],
         "generationConfig": {
             "temperature": 0.4,
-            "maxOutputTokens": 1500,  # Increased to prevent truncation
+            "maxOutputTokens": 1500, 
             "responseMimeType": "application/json" 
         }
     }
 
     try:
-        response = requests.post(
-            API_URL,
-            headers={"Content-Type": "application/json"},
-            json=payload
-        )
-        
-        if response.status_code != 200:
-            raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
-        
+        # Implemented Exponential Backoff Retry Logic
+        max_retries = 3
+        for attempt in range(max_retries):
+            response = requests.post(
+                API_URL,
+                headers={"Content-Type": "application/json"},
+                json=payload
+            )
+            
+            if response.status_code == 503:
+                if attempt < max_retries - 1:
+                    time.sleep(2 ** attempt)
+                    continue
+                else:
+                    raise HTTPException(status_code=503, detail="The AI service is currently experiencing high demand. Please try again in a few moments.")
+            
+            elif response.status_code != 200:
+                raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
+            
+            break
+
         data = response.json()
         
         if "candidates" not in data or not data["candidates"]:
@@ -194,24 +220,19 @@ def generate_suggestion(request: PromptRequest):
 
         raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
         
-        # 1. Cleanly strip markdown fences without eating actual JSON contents
         clean_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.IGNORECASE)
         clean_text = re.sub(r"\s*```$", "", clean_text).strip()
 
-        # 2. Extract valid JSON structure if extra text exists
         if not (clean_text.startswith("{") and clean_text.endswith("}")):
             match = re.search(r"\{.*\}", clean_text, re.DOTALL)
             if match:
                 clean_text = match.group(0)
 
-        # 3. Parse JSON safely
         structured_data = json.loads(clean_text)
-
         return {"success": True, "data": structured_data}
         
     except json.JSONDecodeError as e:
         print(f"JSON PARSE ERROR: {e}")
-        print(f"RAW TEXT RECEIVED:\n{raw_text}\n")
         raise HTTPException(status_code=500, detail="Failed to parse AI JSON response.")
     except Exception as e:
         print(" BACKEND CRASH:", str(e))
@@ -224,28 +245,22 @@ def generate_suggestion(request: PromptRequest):
 
 @app.get("/api/products/search")
 async def search_ecommerce_products(query: str):
-    """
-    Searches for products across various sites using ScraperAPI's Google Shopping structured endpoint.
-    This safely returns JSON data containing prices, stores (Amazon, Flipkart, etc.), and product links.
-    """
     if not SCRAPER_API_KEY:
         raise HTTPException(status_code=500, detail="ScraperAPI key is missing in environment variables.")
     
     if not query.strip():
         raise HTTPException(status_code=400, detail="Search query cannot be empty.")
 
-    # Using ScraperAPI's structured Google Shopping API to get results from multiple stores
     scraper_url = "https://api.scraperapi.com/structured/google/shopping"
     
     params = {
         "api_key": SCRAPER_API_KEY,
         "query": query,
-        "country": "in",  # Targets India for accurate Amazon.in / Flipkart results
+        "country": "in",  
         "tld": "co.in",
     }
 
     try:
-        # Increase timeout because scraping can take a few seconds
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.get(scraper_url, params=params)
             
@@ -255,7 +270,6 @@ async def search_ecommerce_products(query: str):
             
             data = response.json()
             
-            # Format and return the shopping results
             if "shopping_results" in data:
                 return {"success": True, "results": data["shopping_results"]}
             else:

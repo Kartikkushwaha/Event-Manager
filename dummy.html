@@ -1,62 +1,221 @@
-<!-- EventEase Logo Start -->
-<div class="eventease-glowing-logo">
-    
-    <!-- SVG Symbol -->
-    <!-- TO CHANGE SYMBOL SIZE: Adjust 'width' and 'height' values below. (Do not change the viewBox) -->
-    <svg class="logo-symbol" viewBox="0 0 100 64" width="75" height="48" xmlns="http://www.w3.org/2000/svg">
-        <!-- Left Dark Circle -->
-        <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
-        <!-- Right Cyan Circle -->
-        <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
-        <!-- Center Overlap Lens (Blue) -->
-        <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
-    </svg>
-
-    <!-- Logo Text -->
-    <div class="logo-text">
-        <span class="text-event">Event</span><span class="text-ease">Ease</span>
-    </div>
-
-    <!-- Inline CSS for Styling and Glow Effects -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click-to-Place Text Editor</title>
     <style>
-        .eventease-glowing-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            
-            /* TO CHANGE SPACING BETWEEN SYMBOL AND TEXT: Adjust the 'gap' Pvalue below */
-            gap: 6px; 
-            
-            /* TO CHAPNGE BORDER SIZE AROUND THE LOGO: Adjust the 'padding' below (top, right, bottom, left) */
-            padding: 8px 24px 8px 16px; 
-            
-            background-color: transparent;}
-            
-           
-
-        /* Subtle glow on the SVG symbol */
-      
-       
-
-        .logo-text {
-            /* TO CHANGE TEXT SIZE: Adjust the 'font-size' value below */
-            font-size: 28px; 
-            
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            background: white;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-
-        .text-event {
-            color: #7dece7;
-            /* Subtle glow for the dark text to ensure it stands out */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
         }
+        .header h2 { margin: 0; color: #2c3e50; }
+        .header p { color: #7f8c8d; margin-top: 5px; font-size: 14px; }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background: #f1f3f5;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label { font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #495057; }
+        input { padding: 10px; border: 1px solid #ced4da; border-radius: 6px; font-size: 14px; }
+        input:focus { outline: none; border-color: #339af0; box-shadow: 0 0 0 2px rgba(51, 154, 240, 0.25); }
+        
+        .full-width { grid-column: span 2; }
+        
+        button {
+            padding: 12px;
+            background-color: #339af0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: #228be6; }
+        #downloadBtn { background-color: #40c057; }
+        #downloadBtn:hover { background-color: #37b24d; }
 
-        .text-ease {
-            color: #0088FF;
-            /* Bright blue glow for the second half of the text */
+        .canvas-container {
+            text-align: center;
+            overflow: auto;
+            border: 2px dashed #ced4da;
+            background: #e9ecef;
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+            cursor: crosshair; /* Changes cursor to indicate you can click */
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
     </style>
-</div>
-<!-- EventEase Logo End -->
+</head>
+<body>
+
+    <div class="header">
+        <h2>Smart Image Text Editor</h2>
+        <p>Type your text, then <strong>click anywhere on the image</strong> to place it.</p>
+    </div>
+    
+    <div class="controls">
+        <div class="control-group full-width">
+            <label for="imageUpload">1. Upload your template (JPG/PNG)</label>
+            <input type="file" id="imageUpload" accept="image/png, image/jpeg">
+        </div>
+
+        <div class="control-group full-width">
+            <label for="overlayText">2. Text to Write</label>
+            <input type="text" id="overlayText" placeholder="e.g., Jane Doe" value="Jane Doe">
+        </div>
+
+        <div class="control-group">
+            <label for="xPos">X Coordinate (Auto-updates on click)</label>
+            <input type="number" id="xPos" value="50">
+        </div>
+
+        <div class="control-group">
+            <label for="yPos">Y Coordinate (Auto-updates on click)</label>
+            <input type="number" id="yPos" value="50">
+        </div>
+
+        <button id="downloadBtn" class="full-width">Download Final Image</button>
+    </div>
+
+    <div class="canvas-container" id="canvasContainer">
+        <!-- The canvas element where the user interacts -->
+        <canvas id="memeCanvas"></canvas>
+    </div>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const overlayText = document.getElementById('overlayText');
+        const xPos = document.getElementById('xPos');
+        const yPos = document.getElementById('yPos');
+        const canvas = document.getElementById('memeCanvas');
+        const ctx = canvas.getContext('2d');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let currentImage = new Image();
+
+        // 1. Handle Image Upload
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                currentImage.onload = function() {
+                    // Match canvas internal resolution to the original image
+                    canvas.width = currentImage.width;
+                    canvas.height = currentImage.height;
+                    
+                    // Reset coordinates to top left on new upload
+                    xPos.value = 50;
+                    yPos.value = 50;
+                    
+                    drawCanvas();
+                }
+                currentImage.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        });
+
+        // 2. Redraw canvas whenever text or coordinate inputs change manually
+        [overlayText, xPos, yPos].forEach(input => {
+            input.addEventListener('input', drawCanvas);
+        });
+
+        // 3. The Click-to-Place Logic
+        canvas.addEventListener('mousedown', function(event) {
+            if (!currentImage.src) return;
+
+            // Get the bounding rectangle of the canvas on the screen
+            const rect = canvas.getBoundingClientRect();
             
+            // Calculate the scaling factor (Screen size vs Actual Image Resolution)
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+
+            // Calculate the exact pixel coordinates on the original image
+            const clickX = (event.clientX - rect.left) * scaleX;
+            const clickY = (event.clientY - rect.top) * scaleY;
+
+            // Update the HTML input fields so the user sees the new coordinates
+            xPos.value = Math.round(clickX);
+            yPos.value = Math.round(clickY);
+
+            // Redraw the canvas with the text at the newly clicked position
+            drawCanvas();
+        });
+
+        // 4. The Main Drawing Function
+        function drawCanvas() {
+            if (!currentImage.src) return; 
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the base image
+            ctx.drawImage(currentImage, 0, 0);
+
+            // Set up text styles
+            ctx.font = 'bold 36px Arial'; // Change font family or size here
+            ctx.fillStyle = '#000000';    // Black text
+            
+            // Align left and middle so text starts exactly at the mouse click
+            ctx.textAlign = 'left';       
+            ctx.textBaseline = 'middle';  
+
+            // Grab current values
+            const text = overlayText.value;
+            const x = parseInt(xPos.value) || 0;
+            const y = parseInt(yPos.value) || 0;
+
+            // Draw the text
+            ctx.fillText(text, x, y);
+        }
+
+        // 5. Handle Download
+        downloadBtn.addEventListener('click', function() {
+            if (!currentImage.src) {
+                alert("Please upload an image first!");
+                return;
+            }
+            const link = document.createElement('a');
+            link.download = 'custom_invitation.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
