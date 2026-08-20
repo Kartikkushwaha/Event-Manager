@@ -47,7 +47,7 @@
 
     <div class="carousel-wrapper" id="carousel">
       <section class="card-container">
-        <!-- Added onclick="openModal('bd_')" to trigger the Birthday templates -->
+        <!-- Birthday templates -->
         <div class="card" onclick="openModal('bd_')">
           <div class="card-icon">🎂</div>
           <h2>Birthday</h2>
@@ -68,8 +68,6 @@
           <p>A little miracle is on the way! Celebrate this beautiful new chapter with an invitation as sweet as your bundle of joy.</p>
           <div class="card-footer">Start Designing &rarr;</div>
         </div>
-
-        <!-- Add other cards here as needed -->
       </section>
     </div>
   </main>
@@ -115,6 +113,40 @@
     </div>
   </div>
 
-  <script src="templates_inv_gen.js"></script>
+  <!-- MODE SELECTION MODAL -->
+  <div id="modeSelectionModal" class="modal sub-modal">
+    <div class="modal-content small-modal">
+      <h2>How do you want to fill the guest names?</h2>
+      <div class="mode-btn-container">
+        <button id="btnManualMode" class="action-btn">Add Data Manually</button>
+        <button id="btnGuestlistMode" class="action-btn primary">Choose from Guestlist</button>
+        <button class="action-btn ghost" onclick="closeModeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUEST SELECTION MODAL -->
+  <div id="guestSelectionModal" class="modal sub-modal">
+    <div class="modal-content small-modal">
+      <h2>Select Guests</h2>
+      <div class="checklist-header">
+        <label class="custom-checkbox">
+          <input type="checkbox" id="selectAllGuests">
+          <span class="checkmark"></span>
+          <strong>Select All</strong>
+        </label>
+      </div>
+      <div id="guestChecklist" class="guest-checklist-container">
+        <!-- Guest checkboxes generated here -->
+      </div>
+      <div class="mode-btn-container" style="flex-direction: row; gap: 10px; margin-top: 15px;">
+        <button class="action-btn ghost" onclick="closeGuestSelectionModal()" style="flex: 1;">Cancel</button>
+        <button id="btnProceedGuests" class="action-btn primary" style="flex: 1;">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPORTANT: Added type="module" -->
+  <script type="module" src="templates_inv_gen.js"></script>
 </body>
 </html>

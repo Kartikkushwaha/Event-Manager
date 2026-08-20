@@ -146,12 +146,12 @@ body {
 
 #themeToggle {
   background: transparent;
-  border: 1px solid var(--border-color); /* Fixed to use a valid variable */
+  border: 1px solid var(--border-color); 
   padding: 5px 12px;
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: var(--text-main); /* Fixed to use a valid variable */
+  color: var(--text-main); 
 }
 
 #themeToggle:hover {
@@ -203,14 +203,13 @@ main {
   letter-spacing: -0.2px;
 }
 
-/* --- Carousel Wrapper (With Huge Vertical Buffer for Hover Zoom) --- */
+/* --- Carousel Wrapper --- */
 .carousel-wrapper {
   width: 100%;
   max-width: 100vw;
   overflow-x: auto;
   text-align: center; 
   white-space: nowrap;
-  /* 80px top & bottom padding prevents the zoomed card top from getting cut off */
   padding: 80px 0 80px 0; 
   margin: -20px 0;
   cursor: grab;
@@ -248,7 +247,7 @@ main {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  margin-left: -170px; /* Deep FAANG card overlap */
+  margin-left: -170px; 
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   user-select: none; 
@@ -262,17 +261,15 @@ main {
   margin-left: 0;
 }
 
-/* --- Premium Stacking & Spreading Physics (Active on Desktop AND Half-Screen) --- */
 @media (hover: hover) and (pointer: fine) {
   .card-container:hover .card {
-    margin-left: 15px; /* Smoothly spreads out on container hover */
+    margin-left: 15px;
     transform: rotateY(0deg) scale(1);
   }
   .card-container:hover .card:first-child {
     margin-left: 0;
   }
   
-  /* Individual Card Zoom */
   .card-container .card:hover {
     transform: scale(1.1) translateY(-20px);
     z-index: 20;
@@ -280,13 +277,11 @@ main {
     border-color: var(--border-highlight);
   }
   
-  /* Cards to the right push aside gently */
   .card-container .card:hover ~ .card {
     transform: translateX(35px);
   }
 }
 
-/* --- Card Content --- */
 .card-icon {
   font-size: 2.5rem;
   margin-bottom: 20px;
@@ -333,11 +328,8 @@ main {
 
 
 /* --- RESPONSIVE BREAKPOINTS --- */
-
-/* 1. Tablet & Half-Screen Desktop (601px to 1024px) */
 @media (max-width: 1024px) and (min-width: 601px) {
   .header-text h1 { font-size: 2.8rem; }
-  
   .card { 
     min-width: 270px;
     max-width: 270px;
@@ -346,33 +338,21 @@ main {
   }
 }
 
-/* 2. Mobile & Small Tablets (768px and below) */
 @media (max-width: 768px) {
   .navbar {
     padding: 12px 24px;
     border-radius: 24px;
   }
   
-  /* Scale down the glowing logo for mobile to prevent overflow */
   .eventease-glowing-logo {
     padding: 4px 12px 4px 8px;
     gap: 4px;
   }
   
-  .logo-text {
-    font-size: 16px;
-  }
+  .logo-text { font-size: 16px; }
+  .logo-symbol { width: 35px; height: 24px; }
+  .mobile-menu-btn { display: block; }
   
-  .logo-symbol {
-    width: 35px;
-    height: 24px;
-  }
-
-  .mobile-menu-btn {
-    display: block;
-  }
-  
-  /* Dropdown Menu */
   .nav-links {
     position: absolute;
     top: 70px;
@@ -388,7 +368,6 @@ main {
     box-shadow: var(--shadow-hover);
     gap: 16px;
     text-align: center;
-    
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -407,7 +386,6 @@ main {
   }
 }
 
-/* 3. Phones ONLY (600px and below) */
 @media (max-width: 600px) {
   .header-text h1 { font-size: 2.2rem; }
   
@@ -489,7 +467,6 @@ main {
   margin-top: 25px;
 }
 
-/* Sidebar Styles */
 .sidebar {
   width: 380px;
   background: var(--card-bg);
@@ -502,13 +479,8 @@ main {
   gap: 20px;
   overflow-y: auto;
 }
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: var(--text-muted);
-  border-radius: 10px;
-}
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 10px; }
 
 .sidebar h2 {
   font-size: 18px;
@@ -534,9 +506,7 @@ main {
   font-size: 12px;
   transition: all 0.2s ease;
 }
-.template-btn:hover {
-  background: var(--bg-color-2);
-}
+.template-btn:hover { background: var(--bg-color-2); }
 .template-btn.active {
   background: var(--accent-color);
   color: #fff;
@@ -551,17 +521,8 @@ main {
   padding-top: 15px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-group label { 
-  font-size: 13px; 
-  font-weight: 600; 
-  color: var(--text-muted); 
-}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
 
 .form-group input, .form-group select { 
   padding: 12px; 
@@ -594,7 +555,6 @@ button.download:hover {
   transform: translateY(-2px);
 }
 
-/* Canvas Display */
 .canvas-area {
   flex: 1;
   background: var(--bg-color-1);
@@ -613,17 +573,110 @@ button.download:hover {
   box-shadow: var(--shadow-md);
 }
 
-/* Responsive constraints for modal */
+/* ==========================================
+   NEW SUB-MODALS (Mode & Guest Selection)
+========================================== */
+.sub-modal {
+  z-index: 2500;
+}
+.small-modal {
+  max-width: 450px;
+  height: auto;
+  min-height: auto;
+  padding: 30px;
+}
+.small-modal h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--text-main);
+}
+.mode-btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.action-btn {
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-main);
+}
+.action-btn:hover {
+  background: var(--bg-color-2);
+}
+.action-btn.primary {
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+}
+.action-btn.primary:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+.action-btn.ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+}
+.action-btn.ghost:hover {
+  color: var(--text-main);
+  background: rgba(0,0,0,0.05);
+}
+
+.guest-checklist-container {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 15px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.guest-checklist-container::-webkit-scrollbar {
+  width: 6px;
+}
+.guest-checklist-container::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 10px;
+}
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-main);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* Custom Checkbox Styling */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-main);
+}
+.custom-checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
 @media (max-width: 900px) {
   .generator-container {
     flex-direction: column;
     overflow-y: auto;
   }
-  .sidebar, .canvas-area {
-    width: 100%;
-    flex: none;
-  }
-  .canvas-area {
-    height: 400px;
-  }
+  .sidebar, .canvas-area { width: 100%; flex: none; }
+  .canvas-area { height: 400px; }
 }
