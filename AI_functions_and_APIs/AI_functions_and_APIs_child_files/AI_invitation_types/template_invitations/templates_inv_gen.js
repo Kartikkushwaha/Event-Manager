@@ -155,7 +155,7 @@ const templates = {
         src: "val_12.png", 
         fields: [
             { id: "valName", label: "My Valentine", x: 786, y: 812, font: "bold 60px Arial", color: "#211104", align: "center" },
-            { id: "guestName", label: "Nickname/Guest", x: 786, y: 960, font: "bold 60px Arial", color: "#211104", align: "center" }, /* Standardized to guestName for logic */
+            { id: "guestName", label: "Nickname/Guest", x: 786, y: 960, font: "bold 60px Arial", color: "#211104", align: "center" }, 
             { id: "valMessage", label: "Love Message", x: 801, y: 1112, font: "bold 60px Arial", color: "#211104", align: "center" },
             { id: "valMemory", label: "Special Memory", x: 839, y: 1264, font: "bold 60px Arial", color: "#211104", align: "center" },
             { id: "valDate", label: "Date", x: 680, y: 1357, font: "bold 60px Arial", color: "#211104", align: "left" },
@@ -164,6 +164,94 @@ const templates = {
             { id: "valSurprise", label: "Special Surprise", x: 761, y: 1689, font: "bold 60px Arial", color: "#211104", align: "center" },
             { id: "valRSVP", label: "RSVP / Contact", x: 978, y: 1774, font: "bold 60px Arial", color: "#211104", align: "left" },
             { id: "valClosing", label: "Closing Line", x: 768, y: 1936, font: "bold 60px Arial", color: "#211104", align: "left" }
+        ]
+    },
+    // --- FAREWELL TEMPLATES ---
+    "fare_1": {
+        name: "Farewell 1",
+        src: "fare_1.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 440, y: 573, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 505, y: 692, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dateTime", label: "When (Date & Time)", x: 428, y: 816, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "location", label: "Where (Location)", x: 445, y: 963, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "highlights", label: "Highlights", x: 505, y: 1084, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 600, y: 1214, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 543, y: 1308, font: "bold 40px Arial", color: "#4c1a23", align: "left" }
+        ]
+    },
+    "fare_2": {
+        name: "Farewell",
+        src: "fare_2.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 364, y: 521, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 411, y: 618, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dateTime", label: "When (Date & Time)", x: 356, y: 774, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "location", label: "Where (Location)", x: 368, y: 920, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "highlights", label: "Highlights", x: 318, y: 1059, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 523, y: 1192, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 466, y: 1294, font: "bold 40px Arial", color: "#4c1a23", align: "left" }
+        ]
+    },
+    "fare_3": {
+        name: "Farewell 3",
+        src: "fare_3.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 408, y: 582, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 468, y: 691, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dateTime", label: "When (Date & Time)", x: 405, y: 803, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "location", label: "Where (Location)", x: 420, y: 945, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "highlights", label: "Highlights", x: 363, y: 1083, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 561, y: 1215, font: "bold 40px Arial", color: "#4c1a23", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 521, y: 1288, font: "bold 40px Arial", color: "#4c1a23", align: "left" }
+        ]
+    },
+    "fare_4": {
+        name: "Farewell 4",
+        src: "fare_4.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 416, y: 585, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 469, y: 667, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "date", label: "Date", x: 411, y: 807, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "day", label: "Day", x: 411, y: 839, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "time", label: "Time", x: 411, y: 870, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "venue", label: "Venue", x: 425, y: 962, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "location", label: "Location", x: 454, y: 995, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "highlights", label: "Highlights", x: 383, y: 1082, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 580, y: 1210, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 519, y: 1288, font: "bold 35px Arial", color: "#2e2136", align: "left" }
+        ]
+    },
+    "fare_5": {
+        name: "Farewell 5",
+        src: "fare_5.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 392, y: 559, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 437, y: 660, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "date", label: "Date", x: 359, y: 806, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "day", label: "Day", x: 359, y: 840, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "time", label: "Time", x: 359, y: 875, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "venue", label: "Venue", x: 375, y: 964, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "location", label: "Location", x: 404, y: 1001, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "highlights", label: "Highlights", x: 344, y: 1089, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 539, y: 1214, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 497, y: 1297, font: "bold 35px Arial", color: "#2e2136", align: "left" }
+        ]
+    },
+    "fare_6": {
+        name: "Farewell 6",
+        src: "fare_6.jpeg", 
+        fields: [
+            { id: "event", label: "Event Details", x: 425, y: 551, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 465, y: 660, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "date", label: "Date", x: 409, y: 790, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "day", label: "Day", x: 409, y: 822, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "time", label: "Time", x: 409, y: 856, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "venue", label: "Venue", x: 423, y: 952, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "location", label: "Location", x: 453, y: 986, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "highlights", label: "Highlights", x: 385, y: 1074, font: "bold 28px Arial", color: "#2e2136", align: "left" },
+            { id: "dressCode", label: "Dress Code", x: 583, y: 1202, font: "bold 35px Arial", color: "#2e2136", align: "left" },
+            { id: "rsvp", label: "Contact / RSVP", x: 517, y: 1286, font: "bold 35px Arial", color: "#2e2136", align: "left" }
         ]
     }
 };
@@ -204,7 +292,8 @@ window.openModal = function(categoryPrefix) {
     const titleMap = {
         'bd_': 'Birthday Templates',
         'val_': 'Valentine Templates',
-        'bs_': 'Baby Shower Templates'
+        'bs_': 'Baby Shower Templates',
+        'fare_': 'Farewell Templates'
     };
     document.getElementById('modalCategoryTitle').innerText = titleMap[categoryPrefix] || 'Select Template';
 
