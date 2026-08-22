@@ -16,7 +16,8 @@ EventEase empowers users to orchestrate complex events from a unified digital da
 
 ## Technologies Used
 
-* **Frontend:** HTML, CSS, JavaScript 
+* **Frontend:** HTML, CSS, JavaScript
+* **Backend:** FastAPI (Python)
 * **Authentication:** Google Firebase
 * **AI Integration:** Google Cloud APIs (Gemini models) for generative AI and reasoning.
 * **Mapping & Location:** Google Maps Platform / Places API, TomTom APIs.
