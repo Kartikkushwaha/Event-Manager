@@ -26,7 +26,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  
 SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY") 
 
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_API_KEY}"
+# Updated API URL without the ?key= parameter
+API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
 
 
 # ==========================================
@@ -67,9 +68,13 @@ def generate_invitation(request: PromptRequest):
         # Implemented Exponential Backoff Retry Logic
         max_retries = 3
         for attempt in range(max_retries):
+            # Added x-goog-api-key header for authentication
             response = requests.post(
                 API_URL,
-                headers={"Content-Type": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": GEMINI_API_KEY
+                },
                 json=payload
             )
             
@@ -79,7 +84,6 @@ def generate_invitation(request: PromptRequest):
                     time.sleep(2 ** attempt)  # Wait 1s, then 2s, then fail
                     continue
                 else:
-                    
                     return {"success": False, "detail": "Please try again..."}
             
             # Handle other API errors
@@ -195,9 +199,13 @@ def generate_suggestion(request: PromptRequest):
         # Implemented Exponential Backoff Retry Logic
         max_retries = 3
         for attempt in range(max_retries):
+            # Added x-goog-api-key header for authentication
             response = requests.post(
                 API_URL,
-                headers={"Content-Type": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": GEMINI_API_KEY
+                },
                 json=payload
             )
             
