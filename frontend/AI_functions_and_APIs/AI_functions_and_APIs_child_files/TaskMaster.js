@@ -17,7 +17,7 @@ const auth = getAuth(app);
 const db = initializeFirestore(app, { localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()}) });
 
 // Global Backend Config
-const BACKEND_URL = "http://localhost:8000/api";
+const BACKEND_URL = "https://eventease-sopf.onrender.com/api";
 
 // DOM Bindings
 const guestCountInput = document.getElementById('guest-count-input');
