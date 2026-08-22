@@ -47,7 +47,7 @@
 
     <div class="carousel-wrapper" id="carousel">
       <section class="card-container">
-        <!-- Birthday templates -->
+        <!-- Birthday -->
         <div class="card" onclick="openModal('bd_')">
           <div class="card-icon">🎂</div>
           <h2>Birthday</h2>
@@ -55,6 +55,7 @@
           <div class="card-footer">Start Designing &rarr;</div>
         </div>
 
+        <!-- Valentine -->
         <div class="card" onclick="openModal('val_')">
           <div class="card-icon">💖</div>
           <h2>Valentine</h2>
@@ -62,6 +63,7 @@
           <div class="card-footer">Start Designing &rarr;</div>
         </div>
         
+        <!-- Baby Shower -->
         <div class="card" onclick="openModal('bs_')">
           <div class="card-icon">🍼</div>
           <h2>Baby Shower</h2>
@@ -69,11 +71,19 @@
           <div class="card-footer">Start Designing &rarr;</div>
         </div>
         
-        <!-- Farewell templates -->
+        <!-- Farewell -->
         <div class="card" onclick="openModal('fare_')">
           <div class="card-icon">👋</div>
           <h2>Farewell</h2>
           <p>Say goodbye in style! Create a beautiful farewell invitation to honor someone special's next big adventure.</p>
+          <div class="card-footer">Start Designing &rarr;</div>
+        </div>
+
+        <!-- Wedding -->
+        <div class="card" onclick="openModal('wed_')">
+          <div class="card-icon">💍</div>
+          <h2>Wedding</h2>
+          <p>Two lives, one beautiful journey. Invite your loved ones to celebrate your special day with elegance.</p>
           <div class="card-footer">Start Designing &rarr;</div>
         </div>
       </section>
@@ -95,14 +105,21 @@
 
             <h2 style="margin-top: 15px;">Customize Details</h2>
             <div class="dynamic-inputs">
-                <div class="form-group">
-                    <label for="fontSelector">Choose Font Style</label>
-                    <select id="fontSelector">
-                        <option value="Arial">Default (Arial)</option>
-                        <option value="'Alex Brush'">Alex Brush (Graceful)</option>
-                        <option value="'Great Vibes'">Great Vibes (Flowing)</option>
-                        <option value="'EB Garamond'">Garamond (Classic)</option>
-                    </select>
+                <div class="form-group" style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label for="fontSelector">Font Style</label>
+                        <select id="fontSelector" style="width: 100%;">
+                            <option value="Arial">Default (Arial)</option>
+                            <option value="'Alex Brush'">Alex Brush (Graceful)</option>
+                            <option value="'Great Vibes'">Great Vibes (Flowing)</option>
+                            <option value="'EB Garamond'">Garamond (Classic)</option>
+                        </select>
+                    </div>
+                    <div style="flex: 0 0 80px;">
+                        <label for="colorSelector">Text Color</label>
+                        <!-- Added Color Picker -->
+                        <input type="color" id="colorSelector" value="#2e2136" style="width: 100%; height: 43px; padding: 2px; cursor: pointer;">
+                    </div>
                 </div>
             </div>
             
