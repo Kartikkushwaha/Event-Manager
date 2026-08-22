@@ -22,10 +22,4 @@ EventEase empowers users to orchestrate complex events from a unified digital da
 * **Mapping & Location:** Google Maps Platform / Places API, TomTom APIs.
 * **Deployment:** GitHub Pages
 
-## Getting Started
 
-To run the project locally on your machine:
-
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/Kartikkushwaha/Event-Manager.git](https://github.com/Kartikkushwaha/Event-Manager.git)
