@@ -1,53 +1,31 @@
-EventEase
-EventEase is a comprehensive, AI-powered event management platform designed to streamline the entire event planning lifecycle. It addresses the highly fragmented event industry by bridging the gap between digital planning tools and localized offline execution.
+# EventEase
 
-EventEase empowers users to orchestrate complex events—from weddings and birthdays to corporate gatherings—through a unified digital dashboard, offering tools for dynamic budget tracking, AI-generated invitations, vendor discovery, and real-time team collaboration.
+EventEase is a comprehensive, AI-powered event management platform designed to streamline the entire event planning lifecycle. It addresses the highly fragmented event industry by bridging the gap between digital planning tools and localized offline execution. 
 
-Features
-1. Core Event Dashboard & Setup
-i. Centralized Management: A unified dashboard displaying active events, saved vendors, and real-time budget health.
+EventEase empowers users to orchestrate complex events from a unified digital dashboard, offering tools for dynamic budget tracking, AI-generated invitations, vendor discovery, and real-time team collaboration.
 
-ii. Custom Event Pipelines: Automated creation of a management pipeline based on user inputs, including event category, religious/cultural theme, date, estimated guest count, and total budget.
+## Features
 
-2. Guest List Manager
-i. Real-time Tracking: Add guests, log contact details, and sort attendees efficiently, eliminating the need for scattered spreadsheets.
+* **Core Event Dashboard:** A unified dashboard displaying active events, saved vendors, and real-time budget health. Automated creation of management pipelines based on user inputs (category, theme, date, budget).
+* **Guest List Manager:** Add guests, log contact details, and sort attendees efficiently in real-time. Export clean, professional PDF guest lists with a single click.
+* **AI Invitation Studio:** Instantly generate custom invitation cards based on text prompts. Access a library of pre-designed templates or take complete control with a drag-and-drop manual customization canvas.
+* **TaskMaster AI:** A dynamic budget monitor that automatically recalculates estimated cost-per-guest as headcounts change. Features an AI Advisor that analyzes cultural themes to provide tailored logistical recommendations.
+* **My Market Central:** Integrated mapping to discover nearby verified vendors based on adjustable search radii. Provides direct navigation routes and allows users to save local vendors directly to their event wishlist.
+* **Product Marketplace & Smart Cart:** Search for event-specific products and track total expenditures through a unified budget sync system.
+* **SyncSphere Collaboration:** Create secure, dedicated community channels for events to centralize communication and task management among family or committee members.
 
-ii. Professional Export: Generate and download a clean PDF guest list with a single click, ready for distribution or check-ins.
+## Technologies Used
 
-3. AI Invitation Studio
-i. AI-Powered Generation: Instantly generate custom invitation cards based on user prompts detailing aesthetic preferences and event information.
+* **Frontend:** HTML, CSS, JavaScript 
+* **Authentication:** Google Firebase
+* **AI Integration:** Google Cloud APIs (Gemini models) for generative AI and reasoning.
+* **Mapping & Location:** Google Maps Platform / Places API, TomTom APIs.
+* **Deployment:** GitHub Pages
 
-ii. Template Library: Access a diverse library of pre-designed professional templates categorized by event type (e.g., Baby Shower, Corporate, Farewell).
+## Getting Started
 
-iii. Manual Customization Canvas: Take complete control with a drag-and-drop studio to manually design invitations, adjusting backgrounds, borders, typography, and images.
+To run the project locally on your machine:
 
-4. TaskMaster AI: Budget & Cultural Optimization
-i. Dynamic Budget Monitor: Automatically recalculates estimated cost-per-guest and allocates resources as headcounts or total budgets change.
-
-ii. AI Advisor: Analyzes the specified event theme (e.g., Modern Sikh Birthday in Punjab) to provide tailored cultural and logistical recommendations, ensuring traditions and requirements are seamlessly integrated.
-
-5. My Market Central: Local Vendor Discovery
-i. Hyper-Local Mapping: Integrated with map services (e.g., TomTom/Google Maps API) to discover nearby verified businesses based on an adjustable search radius (e.g., 5km).
-
-ii. Direct Navigation: Provides calculated routes and estimated driving times directly to venues or vendors.
-
-iii. Wishlist Integration: Save local vendors (caterers, florists, DJs, venues) directly to the event planner.
-
-6. Product Marketplace & Smart Cart
-i. E-Commerce Aggregation: Search for event-specific products (attire, decorations, sweets) directly within the platform.
-
-ii. Unified Budget Sync: Items added to the cart are automatically calculated into a "Total Cost Summary," keeping all event expenditures managed in one place.
-
-7. SyncSphere Collaboration
-i. Team Coordination: Create dedicated, secure community channels for specific events.
-
-ii. Real-Time Communication: Invite family members or committee coordinators using custom referral codes to centralize discussions and task management.
-
-#Technologies Used
-Authentication: Google Firebase
-
-AI Integration: Google Cloud APIs (Gemini models) for TaskMaster reasoning and AI generation.
-
-Mapping & Location Services: Google Maps Platform / Places API, TomTom APIs for vendor routing and discovery.
-
-Deployment: GitHub Pages (managed via Kartikkushwaha/Event-Manager repository workflow)
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/Kartikkushwaha/Event-Manager.git](https://github.com/Kartikkushwaha/Event-Manager.git)
