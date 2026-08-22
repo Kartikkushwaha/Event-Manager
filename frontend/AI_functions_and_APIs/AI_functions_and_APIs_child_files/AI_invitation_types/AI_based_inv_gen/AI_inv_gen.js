@@ -24,7 +24,7 @@ function updateThemeIcon(theme) {
 // ==========================================
 // 2. AI INVITATION GENERATOR LOGIC
 // ==========================================
-const API_URL = "http://localhost:8000/api/generate";
+const API_URL = "https://eventease-sopf.onrender.com/api/generate";
 
 const generateBtn = document.getElementById("generateBtn");
 const promptInput = document.getElementById("promptInput");
