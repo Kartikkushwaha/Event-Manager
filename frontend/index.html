@@ -12,83 +12,18 @@
 <header class="header-wrapper">
     <nav class="navbar">
         <div class="logo" data-view="home">
-
-<!-- EventEase Logo Start
-<div class="eventease-glowing-logo">
-    
-    <--SVG Symbol -->
-    <!-- TO CHANGE SYMBOL SIZE: Adjust 'width' and 'height' values below. (Do not change the viewBox) -->
-    <svg class="logo-symbol" viewBox="0 0 100 64" width="75" height="48" xmlns="http://www.w3.org/2000/svg">
-        <!-- Left Dark Circle -->
-        <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
-        <!-- Right Cyan Circle -->
-        <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
-        <!-- Center Overlap Lens (Blue) -->
-        <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
-    </svg>
-
-    <!-- Logo Text -->
-    <div class="logo-text">
-        <span class="text-event">Event</span><span class="text-ease">Ease</span>
-    </div>
-
-    <!-- Inline CSS for Styling and Glow Effects -->
-    <style>
-        .eventease-glowing-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            
-            /* TO CHANGE SPACING BETWEEN SYMBOL AND TEXT: Adjust the 'gap' Pvalue below */
-            gap: 6px; 
-            
-            /* TO CHAPNGE BORDER SIZE AROUND THE LOGO: Adjust the 'padding' below (top, right, bottom, left) */
-            padding: 8px 24px 8px 16px; 
-            
-            background-color: transparent;
-            
-            /* 1px Glowing Border */
-            border: 0.05px solid #00E5FF;
-            border-radius: 50px;
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), 
-                        inset 0 0 12px rgba(0, 229, 255, 0.3);
-            
-            /* Ensures it scales to fit content */
-            width: max-content;
-            font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
-            user-select: none;
-        }
-
-        /* Subtle glow on the SVG symbol */
-        .logo-symbol {
-            filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
-        }
-
-        .logo-text {
-            /* TO CHANGE TEXT SIZE: Adjust the 'font-size' value below */
-            font-size: 28px; 
-            
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-
-        .text-event {
-            color: #7dece7;
-            /* Subtle glow for the dark text to ensure it stands out */
-        }
-
-        .text-ease {
-            color: #0088FF;
-            /* Bright blue glow for the second half of the text */
-        }
-    </style>
-</div>
-<!-- EventEase Logo End -->
-            
+            <!-- EventEase Logo Start (Added nav-logo-svg class) -->
+            <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
+              <g transform="translate(25, 22)">
+                <rect x="0" y="0" width="32" height="8" rx="4" style="fill: var(--text-primary); transition: fill 0.3s ease;"/>
+                <rect x="0" y="14" width="20" height="8" rx="4" style="fill: var(--text-secondary); transition: fill 0.3s ease;"/>
+                <rect x="0" y="28" width="32" height="8" rx="4" style="fill: var(--text-tertiary); transition: fill 0.3s ease;"/>
+              </g>
+              <text x="75" y="52" font-family="'Product Sans', Arial, sans-serif" font-size="32" font-weight="bold" style="fill: var(--text-primary); transition: fill 0.3s ease;" letter-spacing="-0.5">EventEase</text>
+            </svg>
         </div>
 
-        <ul class="nav-links">
+        <ul class="nav-links" id="navLinks">
             <li><a href="#home" class="nav-item active-link" data-view="home">Home</a></li>
             <li><a href="#features" class="nav-item" data-view="features">Features</a></li>
             <li><a href="#how-it-works" class="nav-item" data-view="htw">How it Works</a></li>
@@ -96,7 +31,16 @@
             <li><a href="#contact" class="nav-item" data-view="cntus">Contact Us</a></li>
         </ul>
         
-        <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
+        <div class="nav-controls">
+            <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
     </nav>
 </header>
 
@@ -120,25 +64,6 @@
                     <p class="account-text">
                         Create an account to synchronize event details, curations, and vendor communications.
                     </p>
-                </div>
-
-                <div class="event-selection">
-                    <h3>Select Event Category</h3>
-                    <div class="event-types">
-                        <button class="event-btn">💍 Wedding</button>
-                        <button class="event-btn">🎂 Birthday</button>
-                        <div class="dropdown">
-                            <button class="event-btn drop-btn">More ▼</button>
-                            <div class="dropdown-content">
-                                <a href="#">Baby Shower</a>
-                                <a href="#">Engagement</a>
-                                <a href="#">Corporate Event</a>
-                                <a href="#">Anniversary</a>
-                                <a href="#">Product Launch</a>
-                                <a href="#">Farewell Party</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="stats">
@@ -185,43 +110,36 @@
                     <h3>AI Planning Engine</h3>
                     <p>Receive real-time, algorithmic event blueprints tailored to your exact budgetary constraints and thematic preferences.</p>
                 </div>
-
                 <div class="feature-card highlight">
                     <div class="icon">💌</div>
                     <h3>Generative Invitations</h3>
                     <p>Harness custom typography and AI-generated imagery to craft bespoke digital and print invitations in seconds.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">🔒</div>
                     <h3>Enterprise Security</h3>
                     <p>Authenticate seamlessly via Google Workspace. Your personal itineraries, financial ledgers, and vendor contracts remain encrypted.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">🎨</div>
                     <h3>Parametric Customization</h3>
                     <p>Fine-tune every variable of your event architecture, from guest seating matrices to multi-day scheduling.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">📍</div>
                     <h3>Geospatial Discovery</h3>
                     <p>Integrate directly with Google Maps to evaluate venue proximity, transit logistics, and localized vendor ratings.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">👥</div>
                     <h3>Collaborative Network</h3>
                     <p>Access transparent, verified peer reviews and collaborative itineraries shared across our global host community.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">💰</div>
                     <h3>Dynamic Budgeting</h3>
                     <p>Track expenditures with predictive cost modeling that alerts you to potential budget overruns before they happen.</p>
                 </div>
-
                 <div class="feature-card">
                     <div class="icon">❤️</div>
                     <h3>Intelligent Shortlisting</h3>
@@ -267,7 +185,6 @@
                             <p>support@eventease.com</p>
                         </div>
                     </div>
-
                     <div class="info-card">
                         <div class="info-icon">📞</div>
                         <div>
@@ -275,7 +192,6 @@
                             <p>+91 1800 098 537</p>
                         </div>
                     </div>
-
                     <div class="info-card">
                         <div class="info-icon">📍</div>
                         <div>
@@ -308,13 +224,13 @@
     </section>
 
 </div>
-
-<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+<!-- current feature of chatbot is unavailable -->
+<!-- <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
     createChat({
         webhookUrl: 'https://eventease.app.n8n.cloud/webhook/406b7689-c21f-41d5-bd72-baba2765e243/chat'
-    });
+    }); -->
 </script>
 <script type="module" src="script.js"></script>
 </body>

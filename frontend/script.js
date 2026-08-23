@@ -19,11 +19,13 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 // ==========================================
-// SPA ROUTING ENGINE
+// SPA ROUTING & MOBILE NAVIGATION ENGINE
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const navItems = document.querySelectorAll("[data-view]");
     const views = document.querySelectorAll(".view-section");
+    const hamburgerBtn = document.getElementById("hamburgerBtn");
+    const navLinks = document.getElementById("navLinks");
 
     function switchView(targetViewId) {
         views.forEach(view => {
@@ -47,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    // Navigation Click Handler
     navItems.forEach(item => {
         item.addEventListener("click", (e) => {
             e.preventDefault();
@@ -54,8 +57,28 @@ document.addEventListener("DOMContentLoaded", () => {
             if (targetViewId) {
                 switchView(targetViewId);
             }
+            
+            // Auto-close the mobile menu when a link is clicked
+            if (navLinks && navLinks.classList.contains("active-menu")) {
+                navLinks.classList.remove("active-menu");
+            }
         });
     });
+
+    // Hamburger Menu Toggle Handler (With Click-Off Fix)
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevents document click from firing immediately
+            navLinks.classList.toggle("active-menu");
+        });
+        
+        // Close menu if user clicks anywhere outside the navLinks
+        document.addEventListener("click", (e) => {
+            if (navLinks.classList.contains("active-menu") && !navLinks.contains(e.target)) {
+                navLinks.classList.remove("active-menu");
+            }
+        });
+    }
 });
 
 // ==========================================
@@ -129,7 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
             
-            // Ease-out quad formula for smoother deceleration
             const easeOutProgress = 1 - (1 - progress) * (1 - progress);
             const currentCount = Math.floor(easeOutProgress * target);
 

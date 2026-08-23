@@ -534,3 +534,25 @@ document.getElementById("settingsForm").addEventListener("submit", (e) => {
         }
     }
 });
+
+// --- 5. Mobile Hamburger Menu Logic (Click-to-Close Fix) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (hamburgerBtn && navLinks) {
+        // 1. Toggle menu when clicking the hamburger button
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents the document click listener below from firing immediately
+            navLinks.classList.toggle('active-menu');
+        });
+
+        // 2. Click anywhere else on the screen to close ("pop off")
+        document.addEventListener('click', (e) => {
+            // If the menu is open, AND we didn't click inside the menu itself...
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
+    }
+});
