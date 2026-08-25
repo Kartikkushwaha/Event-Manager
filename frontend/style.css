@@ -556,6 +556,38 @@ input:focus, textarea:focus {
 }
 
 /* =========================================================
+   LAPTOP / TABLET RESPONSIVE HERO REORDERING 
+   (Triggers when screen drops to 1024px or below)
+========================================================= */
+@media (max-width: 1024px) {
+    .hero-layout {
+        display: flex !important;
+        flex-direction: column;
+    }
+    
+    /* Removes the wrapper so children can be ordered freely */
+    .hero-content {
+        display: contents; 
+    }
+    
+    /* Order placement: Animation box goes to 5, before stats */
+    .badge-wrapper { order: 1; }
+    .hero-content h1 { order: 2; }
+    .description { order: 3; }
+    .cta-group { order: 4; }
+    
+    .hero-visual { 
+        order: 5;
+        width: 100%;
+    }
+    
+    .stats { 
+        order: 6;
+        width: 100%; 
+    }
+}
+
+/* =========================================================
    MOBILE RESPONSIVENESS FIXES (GUARANTEED 1-LINE & NO OVERFLOW)
 ========================================================= */
 @media (max-width: 960px) {

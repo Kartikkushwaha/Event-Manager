@@ -125,7 +125,7 @@ slider.addEventListener('mousemove', (e) => {
 });
 
 // ==========================================
-// 3. FULL TEMPLATE DATABASE (Restored)
+// 3. FULL TEMPLATE DATABASE
 // ==========================================
 const templates = {
     // --- BIRTHDAY ---
@@ -169,7 +169,7 @@ const templates = {
             { id: "valDate", label: "Date", x: 680, y: 1357, font: "bold 60px Arial", color: "#211104", align: "left" }
         ]
     },
-    // --- WEDDING (Restored) ---
+    // --- WEDDING ---
     "wed_1": {
         name: "Wed 1", src: "wed_1.png",
         fields: [
@@ -197,7 +197,7 @@ const templates = {
             { id: "venue", label: "Venue", x: 1100, y: 1050, font: "bold 45px Arial", color: "#ffffff", align: "right" }
         ]
     },
-    // --- FAREWELL (Restored 1 through 6) ---
+    // --- FAREWELL ---
     "fare_1": {
         name: "Fare 1", src: "fare_1.png",
         fields: [
@@ -265,15 +265,14 @@ const modal = document.getElementById('generatorModal');
 let currentTemplateKey = null;
 let currentImage = new Image();
 let generationMode = "manual"; 
-let pendingTemplateKey = null;
 let selectedGuestNames = []; 
+let globalFormData = {}; // Saves inputs when switching templates
 
 fontSelector.addEventListener('change', () => drawCanvas());
 colorSelector.addEventListener('input', () => drawCanvas());
 
 window.onclick = function(event) {
     if (event.target == modal) window.closeModal();
-    if (event.target == document.getElementById('modeSelectionModal')) window.closeModeModal();
     if (event.target == document.getElementById('guestSelectionModal')) window.closeGuestSelectionModal();
 }
 
@@ -301,53 +300,139 @@ window.openModal = function(categoryPrefix) {
             btn.innerText = templates[key].name;
             
             btn.onclick = (e) => {
-                pendingTemplateKey = key;
                 document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
-                
-                // Triggers Mode Selection instantly when clicking a template
-                document.getElementById('modeSelectionModal').style.display = 'block';
+                renderTemplateInterface(key); // Renders without pop-ups
             };
             templateSelector.appendChild(btn);
         }
     }
     
-    // Auto-load first template visual without prompting mode yet
     if (firstKey) {
-        pendingTemplateKey = firstKey;
         templateSelector.firstChild.classList.add('active');
-        
-        // Show default image preview
-        currentTemplateKey = firstKey;
-        currentImage.src = templates[firstKey].src;
-        currentImage.onload = () => {
-            canvas.width = currentImage.width;
-            canvas.height = currentImage.height;
-            drawCanvas();
-        };
+        renderTemplateInterface(firstKey);
     }
 }
 
-window.closeModal = function() { modal.style.display = 'none'; }
-window.closeModeModal = function() { document.getElementById('modeSelectionModal').style.display = 'none'; }
-window.closeGuestSelectionModal = function() { document.getElementById('guestSelectionModal').style.display = 'none'; }
+window.closeModal = function() { 
+    modal.style.display = 'none'; 
+}
 
-document.getElementById('btnManualMode').addEventListener('click', () => {
-    generationMode = "manual";
-    window.closeModeModal();
-    renderTemplateInterface(pendingTemplateKey);
-});
+window.closeGuestSelectionModal = function() { 
+    document.getElementById('guestSelectionModal').style.display = 'none'; 
+}
 
-document.getElementById('btnGuestlistMode').addEventListener('click', () => {
-    window.closeModeModal();
+// Replaces the old Auto-Popup with integrated sidebar toggles
+function renderTemplateInterface(key) {
+    currentTemplateKey = key;
+    const config = templates[key];
+
+    inputContainer.innerHTML = ''; // Clear previous inputs
+
+    // --- INJECT INLINE MODE TOGGLE ---
+    const modeToggleContainer = document.createElement('div');
+    modeToggleContainer.style.display = 'flex';
+    modeToggleContainer.style.gap = '10px';
+    modeToggleContainer.style.marginBottom = '20px';
+    modeToggleContainer.style.paddingBottom = '15px';
+    modeToggleContainer.style.borderBottom = '1px solid var(--border-color)';
+
+    const manBtn = document.createElement('button');
+    manBtn.innerText = 'Manual Entry';
+    manBtn.className = generationMode === 'manual' ? 'action-btn primary' : 'action-btn ghost';
+    manBtn.style.flex = '1';
+    manBtn.style.padding = '10px';
+    manBtn.style.fontSize = '13px';
+    manBtn.onclick = () => {
+        generationMode = 'manual';
+        renderTemplateInterface(key);
+    };
+
+    const guestBtn = document.createElement('button');
+    guestBtn.innerText = 'From Guestlist';
+    guestBtn.className = generationMode === 'guestlist' ? 'action-btn primary' : 'action-btn ghost';
+    guestBtn.style.flex = '1';
+    guestBtn.style.padding = '10px';
+    guestBtn.style.fontSize = '13px';
+    guestBtn.onclick = triggerGuestSelection;
+
+    modeToggleContainer.appendChild(manBtn);
+    modeToggleContainer.appendChild(guestBtn);
+    inputContainer.appendChild(modeToggleContainer);
+
+    // --- INJECT DYNAMIC INPUTS ---
+    let guestFieldRendered = false;
     
+    config.fields.forEach(field => {
+        if (generationMode === "guestlist" && field.id === "guestName") {
+            if (!guestFieldRendered) {
+                const infoMsg = document.createElement('div');
+                infoMsg.style.fontSize = '13px';
+                infoMsg.style.color = 'var(--text-main)';
+                infoMsg.style.marginBottom = '15px';
+                infoMsg.style.padding = '12px';
+                infoMsg.style.background = 'var(--border-highlight)';
+                infoMsg.style.borderRadius = '8px';
+                infoMsg.style.border = '1px dashed var(--accent-color)';
+                infoMsg.innerHTML = `<strong>✓ ${selectedGuestNames.length} guests selected.</strong><br><span style="opacity:0.8; font-size:11.5px;">Names will be injected automatically during generation.</span>`;
+                inputContainer.appendChild(infoMsg);
+                guestFieldRendered = true;
+            }
+            return; // Skip standard input
+        }
+
+        const group = document.createElement('div');
+        group.className = 'form-group';
+        
+        const label = document.createElement('label');
+        label.innerText = field.label;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = field.id;
+        input.placeholder = `Enter ${field.label}`;
+        
+        // Restore previous value if user typed it in another template
+        if (globalFormData[field.id]) {
+            input.value = globalFormData[field.id];
+        }
+
+        input.addEventListener('input', (e) => {
+            globalFormData[field.id] = e.target.value; // Save to global state
+            drawCanvas();
+        });
+
+        group.appendChild(label);
+        group.appendChild(input);
+        inputContainer.appendChild(group);
+    });
+
+    // Update Download button state
+    const dlBtn = document.getElementById('downloadBtn');
+    if (generationMode === "guestlist") {
+        dlBtn.innerText = `Generate Invitations (${selectedGuestNames.length})`;
+    } else {
+        dlBtn.innerText = `Download Image`;
+    }
+
+    // Load Image onto Canvas
+    currentImage.onload = () => {
+        canvas.width = currentImage.width;
+        canvas.height = currentImage.height;
+        drawCanvas();
+    };
+    currentImage.src = config.src;
+}
+
+// Dedicated Guestlist Trigger Function
+function triggerGuestSelection() {
     if (!currentUserUid) {
         alert("Please log in to your account first to access your saved guest list.");
         return;
     }
     
     if (fetchedGuestList.length === 0) {
-        alert("No guests found. Please add guests in the Dashboard -> Guest List Manager first.");
+        alert("No guests found. Please add guests in the Guest List Manager.");
         return;
     }
 
@@ -359,17 +444,18 @@ document.getElementById('btnGuestlistMode').addEventListener('click', () => {
         const lbl = document.createElement('label');
         lbl.className = 'checklist-item custom-checkbox';
         lbl.innerHTML = `
-            <input type="checkbox" class="guest-cb" value="${guest.name}">
+            <input type="checkbox" class="guest-cb" value="${guest.name}" ${selectedGuestNames.includes(guest.name) ? 'checked' : ''}>
             <span class="checkmark"></span>
             ${guest.name}
         `;
         container.appendChild(lbl);
     });
 
-    document.getElementById('selectAllGuests').checked = false;
+    document.getElementById('selectAllGuests').checked = (selectedGuestNames.length > 0 && selectedGuestNames.length === fetchedGuestList.length);
     document.getElementById('guestSelectionModal').style.display = 'block';
-});
+}
 
+// Guest Selection Events
 document.getElementById('selectAllGuests').addEventListener('change', (e) => {
     const checkboxes = document.querySelectorAll('.guest-cb');
     checkboxes.forEach(cb => cb.checked = e.target.checked);
@@ -386,49 +472,10 @@ document.getElementById('btnProceedGuests').addEventListener('click', () => {
 
     generationMode = "guestlist";
     window.closeGuestSelectionModal();
-    renderTemplateInterface(pendingTemplateKey);
+    renderTemplateInterface(currentTemplateKey);
 });
 
-function renderTemplateInterface(key) {
-    currentTemplateKey = key;
-    const config = templates[key];
-
-    inputContainer.innerHTML = '';
-    config.fields.forEach(field => {
-        if (generationMode === "guestlist" && field.id === "guestName") return; 
-
-        const group = document.createElement('div');
-        group.className = 'form-group';
-        
-        const label = document.createElement('label');
-        label.innerText = field.label;
-        
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.id = field.id;
-        input.placeholder = `Enter ${field.label}`;
-        input.addEventListener('input', () => drawCanvas());
-
-        group.appendChild(label);
-        group.appendChild(input);
-        inputContainer.appendChild(group);
-    });
-
-    const dlBtn = document.getElementById('downloadBtn');
-    if (generationMode === "guestlist") {
-        dlBtn.innerText = `Generate Invitations (${selectedGuestNames.length})`;
-    } else {
-        dlBtn.innerText = `Download Image`;
-    }
-
-    currentImage.onload = () => {
-        canvas.width = currentImage.width;
-        canvas.height = currentImage.height;
-        drawCanvas();
-    };
-    currentImage.src = config.src;
-}
-
+// Canvas Drawing Engine
 function drawCanvas(overrideGuestName = null) {
     if (!currentTemplateKey || !currentImage.src) return;
     const config = templates[currentTemplateKey];
@@ -469,13 +516,13 @@ function drawCanvas(overrideGuestName = null) {
                 ctx.font = `${fontPrefix}${currentFontSize}px ${selectedFontFamily}`;
             }
 
-            // Fallback to config color if user didn't use the color picker yet
             ctx.fillStyle = selectedColor || field.color;
             ctx.fillText(text, drawX, drawY);
         }
     });
 }
 
+// Download & Batch Generation
 document.getElementById('downloadBtn').addEventListener('click', async () => {
     if (generationMode === "manual") {
         const link = document.createElement('a');
