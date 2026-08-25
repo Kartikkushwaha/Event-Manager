@@ -117,7 +117,7 @@ body {
     align-items: center;
     flex-wrap: nowrap !important; /* STRICTLY 1 LINE */
     padding: 16px 28px; /* TALLER NAVBAR */
-    border-radius: var(--radius-pill);
+    border-radius: 20px;
     box-shadow: var(--shadow-md);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -567,8 +567,7 @@ input:focus, textarea:focus {
     .navbar {
         flex-direction: row; 
         flex-wrap: nowrap !important;
-        padding: 16px 14px; /* Taller navbar */
-        border-radius: var(--radius-lg);
+        padding: 16px 14px; 
         position: relative; 
         gap: 4px;
     }
@@ -623,6 +622,9 @@ input:focus, textarea:focus {
         z-index: 1000;
         gap: 12px;
         align-items: stretch;
+        max-height: 70vh;              /* Stops the menu from being taller than the screen */
+        overflow-y: auto;              /* Adds a scrollbar to the menu itself */
+        -webkit-overflow-scrolling: touch; /* Makes scrolling smooth on iPhones */
     }
 
     .nav-links.active-menu {

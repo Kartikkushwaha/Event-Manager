@@ -46,9 +46,7 @@ themeBtn.addEventListener("click", () => {
     }
 });
 
-
 // --- GUEST LIST UI & LOGIC ---
-
 const addGuestBtn = document.getElementById("addGuestBtn");
 const guestContainer = document.getElementById("guestContainer");
 const guestCount = document.getElementById("guestCount");
@@ -88,7 +86,6 @@ function createGuest(name = "", address = "", phone = "", prepend = false, id = 
         updateGuestNumbers();
     });
 
-    // Insert at the top (row 1) if requested, otherwise append
     if (prepend && guestContainer.firstChild) {
         guestContainer.prepend(row);
     } else {
@@ -118,17 +115,12 @@ function sortGuestList(criteria) {
         } else if (criteria === "time-newest" || criteria === "time-oldest") {
             const idA = parseFloat(a.dataset.id);
             const idB = parseFloat(b.dataset.id);
-            // time-newest: highest timestamp (most recent) at the top
-            // time-oldest: lowest timestamp (earliest added) at the top
             return criteria === "time-newest" ? idB - idA : idA - idB;
         }
         return 0;
     });
 
-    // Re-insert rows into container in sorted order
     rows.forEach(row => guestContainer.appendChild(row));
-    
-    // Update visual S.No sequentially from top to bottom
     updateGuestNumbers();
 }
 
@@ -146,7 +138,6 @@ async function loadGuestsFromFirestore() {
             if (data.guests && Array.isArray(data.guests) && data.guests.length > 0) {
                 guestContainer.innerHTML = ""; 
                 
-                // Rebuild rows preserving their original saved ID and order
                 data.guests.forEach((guest, index) => {
                     createGuest(guest.name, guest.address, guest.phone, false, guest.id || (Date.now() + index));
                 });
@@ -158,11 +149,9 @@ async function loadGuestsFromFirestore() {
     }
 }
 
-// When user clicks '+ Add Guest', insert at the TOP (prepend = true)
 if (addGuestBtn) {
     addGuestBtn.addEventListener("click", () => createGuest("", "", "", true));
 }
-
 
 // --- SAVE LOGIC ---
 const saveGuestBtn = document.getElementById("saveGuestBtn");
@@ -175,8 +164,9 @@ if (saveGuestBtn) {
             return;
         }
 
-        const originalText = saveGuestBtn.textContent;
-        saveGuestBtn.textContent = "Saving...";
+        // Change text only to keep Lucide icons intact
+        const textSpan = saveGuestBtn.querySelector('.btn-text');
+        textSpan.textContent = "Saving...";
 
         const rows = document.querySelectorAll(".guest-row");
         const guestList = [];
@@ -188,7 +178,6 @@ if (saveGuestBtn) {
             const id = parseFloat(row.dataset.id);
 
             if (name) {
-                // Save the dataset ID so Newest/Oldest sorting remains consistent across sessions
                 guestList.push({ name, address, phone, id });
             }
         });
@@ -200,13 +189,15 @@ if (saveGuestBtn) {
                 lastUpdated: new Date().toISOString()
             }, { merge: true });
 
-            saveGuestBtn.textContent = "Saved! ✓";
-            setTimeout(() => saveGuestBtn.textContent = originalText, 2000);
+            textSpan.textContent = "Saved! ✓";
+            setTimeout(() => {
+                textSpan.textContent = "Save";
+            }, 2000);
             
         } catch (error) {
             console.error("Error saving document: ", error);
             alert("Failed to save data. You might not have write permission.");
-            saveGuestBtn.textContent = originalText;
+            textSpan.textContent = "Save";
         }
     });
 }
@@ -223,7 +214,8 @@ if (removeAllBtn) {
             updateGuestNumbers();
 
             if (currentUserUid) {
-                removeAllBtn.textContent = "Deleting...";
+                const textSpan = removeAllBtn.querySelector('.btn-text');
+                textSpan.textContent = "Deleting...";
                 
                 try {
                     const userDocRef = doc(db, "users", currentUserUid);
@@ -232,13 +224,13 @@ if (removeAllBtn) {
                         lastUpdated: new Date().toISOString()
                     }, { merge: true });
 
-                    removeAllBtn.textContent = "Delete All";
+                    textSpan.textContent = "Delete All";
                     alert("All guests have been permanently deleted!");
                     
                 } catch (error) {
                     console.error("Error deleting guests: ", error);
                     alert("Failed to delete from cloud. Check console.");
-                    removeAllBtn.textContent = "Delete All";
+                    textSpan.textContent = "Delete All";
                 }
             }
         }
@@ -253,7 +245,6 @@ if (exportBtn) {
         const rows = document.querySelectorAll(".guest-row");
         const guestData = [];
 
-        // Traverses the screen in exact visual DOM order
         rows.forEach((row) => {
             const name = row.querySelector(".guest-name").value.trim();
             const address = row.querySelector(".guest-address").value.trim();
@@ -318,3 +309,22 @@ if (exportBtn) {
         doc.save("EventEase_Guest_List.pdf");
     });
 }
+
+// --- Mobile Hamburger Menu Logic (Click-to-Close Fix) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            navLinks.classList.toggle('active-menu');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
+    }
+});

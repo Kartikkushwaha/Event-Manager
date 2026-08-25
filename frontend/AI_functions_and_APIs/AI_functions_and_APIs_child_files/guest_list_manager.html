@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EventEase - Guest List Manager</title>
     <link rel="icon" type="image/png" href="../../logo.png">
+    
+    <!-- Lucide Icons Script -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
   :root {
     --bg: #f8fafc;
@@ -43,16 +47,21 @@
     color: var(--text);
     transition: background-color 0.3s ease, color 0.3s ease;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
-  /* Navbar */
+  /* =========================================================
+     NAVBAR: TALLER, STRICTLY 1-LINE & PERFECTLY CENTERED
+  ========================================================= */
   .navbar {
     background: var(--navbar);
-    padding: 16px 36px;
+    padding: 16px 28px;
     display: flex;
+    flex-direction: row;
     border-radius: 16px; 
     justify-content: space-between;
     align-items: center;
+    flex-wrap: nowrap !important;
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     backdrop-filter: blur(16px);
@@ -63,352 +72,140 @@
     margin: 15px 20px 0 20px;
   }
 
-  .logo {
-    display: flex;
-    align-items: center;
-  }
+  .logo { display: flex; align-items: center; min-width: 0; flex: 1; }
+  .nav-logo-svg { height: 56px; width: auto; max-width: 100%; display: block; transition: height 0.3s ease; }
 
+  .nav-links { display: flex; gap: 28px; align-items: center; justify-content: center; flex: 1; }
+  .nav-links a { text-decoration: none; color: var(--secondaryText); font-weight: 500; font-size: 15px; transition: color 0.2s ease; }
+  .nav-links a:hover { color: var(--accent); }
 
+  .nav-controls { display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 16px; white-space: nowrap; flex: 1; }
 
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    align-items: center;
-  }
+  .theme-btn { background: transparent; border: 1px solid var(--border); padding: 6px 10px; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; color: var(--text); font-size: 14px; }
+  .theme-btn:hover { background-color: var(--bg); }
 
-  .nav-links a {
-    text-decoration: none;
-    color: var(--secondaryText);
-    font-weight: 500;
-    font-size: 15px;
-    transition: color 0.2s ease;
-  }
-
-  .nav-links a:hover {
-    color: var(--accent);
-  }
-
-  /* theme button toggle */
-  #themeToggle {
-    background: transparent;
-    border: 1px solid var(--border);
-    padding: 5px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text);
-  }
-
-  #themeToggle:hover {
-    background-color: var(--bg);
-    transform: scale(1.02);
-  }
+  .hamburger-btn { display: none; background: transparent; border: none; color: var(--text); cursor: pointer; padding: 0; }
+  .hamburger-btn svg { width: 28px; height: 28px; }
 
   /* Guest Panel */
   .guest-panel {
-    width: 92%;
-    max-width: 1200px;
-    margin: 30px auto;
-    background: var(--card);
-    padding: 28px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 92%; max-width: 1200px; margin: 30px auto; background: var(--card); padding: 28px; border-radius: 20px;
+    box-shadow: var(--shadow); border: 1px solid var(--border); transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
-  .panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .panel-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+  .panel-header h2 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
 
   /* Top Stat Bar & Controls */
   .guest-stats-bar {
-    background: rgba(37, 99, 235, 0.08);
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    padding: 12px 18px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-weight: 600;
-    color: var(--accent);
-    font-size: 15px;
+    background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); padding: 12px 18px; border-radius: 12px;
+    margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-weight: 600; color: var(--accent); font-size: 15px;
   }
 
-  /* Sort Dropdown Styling */
-  .sort-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--text);
-  }
+  .sort-container { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); }
+  .sort-dropdown { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; outline: none; transition: all 0.2s ease; }
+  .sort-dropdown:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
-  .sort-dropdown {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-
-  .sort-dropdown:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  }
-
-  /* Refined Button Hierarchy */
-  .panel-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
+  /* =========================================================
+     REFINED PANEL BUTTONS & LUCIDE ICONS (DESKTOP)
+  ========================================================= */
+  .panel-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
   .panel-buttons button {
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer;
+    transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
   }
 
-  #addGuestBtn, #saveGuestBtn {
-    background: var(--accent);
-    color: white;
-    border: 1px solid transparent;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-  }
+  /* Hide the Lucide icons on laptop, show text */
+  .panel-buttons .btn-icon { display: none; }
+  .panel-buttons .btn-text { display: inline; }
 
-  #addGuestBtn:hover, #saveGuestBtn:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
+  #addGuestBtn, #saveGuestBtn { background: var(--accent); color: white; border: 1px solid transparent; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+  #addGuestBtn:hover, #saveGuestBtn:hover { background: #1d4ed8; transform: translateY(-1px); }
 
-  #ExportGuestBtn {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
+  #ExportGuestBtn { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  #ExportGuestBtn:hover { background: rgba(148, 163, 184, 0.1); }
 
-  #ExportGuestBtn:hover {
-    background: rgba(148, 163, 184, 0.1);
-  }
-
-  #RemoveGuestBtn {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid transparent;
-  }
-
-  #RemoveGuestBtn:hover {
-    background: #ef4444;
-    color: white;
-  }
+  #RemoveGuestBtn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid transparent; }
+  #RemoveGuestBtn:hover { background: #ef4444; color: white; }
 
   /* Grid Layouts */
-  .guest-head, .guest-row {
-    display: grid;
-    grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(130px, 1fr) 44px;
-    gap: 14px;
-    align-items: center;
-  }
+  .guest-head, .guest-row { display: grid; grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(130px, 1fr) 44px; gap: 14px; align-items: center; }
+  .guest-head { font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--secondaryText); padding: 0 10px 12px 10px; border-bottom: 1px solid var(--border); }
+  .guest-row { margin: 12px 0; padding: 6px 10px; border-radius: 12px; transition: background-color 0.2s ease; }
+  .guest-row:hover { background: rgba(148, 163, 184, 0.05); }
 
-  .guest-head {
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--secondaryText);
-    padding: 0 10px 12px 10px;
-    border-bottom: 1px solid var(--border);
-  }
+  .guest-row input { width: 100%; min-width: 0; padding: 10px 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 10px; font-size: 14px; transition: all 0.2s ease; }
+  .guest-row input:focus { outline: none; border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
-  .guest-row {
-    margin: 12px 0;
-    padding: 6px 10px;
-    border-radius: 12px;
-    transition: background-color 0.2s ease;
-  }
+  .serial-box { display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--secondaryText); font-size: 14px; }
+  
+  .deleteBtn { background: transparent; color: #ef4444; width: 40px; height: 40px; border: 1px solid transparent; border-radius: 10px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+  .deleteBtn:hover { background: rgba(239, 68, 68, 0.1); transform: scale(1.05); }
 
-  .guest-row:hover {
-    background: rgba(148, 163, 184, 0.05);
-  }
-
-  /* Modern Input Fields */
-  .guest-row input {
-    width: 100%;
-    min-width: 0;
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-    border-radius: 10px;
-    font-size: 14px;
-    transition: all 0.2s ease;
-  }
-
-  .guest-row input:focus {
-    outline: none;
-    border-color: var(--accent);
-    background: var(--card);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-  }
-
-  .serial-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: var(--secondaryText);
-    font-size: 14px;
-  }
-
-  .deleteBtn {
-    background: transparent;
-    color: #ef4444;
-    width: 40px;
-    height: 40px;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-  }
-
-  .deleteBtn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    transform: scale(1.05);
-  }
-
-  /* Mobile Responsive Adaptations */
   @media (max-width: 900px) {
-    .guest-head {
-      display: none;
-    }
-
-    .guest-row {
-      grid-template-columns: 1fr;
-      gap: 12px;
-      padding: 18px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      margin-bottom: 16px;
-      position: relative;
-    }
-
-    .guest-row:hover {
-      background: var(--bg);
-    }
-
-    .serial-box {
-      justify-content: flex-start;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4px;
-      color: var(--accent);
-    }
-
-    .serial-box::before {
-      content: "Guest #";
-    }
-
-    .deleteBtn {
-      width: 100%;
-      height: 42px;
-      background: rgba(239, 68, 68, 0.08);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      margin-top: 6px;
-    }
-
-    .deleteBtn::after {
-      font-size: 14px;
-      font-weight: 600;
-      margin-left: 6px;
-    }
+    .guest-head { display: none; }
+    .guest-row { grid-template-columns: 1fr; gap: 12px; padding: 18px; border: 1px solid var(--border); background: var(--bg); margin-bottom: 16px; position: relative; }
+    .guest-row:hover { background: var(--bg); }
+    .serial-box { justify-content: flex-start; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px; color: var(--accent); }
+    .serial-box::before { content: "Guest #"; }
+    .deleteBtn { width: 100%; height: 42px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); margin-top: 6px; }
+    .deleteBtn::after { font-size: 14px; font-weight: 600; margin-left: 6px; }
   }
 
-  @media (max-width: 640px) {
-    .navbar {
-      margin: 10px 10px 0 10px;
-      padding: 14px 20px;
-      flex-direction: column;
-      gap: 16px;
-    }
+  /* =========================================================
+     MOBILE RESPONSIVENESS FIXES (NAVBAR & LUCIDE BUTTONS)
+  ========================================================= */
+  @media (max-width: 960px) {
+    .navbar { margin: 10px 10px 0 10px; padding: 12px 16px; gap: 4px; }
+    .nav-logo-svg { height: 38px; }
+    .nav-controls { gap: 16px; }
+    .theme-btn { padding: 4px 8px; font-size: 11px; border-radius: 11px; }
+    .hamburger-btn { display: flex; align-items: center; }
+    .hamburger-btn svg { width: 24px; height: 24px; }
 
+    /* Solid Opaque Dropdown */
     .nav-links {
-      width: 100%;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; width: 100%;
+      background-color: var(--card) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+      border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      z-index: 1000; flex-direction: column; align-items: stretch; max-height: 70vh; overflow-y: auto; -webkit-overflow-scrolling: touch;
     }
+    .nav-links.active-menu { display: flex; }
+    .nav-links a { text-align: center; padding: 14px; }
 
-    #themeToggle {
-      margin-right: 0;
-      width: 100%;
-    }
+    .guest-panel { width: 94%; padding: 18px; margin: 20px auto; }
+    .panel-header { flex-direction: column; align-items: flex-start; }
+    .guest-stats-bar { flex-direction: column; align-items: flex-start; text-align: left; }
+    .sort-container { width: 100%; justify-content: space-between; }
+    .sort-dropdown { flex-grow: 1; }
 
-    .guest-panel {
-      width: 94%;
-      padding: 18px;
-      margin: 20px auto;
-    }
-
-    .panel-header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .guest-stats-bar {
-      flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
-    }
-
-    .sort-container {
+    /* --- THE MAGIC FIX FOR LUCIDE SYMBOL BUTTONS ON MOBILE --- */
+    .panel-buttons {
+      flex-wrap: nowrap; /* Forces all buttons onto 1 line */
       width: 100%;
       justify-content: space-between;
-    }
-
-    .sort-dropdown {
-      flex-grow: 1;
-    }
-
-    .panel-buttons {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
 
     .panel-buttons button {
-      width: 100%;
+      width: auto;
+      flex: 1; /* Divides the width equally */
+      padding: 12px 0;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Hide text, show Lucide symbols */
+    .panel-buttons .btn-text { display: none; }
+    .panel-buttons .btn-icon { display: flex; }
+
+    /* Size the Lucide SVG beautifully for touch targets */
+    .panel-buttons .btn-icon svg {
+        width: 22px;
+        height: 22px;
+        stroke-width: 2.25px;
     }
   }
 </style>
@@ -417,88 +214,31 @@
 
     <nav class="navbar">
         <div class="logo">
-            <!-- EventEase Logo Start -->
-<div class="eventease-glowing-logo">
-    
-    <!-- SVG Symbol -->
-    <!-- TO CHANGE SYMBOL SIZE: Adjust 'width' and 'height' values below. (Do not change the viewBox) -->
-    <svg class="logo-symbol" viewBox="0 0 100 64" width="75" height="48" xmlns="http://www.w3.org/2000/svg">
-        <!-- Left Dark Circle -->
-        <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
-        <!-- Right Cyan Circle -->
-        <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
-        <!-- Center Overlap Lens (Blue) -->
-        <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
-    </svg>
-
-    <!-- Logo Text -->
-    <div class="logo-text">
-        <span class="text-event">Event</span><span class="text-ease">Ease</span>
-    </div>
-
-    <!-- Inline CSS for Styling and Glow Effects -->
-    <style>
-        .eventease-glowing-logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            
-            /* TO CHANGE SPACING BETWEEN SYMBOL AND TEXT: Adjust the 'gap' value below */
-            gap: 6px; 
-            
-            /* TO CHANGE BORDER SIZE AROUND THE LOGO: Adjust the 'padding' below (top, right, bottom, left) */
-            padding: 8px 24px 8px 16px; 
-            
-            background-color: transparent;
-            
-            /* 1px Glowing Border */
-            border: 1px solid #00E5FF;
-            border-radius: 50px;
-            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), 
-                        inset 0 0 12px rgba(0, 229, 255, 0.3);
-            
-            /* Ensures it scales to fit content */
-            width: max-content;
-            font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
-            user-select: none;
-        }
-
-        /* Subtle glow on the SVG symbol */
-        .logo-symbol {
-            filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
-        }
-
-        .logo-text {
-            /* TO CHANGE TEXT SIZE: Adjust the 'font-size' value below */
-            font-size: 28px; 
-            
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1;
-        }
-
-        .text-event {
-            color: #7dece7;
-            /* Subtle glow for the dark text to ensure it stands out */
-        }
-
-        .text-ease {
-            color: #0088FF;
-            /* Bright blue glow for the second half of the text */
-        }
-    </style>
-</div>
-<!-- EventEase Logo End -->
+            <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
+              <g transform="translate(25, 22)">
+                <rect x="0" y="0" width="32" height="8" rx="4" style="fill: var(--text); transition: fill 0.3s ease;"/>
+                <rect x="0" y="14" width="20" height="8" rx="4" style="fill: var(--secondaryText); transition: fill 0.3s ease;"/>
+                <rect x="0" y="28" width="32" height="8" rx="4" style="fill: var(--secondaryText); transition: fill 0.3s ease;"/>
+              </g>
+              <text x="75" y="52" font-family="'Product Sans', Arial, sans-serif" font-size="32" font-weight="bold" style="fill: var(--text); transition: fill 0.3s ease;" letter-spacing="-0.5">EventEase</text>
+            </svg>
         </div>
 
-        <div class="nav-links">
+        <div class="nav-links" id="navLinks">
             <a id="dashboard" href="../../dashboard.html">Dashboard</a>
             <a id="AIpanel" href="../AI_plan.html">AI Panel</a>
         </div>
         
-        <button id="themeToggle">
-            🌙
-        </button>
+        <div class="nav-controls">
+            <button id="themeToggle" class="theme-btn">🌙</button>
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
     </nav>
 
     <!-- Guest Panel -->
@@ -506,15 +246,27 @@
         <div class="panel-header">
             <h2>Guest List Manager</h2>
 
+            <!-- Lucide Icons injected into the btn-icon spans -->
             <div class="panel-buttons">
-                <button id="ExportGuestBtn">Export</button>
-                <button id="RemoveGuestBtn">Delete All</button>
-                <button id="saveGuestBtn">Save</button>
-                <button id="addGuestBtn">+ Add Guest</button>
+                <button id="ExportGuestBtn" title="Export to PDF">
+                    <span class="btn-icon"><i data-lucide="arrow-down-to-line"></i></span>
+                    <span class="btn-text">Export</span>
+                </button>
+                <button id="RemoveGuestBtn" title="Delete All Guests">
+                    <span class="btn-icon"><i data-lucide="trash-2"></i></span>
+                    <span class="btn-text">Delete All</span>
+                </button>
+                <button id="saveGuestBtn" title="Save Changes">
+                    <span class="btn-icon"><i data-lucide="bookmark"></i></span>
+                    <span class="btn-text">Save</span>
+                </button>
+                <button id="addGuestBtn" title="Add a Guest">
+                    <span class="btn-icon"><i data-lucide="user-plus"></i></span>
+                    <span class="btn-text">+ Add Guest</span>
+                </button>
             </div>
         </div>
 
-        <!-- Top Stat Banner & Sort Dropdown -->
         <div class="guest-stats-bar">
             <span id="guestCount">
                 Total Guests: 0
@@ -542,10 +294,14 @@
         <div id="guestContainer"></div>
     </div>
 
-<!-- Include jsPDF and AutoTable libraries for PDF generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-
 <script type="module" src="guest_list_manager.js"></script>
+
+<!-- Initialize Lucide Icons -->
+<script>
+    lucide.createIcons();
+</script>
+
 </body>
 </html>

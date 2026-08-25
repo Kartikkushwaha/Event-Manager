@@ -10,9 +10,8 @@
   --border: #E5E7EB;
   --input-bg: #F9FAFB;
   --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  --nav-bg: #FFFFFF; 
-  --nav-border: rgba(255, 255, 255, 0.1);
-  --nav-text: #F8FAFC;
+  --nav-bg: rgba(255, 255, 255, 0.85); 
+  --nav-border: rgba(31, 41, 55, 0.1);
 }
 
 [data-theme="dark"] {
@@ -29,7 +28,6 @@
   --shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
   --nav-bg: rgba(15, 23, 42, 0.85);
   --nav-border: rgba(255, 255, 255, 0.15);
-  --nav-text: #F8FAFC;
 }
 
 * {
@@ -50,11 +48,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-x: hidden;
 }
 
-/* ==========================================
-   FLOATING NAVBAR
-   ========================================== */
+/* =========================================================
+   UPDATED NAVBAR: TALLER, STRICTLY 1-LINE & PERFECTLY CENTERED
+========================================================= */
 .navbar-wrapper {
   position: fixed;
   top: 1.5rem;
@@ -74,75 +73,43 @@ body {
   border: 1px solid var(--nav-border);
   width: 100%;
   max-width: 1100px;
-  height: auto; /* Changed to auto so it can expand */
-  min-height: 80px; /* Keeps the minimum thickness */
-  border-radius: 50px;
+  border-radius: 16px;
   display: flex;
-  flex-wrap: wrap; /* Allows items to wrap onto the next line */
+  flex-direction: row;
+  flex-wrap: nowrap !important; /* STRICTLY 1 LINE */
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem; /* Added vertical padding for wrapping items */
-  gap: 1rem;
+  padding: 16px 28px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
-.nav-brand {
+.logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #3B82F6;
-  text-decoration: none;
+  min-width: 0;
+  flex: 1; /* Pushes equal width to center the links */
 }
 
-/* --- GLOWING LOGO STYLES --- */
-.eventease-glowing-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px; 
-  padding: 6px 20px 6px 12px; 
-  background-color: transparent;
-  border: 1px solid #00E5FF;
-  border-radius: 50px;
-  box-shadow: 0 0 12px rgba(0, 229, 255, 0.6), inset 0 0 12px rgba(0, 229, 255, 0.3);
-  width: max-content;
-  font-family: 'Segoe UI', 'Montserrat', system-ui, sans-serif;
-  user-select: none;
-}
-
-.logo-symbol {
-  width: 50px;
-  height: 32px;
-  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
-}
-
-.logo-text {
-  font-size: 22px; 
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  line-height: 1;
-}
-
-.text-event {
-  color: #7dece7;
-}
-
-.text-ease {
-  color: #0088FF;
+.nav-logo-svg {
+  height: 56px; 
+  width: auto;
+  max-width: 100%;
+  display: block;
+  transition: height 0.3s ease;
 }
 
 .nav-links {
   display: flex;
-  flex-wrap: wrap; /* Allows individual links to wrap if needed */
-  list-style: none;
-  gap: 2rem;
+  gap: 28px;
   align-items: center;
+  justify-content: center;
+  flex: 1; /* Center pillar */
+  list-style: none;
 }
 
 .nav-link {
-  color: var(--text-main);
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -153,11 +120,21 @@ body {
   color: var(--primary);
 }
 
+.nav-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end; /* Anchors controls to the right */
+  gap: 16px;
+  white-space: nowrap;
+  flex: 1; /* Matches logo width to guarantee center links */
+}
+
 .theme-btn {
   background: transparent;
   border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 6px 10px;
+  border-radius: 15px;
   cursor: pointer;
   transition: all 0.3s ease;
   color: var(--text-main);
@@ -167,12 +144,26 @@ body {
 }
 
 .theme-btn:hover {
-  background-color: var(--bg); 
+  background-color: var(--card-bg); 
+}
+
+.hamburger-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-btn svg {
+  width: 28px;
+  height: 28px;
 }
 
 /* ==========================================
    MAIN CONTAINER & CONTROLS
-   ========================================== */
+========================================== */
 .container {
   max-width: 1100px;
   width: 100%;
@@ -245,6 +236,12 @@ textarea:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
+/* ==========================================
+   BUTTONS (Desktop Default)
+========================================== */
+.btn-icon { display: none; }
+.btn-text { display: inline; }
+
 .btn-main {
   width: 100%;
   padding: 1rem;
@@ -258,6 +255,10 @@ textarea:focus {
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
   transition: transform 0.1s, box-shadow 0.2s, opacity 0.2s;
   min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-main:hover:not(:disabled) {
@@ -280,9 +281,6 @@ textarea:focus {
   min-height: 20px;
 }
 
-/* ==========================================
-   PREVIEW & DOWNLOAD AREA
-   ========================================== */
 .preview-area {
   display: flex;
   flex-direction: column;
@@ -309,6 +307,7 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   transition: transform 0.1s, background-color 0.2s;
   min-height: 48px;
@@ -363,23 +362,42 @@ textarea:focus {
 
 /* ==========================================
    RESPONSIVE DESIGN 
-   ========================================== */
+========================================== */
 
-/* Tier 1: Tablets & Half-screen Desktops (< 992px) */
+/* Tier 1: Tablets (< 992px) */
 @media (max-width: 992px) {
   body {
-    padding-top: 150px; /* Compensate for wrapping navbar */
-  }
-
-  .navbar {
-    justify-content: center; /* Center everything when it starts wrapping */
-    border-radius: 25px; /* Adjust the pill shape for taller heights */
+    padding-top: 150px; 
   }
 
   .nav-links {
-    justify-content: center;
-    gap: 1.5rem;
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    right: 0;
+    width: 100%; 
+   background-color: var(--card-bg) !important; /* Uses your solid card color */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: 1px solid var(--nav-border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: stretch;
+    max-height: 70vh;              
+    overflow-y: auto;              
+    -webkit-overflow-scrolling: touch; 
   }
+  .nav-links.active-menu { display: flex; }
+  .nav-link { padding: 14px; text-align: center; }
+
+  .hamburger-btn { display: flex; }
+  .navbar { padding: 12px 16px; gap: 4px; }
+  .nav-logo-svg { height: 38px; }
+  .nav-controls { gap: 16px; }
 
   .container {
     grid-template-columns: 1fr;
@@ -394,27 +412,9 @@ textarea:focus {
 
 /* Tier 2: Smartphones (< 600px) */
 @media (max-width: 600px) {
-  body {
-    padding-top: 220px; /* Make plenty of room for stacked mobile navbar */
-    padding-bottom: 2rem;
-  }
-
   .navbar-wrapper {
     top: 0.5rem;
     padding: 0 0.5rem;
-  }
-
-  .navbar {
-    flex-direction: column; /* Force vertical stacking on very small screens */
-    border-radius: 20px; /* Square off corners a bit for the box shape */
-    padding: 1rem;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap; /* Ensure links still wrap if mobile screen is extremely narrow */
   }
 
   .container {
@@ -438,5 +438,22 @@ textarea:focus {
     min-height: 350px;
     padding: 1rem;
     border-radius: 16px;
+  }
+
+  /* --- MAGIC MOBILE FIX: SWAP TEXT TO ICONS --- */
+  .btn-icon { display: flex; align-items: center; justify-content: center; }
+  .btn-text { display: none; }
+  
+  .btn-main, .btn-download {
+    padding: 12px;
+    min-height: 48px;
+    width: auto;
+  }
+
+  /* Size the Lucide SVGs nicely */
+  .btn-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
   }
 }

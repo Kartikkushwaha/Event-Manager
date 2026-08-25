@@ -44,9 +44,9 @@ generateBtn.addEventListener("click", async () => {
     return;
   }
 
-  // Reset UI State
+  // Reset UI State (Targets only the text span so the icon is protected)
   generateBtn.disabled = true;
-  generateBtn.querySelector("span").textContent = "Generating Image...";
+  generateBtn.querySelector(".btn-text").textContent = "Generating...";
   statusText.textContent = "Analyzing layout & formatting text...";
   placeholderText.style.display = "flex";
   placeholderText.querySelector("p").textContent = "Creating your Invitation Card, Please Wait...";
@@ -140,7 +140,7 @@ generateBtn.addEventListener("click", async () => {
     statusText.textContent = "Failed to generate image.";
   } finally {
     generateBtn.disabled = false;
-    generateBtn.querySelector("span").textContent = "Generate My Invitation";
+    generateBtn.querySelector(".btn-text").textContent = "Generate My Invitation";
   }
 });
 
@@ -163,3 +163,24 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
   context.fillText(line.trim(), x, y);
   return y + lineHeight;
 }
+
+// ==========================================
+// 4. MOBILE HAMBURGER MENU LOGIC
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            navLinks.classList.toggle('active-menu');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
+    }
+});

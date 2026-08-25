@@ -95,7 +95,7 @@ saveBtn.addEventListener("click", async () => {
             return;
         }
         
-        // If the special person field is visible, ensure they filled it out (Optional validation)
+        // If the special person field is visible, ensure they filled it out
         if (specialPersonGroup.style.display === "flex" && specialPersonInput.value.trim() === "") {
             alert("Please enter the name of the Special Person / Couple");
             return;
@@ -129,9 +129,6 @@ saveBtn.addEventListener("click", async () => {
             return;
         }
 
-        console.log("UID =", uid);
-        console.log("EVENT =", eventData);
-
         await addDoc(collection(db, "users", uid, "events"), eventData);
 
         alert("Event Saved Successfully!");
@@ -140,5 +137,26 @@ saveBtn.addEventListener("click", async () => {
     } catch(error) {
         console.error(error);
         alert("Firebase Error:\n\n" + error.message);
+    }
+});
+
+// --- Mobile Hamburger Menu Logic (Click-to-Close & Scroll Fixes) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (hamburgerBtn && navLinks) {
+        // 1. Toggle menu when clicking the hamburger button
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents document click from firing immediately
+            navLinks.classList.toggle('active-menu');
+        });
+
+        // 2. Click anywhere else on the screen to close ("pop off")
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
     }
 });

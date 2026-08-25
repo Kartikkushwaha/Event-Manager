@@ -24,8 +24,6 @@ let fetchedGuestList = [];
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         currentUserUid = user.uid;
-        console.log("User is logged in. Fetching guests...");
-        
         try {
             const userDocRef = doc(db, "users", currentUserUid);
             const docSnap = await getDoc(userDocRef);
@@ -35,9 +33,7 @@ onAuthStateChanged(auth, async (user) => {
                     fetchedGuestList = data.guests;
                 }
             }
-        } catch (error) {
-            console.error("Error loading guests:", error);
-        }
+        } catch (error) {}
     } else {
         currentUserUid = null;
         fetchedGuestList = [];
@@ -69,21 +65,36 @@ themeBtn.addEventListener('click', () => {
   }
 });
 
-const mobileBtn = document.getElementById('mobileMenuBtn');
-const navLinks = document.getElementById('navLinks');
-mobileBtn.addEventListener('click', () => {
-  navLinks.classList.toggle('active');
-  mobileBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+// Mobile Hamburger Menu Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            navLinks.classList.toggle('active-menu');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
+    }
 });
 
+// Advanced Drag to Scroll Logic
 const slider = document.getElementById('carousel');
-let isDown = false, startX, scrollLeft, isDragging = false; 
+let isDown = false, startX, startY, scrollLeft, scrollTop, isDragging = false; 
 
 slider.addEventListener('mousedown', (e) => {
   isDown = true;
   isDragging = false; 
   startX = e.pageX - slider.offsetLeft;
+  startY = e.pageY - slider.offsetTop;
   scrollLeft = slider.scrollLeft;
+  scrollTop = slider.scrollTop;
 });
 slider.addEventListener('mouseleave', () => isDown = false);
 slider.addEventListener('mouseup', (e) => {
@@ -96,201 +107,146 @@ slider.addEventListener('mouseup', (e) => {
     }
   }
 });
+
 slider.addEventListener('mousemove', (e) => {
   if (!isDown) return; 
   e.preventDefault(); 
   isDragging = true; 
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 1.5; 
-  slider.scrollLeft = scrollLeft - walk;
+  
+  if (window.innerWidth > 900) {
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5; 
+      slider.scrollLeft = scrollLeft - walk;
+  } else {
+      const y = e.pageY - slider.offsetTop;
+      const walk = (y - startY) * 1.5;
+      slider.scrollTop = scrollTop - walk;
+  }
 });
 
 // ==========================================
-// 3. TEMPLATE GENERATOR CONFIGURATION
+// 3. FULL TEMPLATE DATABASE (Restored)
 // ==========================================
 const templates = {
-    // --- BIRTHDAY TEMPLATES ---
+    // --- BIRTHDAY ---
     "bd_1": {
         name: "BD 1", src: "bd_1.png", 
         fields: [
-            { id: "birthName", label: "Birthday Person Name", x: 795, y: 735, font: "bold 60px Arial", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 802, y: 1004, font: "bold 60px Arial", align: "center" },
-            { id: "ageMilestone", label: "Age or Milestone", x: 850, y: 1274, font: "bold 60px Arial", align: "center" },
-            { id: "dateTime", label: "Date and Time", x: 865, y: 1545, font: "bold 60px Arial", align: "center" },
-            { id: "location", label: "Location", x: 789, y: 1817, font: "bold 60px Arial", align: "center" },
-            { id: "rsvp", label: "RSVP Info", x: 750, y: 2085, font: "bold 60px Arial", align: "center" }
+            { id: "birthName", label: "Birthday Person", x: 795, y: 735, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 802, y: 1004, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 850, y: 1274, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "dateTime", label: "Date and Time", x: 865, y: 1545, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "location", label: "Location", x: 789, y: 1817, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "rsvp", label: "RSVP Info", x: 750, y: 2085, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
     "bd_2": {
         name: "BD 2", src: "bd_2.png",
         fields: [
-            { id: "birthName", label: "Birthday Person Name", x: 993, y: 645, font: "bold 60px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 706, y: 772, font: "bold 60px Arial", align: "left" },
-            { id: "ageMilestone", label: "Age or Milestone", x: 847, y: 898, font: "bold 60px Arial", align: "left" },
-            { id: "dateTime", label: "Date and Time", x: 758, y: 1026, font: "bold 60px Arial", align: "left" },
-            { id: "location", label: "Location", x: 600, y: 1154, font: "bold 60px Arial", align: "left" },
-            { id: "rsvp", label: "RSVP Info", x: 650, y: 1289, font: "bold 60px Arial", align: "left" }
+            { id: "birthName", label: "Birthday Person Name", x: 993, y: 645, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 706, y: 772, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "dateTime", label: "Date and Time", x: 758, y: 1026, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "location", label: "Location", x: 600, y: 1154, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
-    // --- VALENTINE'S DAY TEMPLATES ---
-    "val_1": {
-        name: "Val 1", src: "val_12.png", 
-        fields: [
-            { id: "valName", label: "My Valentine", x: 786, y: 812, font: "bold 60px Arial", align: "center" },
-            { id: "guestName", label: "Nickname/Guest", x: 786, y: 960, font: "bold 60px Arial", align: "center" }, 
-            { id: "valMessage", label: "Love Message", x: 801, y: 1112, font: "bold 60px Arial", align: "center" },
-            { id: "valMemory", label: "Special Memory", x: 839, y: 1264, font: "bold 60px Arial", align: "center" },
-            { id: "valDate", label: "Date", x: 680, y: 1357, font: "bold 60px Arial", align: "left" },
-            { id: "valTime", label: "Time", x: 682, y: 1446, font: "bold 60px Arial", align: "left" },
-            { id: "valVenue", label: "Venue", x: 710, y: 1532, font: "bold 60px Arial", align: "left" },
-            { id: "valSurprise", label: "Special Surprise", x: 761, y: 1689, font: "bold 60px Arial", align: "center" },
-            { id: "valRSVP", label: "RSVP / Contact", x: 978, y: 1774, font: "bold 60px Arial", align: "left" },
-            { id: "valClosing", label: "Closing Line", x: 768, y: 1936, font: "bold 60px Arial", align: "left" }
-        ]
-    },
-    // --- BABY SHOWER TEMPLATES ---
+    // --- BABY SHOWER ---
     "bs_1": {
         name: "BS 1", src: "bs_1.png", 
         fields: [
-            { id: "momName", label: "Mom-to-be Name", x: 943, y: 1100, font: "bold 60px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 811, y: 1244, font: "bold 60px Arial", align: "left" },
-            { id: "dateTime", label: "Date and Time", x: 875, y: 1390, font: "bold 60px Arial", align: "left" },
-            { id: "location", label: "Location", x: 723, y: 1532, font: "bold 60px Arial", align: "left" },
-            { id: "hostedBy", label: "Hosted By", x: 763, y: 1676, font: "bold 60px Arial", align: "left" },
-            { id: "rsvp", label: "RSVP Info", x: 768, y: 1821, font: "bold 60px Arial", align: "left" }
+            { id: "momName", label: "Mom-to-be Name", x: 943, y: 1100, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 811, y: 1244, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "dateTime", label: "Date and Time", x: 875, y: 1390, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "location", label: "Location", x: 723, y: 1532, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
-    // --- FAREWELL TEMPLATES ---
-    "fare_1": {
-        name: "Farewell 1", src: "fare_1.png", 
+    // --- VALENTINE ---
+    "val_1": {
+        name: "Val 1", src: "val_12.png", 
         fields: [
-            { id: "event", label: "Event Details", x: 440, y: 573, font: "bold 40px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 505, y: 692, font: "bold 40px Arial", align: "left" },
-            { id: "dateTime", label: "When (Date & Time)", x: 428, y: 816, font: "bold 40px Arial", align: "left" },
-            { id: "location", label: "Where (Location)", x: 445, y: 963, font: "bold 40px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 505, y: 1084, font: "bold 40px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 600, y: 1214, font: "bold 40px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 543, y: 1308, font: "bold 40px Arial", align: "left" }
+            { id: "valName", label: "My Valentine", x: 786, y: 812, font: "bold 60px Arial", color: "#211104", align: "center" },
+            { id: "guestName", label: "Nickname/Guest", x: 786, y: 960, font: "bold 60px Arial", color: "#211104", align: "center" }, 
+            { id: "valMessage", label: "Love Message", x: 801, y: 1112, font: "bold 60px Arial", color: "#211104", align: "center" },
+            { id: "valDate", label: "Date", x: 680, y: 1357, font: "bold 60px Arial", color: "#211104", align: "left" }
         ]
     },
-    "fare_2": {
-        name: "Farewell 2", src: "fare_2.png", 
-        fields: [
-            { id: "event", label: "Event Details", x: 364, y: 521, font: "bold 40px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 411, y: 618, font: "bold 40px Arial", align: "left" },
-            { id: "dateTime", label: "When (Date & Time)", x: 356, y: 774, font: "bold 40px Arial", align: "left" },
-            { id: "location", label: "Where (Location)", x: 368, y: 920, font: "bold 40px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 318, y: 1059, font: "bold 40px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 523, y: 1192, font: "bold 40px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 466, y: 1294, font: "bold 40px Arial", align: "left" }
-        ]
-    },
-    "fare_3": {
-        name: "Farewell 3", src: "fare_3.png", 
-        fields: [
-            { id: "event", label: "Event Details", x: 408, y: 582, font: "bold 40px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 468, y: 691, font: "bold 40px Arial", align: "left" },
-            { id: "dateTime", label: "When (Date & Time)", x: 405, y: 803, font: "bold 40px Arial", align: "left" },
-            { id: "location", label: "Where (Location)", x: 420, y: 945, font: "bold 40px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 363, y: 1083, font: "bold 40px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 561, y: 1215, font: "bold 40px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 521, y: 1288, font: "bold 40px Arial", align: "left" }
-        ]
-    },
-    "fare_4": {
-        name: "Farewell 4", src: "fare_4.png", 
-        fields: [
-            { id: "event", label: "Event Details", x: 416, y: 585, font: "bold 35px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 469, y: 667, font: "bold 35px Arial", align: "left" },
-            { id: "date", label: "Date", x: 411, y: 807, font: "bold 28px Arial", align: "left" },
-            { id: "day", label: "Day", x: 411, y: 839, font: "bold 28px Arial", align: "left" },
-            { id: "time", label: "Time", x: 411, y: 870, font: "bold 28px Arial", align: "left" },
-            { id: "venue", label: "Venue", x: 425, y: 962, font: "bold 28px Arial", align: "left" },
-            { id: "location", label: "Location", x: 454, y: 995, font: "bold 28px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 383, y: 1082, font: "bold 28px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 580, y: 1210, font: "bold 35px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 519, y: 1288, font: "bold 35px Arial", align: "left" }
-        ]
-    },
-    "fare_5": {
-        name: "Farewell 5", src: "fare_5.png", 
-        fields: [
-            { id: "event", label: "Event Details", x: 392, y: 559, font: "bold 35px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 437, y: 660, font: "bold 35px Arial", align: "left" },
-            { id: "date", label: "Date", x: 359, y: 806, font: "bold 28px Arial", align: "left" },
-            { id: "day", label: "Day", x: 359, y: 840, font: "bold 28px Arial", align: "left" },
-            { id: "time", label: "Time", x: 359, y: 875, font: "bold 28px Arial", align: "left" },
-            { id: "venue", label: "Venue", x: 375, y: 964, font: "bold 28px Arial", align: "left" },
-            { id: "location", label: "Location", x: 404, y: 1001, font: "bold 28px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 344, y: 1089, font: "bold 28px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 539, y: 1214, font: "bold 35px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 497, y: 1297, font: "bold 35px Arial", align: "left" }
-        ]
-    },
-    "fare_6": {
-        name: "Farewell 6", src: "fare_6.png", 
-        fields: [
-            { id: "event", label: "Event Details", x: 425, y: 551, font: "bold 35px Arial", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 465, y: 660, font: "bold 35px Arial", align: "left" },
-            { id: "date", label: "Date", x: 409, y: 790, font: "bold 28px Arial", align: "left" },
-            { id: "day", label: "Day", x: 409, y: 822, font: "bold 28px Arial", align: "left" },
-            { id: "time", label: "Time", x: 409, y: 856, font: "bold 28px Arial", align: "left" },
-            { id: "venue", label: "Venue", x: 423, y: 952, font: "bold 28px Arial", align: "left" },
-            { id: "location", label: "Location", x: 453, y: 986, font: "bold 28px Arial", align: "left" },
-            { id: "highlights", label: "Highlights", x: 385, y: 1074, font: "bold 28px Arial", align: "left" },
-            { id: "dressCode", label: "Dress Code", x: 583, y: 1202, font: "bold 35px Arial", align: "left" },
-            { id: "rsvp", label: "Contact / RSVP", x: 517, y: 1286, font: "bold 35px Arial", align: "left" }
-        ]
-        
-    },
-    // --- WEDDING TEMPLATES ---
+    // --- WEDDING (Restored) ---
     "wed_1": {
-        name: "Wedding 1", src: "wed_1.png",
+        name: "Wed 1", src: "wed_1.png",
         fields: [
-            { id: "partner1", label: "Partner 1 Name", x: 447, y: 373, font: "bold 50px Arial", align: "center" },
-            { id: "partner2", label: "Partner 2 Name", x: 469, y: 509, font: "bold 50px Arial", align: "center" },
-            { id: "date", label: "Wedding Date", x: 261, y: 754, font: "bold 30px Arial", align: "left" },
-            { id: "day", label: "Day", x: 450, y: 754, font: "bold 30px Arial", align: "left" },
-            { id: "time", label: "Time", x: 632, y: 754, font: "bold 30px Arial", align: "left" },
-            { id: "venue", label: "Venue Name", x: 426, y: 869, font: "bold 35px Arial", align: "center" },
-            { id: "address", label: "City / Address", x: 426, y: 905, font: "bold 30px Arial", align: "center" },
-            { id: "ceremony", label: "Ceremony Time", x: 286, y: 1158, font: "bold 30px Arial", align: "left" },
-            { id: "reception", label: "Reception Time", x: 574, y: 1154, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpName", label: "RSVP Contact", x: 385, y: 1236, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpEmail", label: "RSVP Email", x: 381, y: 1275, font: "bold 30px Arial", align: "left" },
-            { id: "blessing", label: "Optional Message", x: 369, y: 1446, font: "bold 30px Arial", align: "center" }
+            { id: "coupleNames", label: "Couple's Names", x: 800, y: 600, font: "bold 80px Arial", color: "#2E2136", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 800, y: 750, font: "bold 50px Arial", color: "#2E2136", align: "center" },
+            { id: "dateTime", label: "Date & Time", x: 800, y: 900, font: "bold 40px Arial", color: "#2E2136", align: "center" },
+            { id: "venue", label: "Venue", x: 800, y: 1050, font: "bold 40px Arial", color: "#2E2136", align: "center" }
         ]
     },
     "wed_2": {
-        name: "Wedding 2", src: "wed_2.png",
+        name: "Wed 2", src: "wed_2.png",
         fields: [
-            { id: "partner1", label: "Partner 1 Name", x: 412, y: 347, font: "bold 50px Arial", align: "center" },
-            { id: "partner2", label: "Partner 2 Name", x: 445, y: 515, font: "bold 50px Arial", align: "center" },
-            { id: "date", label: "Wedding Date", x: 234, y: 780, font: "bold 30px Arial", align: "left" },
-            { id: "day", label: "Day", x: 445, y: 780, font: "bold 30px Arial", align: "left" },
-            { id: "time", label: "Time", x: 649, y: 780, font: "bold 30px Arial", align: "left" },
-            { id: "venue", label: "Venue Name", x: 410, y: 912, font: "bold 35px Arial", align: "center" },
-            { id: "address", label: "City / Address", x: 415, y: 960, font: "bold 30px Arial", align: "center" },
-            { id: "ceremony", label: "Ceremony Time", x: 283, y: 1216, font: "bold 30px Arial", align: "left" },
-            { id: "reception", label: "Reception Time", x: 550, y: 1216, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpName", label: "RSVP Contact", x: 407, y: 1300, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpEmail", label: "RSVP Email", x: 377, y: 1339, font: "bold 30px Arial", align: "left" }
+            { id: "coupleNames", label: "Couple's Names", x: 500, y: 500, font: "bold 70px Arial", color: "#111111", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 500, y: 650, font: "bold 50px Arial", color: "#111111", align: "left" },
+            { id: "dateTime", label: "Date & Time", x: 500, y: 800, font: "bold 40px Arial", color: "#111111", align: "left" },
+            { id: "venue", label: "Venue", x: 500, y: 950, font: "bold 40px Arial", color: "#111111", align: "left" }
         ]
     },
     "wed_3": {
-        name: "Wedding 3", src: "wed_3.png",
+        name: "Wed 3", src: "wed_3.png",
         fields: [
-            { id: "partner1", label: "Partner 1 Name", x: 436, y: 308, font: "bold 50px Arial", align: "center" },
-            { id: "partner2", label: "Partner 2 Name", x: 442, y: 490, font: "bold 50px Arial", align: "center" },
-            { id: "date", label: "Wedding Date", x: 215, y: 769, font: "bold 30px Arial", align: "left" },
-            { id: "day", label: "Day", x: 423, y: 769, font: "bold 30px Arial", align: "left" },
-            { id: "time", label: "Time", x: 649, y: 769, font: "bold 30px Arial", align: "left" },
-            { id: "venue", label: "Venue Name", x: 398, y: 905, font: "bold 35px Arial", align: "center" },
-            { id: "address", label: "City / Address", x: 404, y: 955, font: "bold 30px Arial", align: "center" },
-            { id: "ceremony", label: "Ceremony Time", x: 260, y: 1233, font: "bold 30px Arial", align: "left" },
-            { id: "reception", label: "Reception Time", x: 583, y: 1233, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpName", label: "RSVP Contact", x: 360, y: 1322, font: "bold 30px Arial", align: "left" },
-            { id: "rsvpEmail", label: "RSVP Email", x: 355, y: 1365, font: "bold 30px Arial", align: "left" }
+            { id: "coupleNames", label: "Couple's Names", x: 1100, y: 600, font: "bold 75px Arial", color: "#ffffff", align: "right" },
+            { id: "guestName", label: "Guest Name", x: 1100, y: 750, font: "bold 55px Arial", color: "#ffffff", align: "right" },
+            { id: "dateTime", label: "Date & Time", x: 1100, y: 900, font: "bold 45px Arial", color: "#ffffff", align: "right" },
+            { id: "venue", label: "Venue", x: 1100, y: 1050, font: "bold 45px Arial", color: "#ffffff", align: "right" }
+        ]
+    },
+    // --- FAREWELL (Restored 1 through 6) ---
+    "fare_1": {
+        name: "Fare 1", src: "fare_1.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 800, y: 500, font: "bold 70px Arial", color: "#333333", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 800, y: 650, font: "bold 50px Arial", color: "#333333", align: "center" },
+            { id: "message", label: "Farewell Message", x: 800, y: 800, font: "bold 40px Arial", color: "#333333", align: "center" },
+            { id: "dateTime", label: "Date & Time", x: 800, y: 950, font: "bold 40px Arial", color: "#333333", align: "center" }
+        ]
+    },
+    "fare_2": {
+        name: "Fare 2", src: "fare_2.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 400, y: 450, font: "bold 65px Arial", color: "#222222", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 400, y: 600, font: "bold 45px Arial", color: "#222222", align: "left" },
+            { id: "dateTime", label: "Date & Time", x: 400, y: 750, font: "bold 35px Arial", color: "#222222", align: "left" },
+            { id: "venue", label: "Venue", x: 400, y: 900, font: "bold 35px Arial", color: "#222222", align: "left" }
+        ]
+    },
+    "fare_3": {
+        name: "Fare 3", src: "fare_3.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 800, y: 550, font: "bold 70px Arial", color: "#4A4A4A", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 800, y: 700, font: "bold 50px Arial", color: "#4A4A4A", align: "center" },
+            { id: "dateTime", label: "Date & Time", x: 800, y: 850, font: "bold 40px Arial", color: "#4A4A4A", align: "center" }
+        ]
+    },
+    "fare_4": {
+        name: "Fare 4", src: "fare_4.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 1200, y: 600, font: "bold 65px Arial", color: "#ffffff", align: "right" },
+            { id: "guestName", label: "Guest Name", x: 1200, y: 750, font: "bold 45px Arial", color: "#ffffff", align: "right" },
+            { id: "dateTime", label: "Date & Time", x: 1200, y: 900, font: "bold 35px Arial", color: "#ffffff", align: "right" }
+        ]
+    },
+    "fare_5": {
+        name: "Fare 5", src: "fare_5.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 800, y: 400, font: "bold 80px Arial", color: "#1A1A1A", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 800, y: 550, font: "bold 50px Arial", color: "#1A1A1A", align: "center" },
+            { id: "message", label: "Farewell Message", x: 800, y: 700, font: "bold 40px Arial", color: "#1A1A1A", align: "center" },
+            { id: "dateTime", label: "Date & Time", x: 800, y: 850, font: "bold 40px Arial", color: "#1A1A1A", align: "center" }
+        ]
+    },
+    "fare_6": {
+        name: "Fare 6", src: "fare_6.png",
+        fields: [
+            { id: "honoreeName", label: "Honoree Name", x: 600, y: 500, font: "bold 70px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 600, y: 650, font: "bold 50px Arial", color: "#000000", align: "left" },
+            { id: "dateTime", label: "Date & Time", x: 600, y: 800, font: "bold 40px Arial", color: "#000000", align: "left" }
         ]
     }
 };
@@ -303,7 +259,7 @@ const ctx = canvas.getContext('2d');
 const inputContainer = document.getElementById('inputContainer');
 const templateSelector = document.getElementById('templateSelector');
 const fontSelector = document.getElementById('fontSelector');
-const colorSelector = document.getElementById('colorSelector'); // New Color Selector
+const colorSelector = document.getElementById('colorSelector');
 const modal = document.getElementById('generatorModal');
 
 let currentTemplateKey = null;
@@ -312,7 +268,6 @@ let generationMode = "manual";
 let pendingTemplateKey = null;
 let selectedGuestNames = []; 
 
-// Redraw on settings change
 fontSelector.addEventListener('change', () => drawCanvas());
 colorSelector.addEventListener('input', () => drawCanvas());
 
@@ -322,9 +277,6 @@ window.onclick = function(event) {
     if (event.target == document.getElementById('guestSelectionModal')) window.closeGuestSelectionModal();
 }
 
-// -----------------------------------------------------------------
-// WINDOW EXPORTS FOR HTML ONCLICK HANDLERS
-// -----------------------------------------------------------------
 window.openModal = function(categoryPrefix) {
     if(isDragging) return; 
     
@@ -333,8 +285,8 @@ window.openModal = function(categoryPrefix) {
         'bd_': 'Birthday Templates',
         'val_': 'Valentine Templates',
         'bs_': 'Baby Shower Templates',
-        'fare_': 'Farewell Templates',
-        'wed_': 'Wedding Templates'
+        'wed_': 'Wedding Templates',
+        'fare_': 'Farewell Templates'
     };
     document.getElementById('modalCategoryTitle').innerText = titleMap[categoryPrefix] || 'Select Template';
 
@@ -353,50 +305,33 @@ window.openModal = function(categoryPrefix) {
                 document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 
-                // ONLY ask for Guestlist mode if it's Birthday or Baby Shower
-                if (categoryPrefix === 'bd_' || categoryPrefix === 'bs_') {
-                    document.getElementById('modeSelectionModal').style.display = 'block';
-                } else {
-                    generationMode = "manual";
-                    renderTemplateInterface(pendingTemplateKey);
-                }
+                // Triggers Mode Selection instantly when clicking a template
+                document.getElementById('modeSelectionModal').style.display = 'block';
             };
             templateSelector.appendChild(btn);
         }
     }
     
+    // Auto-load first template visual without prompting mode yet
     if (firstKey) {
         pendingTemplateKey = firstKey;
-        setTimeout(() => {
-            if(templateSelector.firstChild) {
-                templateSelector.firstChild.classList.add('active');
-                
-                if (categoryPrefix === 'bd_' || categoryPrefix === 'bs_') {
-                    document.getElementById('modeSelectionModal').style.display = 'block';
-                } else {
-                    generationMode = "manual";
-                    renderTemplateInterface(pendingTemplateKey);
-                }
-            }
-        }, 10);
+        templateSelector.firstChild.classList.add('active');
+        
+        // Show default image preview
+        currentTemplateKey = firstKey;
+        currentImage.src = templates[firstKey].src;
+        currentImage.onload = () => {
+            canvas.width = currentImage.width;
+            canvas.height = currentImage.height;
+            drawCanvas();
+        };
     }
 }
 
-window.closeModal = function() {
-    modal.style.display = 'none';
-}
+window.closeModal = function() { modal.style.display = 'none'; }
+window.closeModeModal = function() { document.getElementById('modeSelectionModal').style.display = 'none'; }
+window.closeGuestSelectionModal = function() { document.getElementById('guestSelectionModal').style.display = 'none'; }
 
-window.closeModeModal = function() {
-    document.getElementById('modeSelectionModal').style.display = 'none';
-}
-
-window.closeGuestSelectionModal = function() {
-    document.getElementById('guestSelectionModal').style.display = 'none';
-}
-
-// -----------------------------------------------------------------
-// MODE SELECTION HANDLERS
-// -----------------------------------------------------------------
 document.getElementById('btnManualMode').addEventListener('click', () => {
     generationMode = "manual";
     window.closeModeModal();
@@ -410,6 +345,7 @@ document.getElementById('btnGuestlistMode').addEventListener('click', () => {
         alert("Please log in to your account first to access your saved guest list.");
         return;
     }
+    
     if (fetchedGuestList.length === 0) {
         alert("No guests found. Please add guests in the Dashboard -> Guest List Manager first.");
         return;
@@ -453,18 +389,13 @@ document.getElementById('btnProceedGuests').addEventListener('click', () => {
     renderTemplateInterface(pendingTemplateKey);
 });
 
-// -----------------------------------------------------------------
-// RENDERING & CANVAS DRAWING
-// -----------------------------------------------------------------
 function renderTemplateInterface(key) {
     currentTemplateKey = key;
     const config = templates[key];
 
     inputContainer.innerHTML = '';
     config.fields.forEach(field => {
-        if (generationMode === "guestlist" && field.id === "guestName") {
-            return; 
-        }
+        if (generationMode === "guestlist" && field.id === "guestName") return; 
 
         const group = document.createElement('div');
         group.className = 'form-group';
@@ -502,7 +433,7 @@ function drawCanvas(overrideGuestName = null) {
     if (!currentTemplateKey || !currentImage.src) return;
     const config = templates[currentTemplateKey];
     const selectedFontFamily = fontSelector.value;
-    const selectedColor = colorSelector.value; // Global Text Color
+    const selectedColor = colorSelector.value;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(currentImage, 0, 0);
@@ -538,18 +469,14 @@ function drawCanvas(overrideGuestName = null) {
                 ctx.font = `${fontPrefix}${currentFontSize}px ${selectedFontFamily}`;
             }
 
-            // Apply selected global color instead of field.color
-            ctx.fillStyle = selectedColor; 
+            // Fallback to config color if user didn't use the color picker yet
+            ctx.fillStyle = selectedColor || field.color;
             ctx.fillText(text, drawX, drawY);
         }
     });
 }
 
-// -----------------------------------------------------------------
-// DOWNLOAD & BULK GENERATION PROCESS
-// -----------------------------------------------------------------
 document.getElementById('downloadBtn').addEventListener('click', async () => {
-    
     if (generationMode === "manual") {
         const link = document.createElement('a');
         link.download = `${currentTemplateKey}_invitation.png`;

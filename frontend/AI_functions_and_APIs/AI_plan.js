@@ -19,7 +19,7 @@ themeBtn.addEventListener("click", () => {
     }
 });
 
-// Fixed: Added "document." and corrected "window.location.href"
+// Navigation Click Handlers
 document.getElementById("guestListBtn").addEventListener("click", () => {
     window.location.href = "AI_functions_and_APIs_child_files/guest_list_manager.html";
 });
@@ -35,8 +35,6 @@ document.getElementById("TaskMaster").addEventListener("click", () => {
 document.getElementById("SyncSphere").addEventListener("click", () => {
     window.location.href = "AI_functions_and_APIs_child_files/SyncSphere.html";
 });
-
-
 
 // Set up the Intersection Observer
 const observerOptions = {
@@ -60,4 +58,23 @@ const observer = new IntersectionObserver((entries, observer) => {
 const overviewBoxes = document.querySelectorAll('.overview-box');
 overviewBoxes.forEach(box => {
     observer.observe(box);
+});
+
+// --- Mobile Hamburger Menu Logic (Click-to-Close Fix) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    if (hamburgerBtn && navLinks) {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            navLinks.classList.toggle('active-menu');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navLinks.classList.contains('active-menu') && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active-menu');
+            }
+        });
+    }
 });

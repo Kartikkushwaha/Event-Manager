@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-// 1. ADD THE AUTH IMPORT
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -14,16 +13,17 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-// 2. INITIALIZE AUTH
 const auth = getAuth(app); 
 
 // --- Theme Logic ---
 const themeBtn = document.getElementById("themeToggle");
 const savedTheme = localStorage.getItem("theme");
+
 if(savedTheme==="dark"){
     document.body.classList.add("dark-mode");
     themeBtn.textContent="☀️";
 }
+
 themeBtn.addEventListener("click", ()=>{
     document.body.classList.toggle("dark-mode");
     if(document.body.classList.contains("dark-mode")){
@@ -66,7 +66,7 @@ function renderEvents(){
     container.innerHTML = "";
 
     if(workingEvents.length === 0){
-        container.innerHTML = "<h2>No Events Found</h2>";
+        container.innerHTML = "<h2 style='grid-column: 1/-1; text-align:left;'>No Events Found</h2>";
         return;
     }
 
@@ -78,8 +78,6 @@ function renderEvents(){
             }) 
             : "Not Specified";
 
-        // --- NEW LOGIC: Check for Wedding or Birthday ---
-        // We convert to lowercase just to make the check foolproof
         const typeLower = (event.eventType || "").toLowerCase();
         const categoryLower = (event.category || "").toLowerCase();
         
@@ -87,28 +85,27 @@ function renderEvents(){
         
         if (typeLower.includes("wedding") || typeLower.includes("birthday") || 
             categoryLower.includes("wedding") || categoryLower.includes("birthday")) {
-            
-            // Assuming 'specialPerson' is the key you save to Firebase. 
-            // If they haven't provided a name, it defaults to 'Not Specified'
             const personName = event.specialPerson || "Not Specified"; 
-            specialPersonHTML = `<p>Special person/Couples: ${personName}</p>`;
+            specialPersonHTML = `<p><strong>Special person/Couples:</strong> ${personName}</p>`;
         }
-        // ------------------------------------------------
 
         const card = document.createElement("div");
         card.className = "event-card";
         card.innerHTML = `
             <h2>${event.eventName}</h2>
-            <p>Type: ${event.eventType}</p>
-            <p>Religion: ${event.relationChoice}</p>
-            <p>State: ${event.state}</p>
-            <p>Event: ${event.category}</p>
-            ${specialPersonHTML} <p>Guests: ${event.guestCount}</p>
-            <p>Timeline: ${formattedDate}</p>
-            <p>Budget: ${event.budget}</p>
+            <p><strong>Type:</strong> ${event.eventType}</p>
+            <p><strong>Religion:</strong> ${event.relationChoice}</p>
+            <p><strong>State:</strong> ${event.state}</p>
+            <p><strong>Event:</strong> ${event.category}</p>
+            ${specialPersonHTML} 
+            <p><strong>Guests:</strong> ${event.guestCount}</p>
+            <p><strong>Timeline:</strong> ${formattedDate}</p>
+            <p><strong>Budget:</strong> ₹${event.budget}</p>
 
-            <button class="deleteBtn">Delete Event</button>
-            <button class="AIbutton">Plan Event with AI</button>
+            <div class="card-buttons">
+                <button class="deleteBtn">Delete Event</button>
+                <button class="AIbutton">Plan Event with AI</button>
+            </div>
         `;
 
         const deleteBtn = card.querySelector(".deleteBtn");
@@ -125,11 +122,11 @@ function renderEvents(){
             }
         });
 
-       AIbutton.addEventListener("click", () => {
-    // Save the specific event ID so the next pages know which event was clicked
-    localStorage.setItem("currentEventId", event.id);
-    window.location.href = "../AI_functions_and_APIs/AI_plan.html";
-});
+        AIbutton.addEventListener("click", () => {
+            localStorage.setItem("currentEventId", event.id);
+            window.location.href = "../AI_functions_and_APIs/AI_plan.html";
+        });
+        
         container.appendChild(card);
     });
 }
@@ -147,15 +144,24 @@ document.getElementById("crtMreEvent")?.addEventListener("click", ()=>{
     window.location.href = "dash_dashboard.html";
 });
 
-// 3. WAIT FOR AUTHENTICATION TO LOAD EVENTS
+// WAIT FOR AUTHENTICATION TO LOAD EVENTS
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        // User is logged in securely, safe to fetch data!
-        // We also ensure the local storage UID matches the actual secure user session
         localStorage.setItem("userUID", user.uid);
         loadEvents();
     } else {
-        // User is not logged in, redirect them or show an error
-        container.innerHTML = "<h2>Please log in to view your events.</h2>";
+        container.innerHTML = "<h2 style='text-align:left;'>Please log in to view your events.</h2>";
+    }
+});
+
+// --- Mobile Sidebar Expand Logic ---
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const actionSidebar = document.getElementById('actionSidebar');
+
+    if (sidebarToggle && actionSidebar) {
+        sidebarToggle.addEventListener('click', () => {
+            actionSidebar.classList.toggle('expanded');
+        });
     }
 });
