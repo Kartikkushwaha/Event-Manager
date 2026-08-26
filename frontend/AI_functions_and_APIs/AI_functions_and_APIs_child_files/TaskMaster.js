@@ -386,14 +386,21 @@ document.getElementById('recenter-btn')?.addEventListener('click', () => {
 });
 
 document.getElementById('map-style-btn')?.addEventListener('click', (e) => {
-  const btn = e.target;
+  const btn = e.currentTarget;
   if (isSatellite) {
     map.removeLayer(satLayer); map.removeLayer(hybridLabelsLayer); map.addLayer(streetLayer);
-    btn.innerHTML = "Satellite View"; btn.style.backgroundColor = "#343a40"; btn.style.borderColor = "#343a40"; isSatellite = false;
+    btn.innerHTML = '<i data-lucide="satellite" class="map-ctrl-icon"></i><span class="map-ctrl-text">Satellite View</span>';
+    btn.setAttribute('data-tooltip', 'Satellite View');
+    btn.style.backgroundColor = "#343a40"; btn.style.borderColor = "#343a40"; 
+    isSatellite = false;
   } else {
     map.removeLayer(streetLayer); map.addLayer(satLayer); map.addLayer(hybridLabelsLayer); 
-    btn.innerHTML = "Street View"; btn.style.backgroundColor = "#0d6efd"; btn.style.borderColor = "#0d6efd"; isSatellite = true;
+    btn.innerHTML = '<i data-lucide="map" class="map-ctrl-icon"></i><span class="map-ctrl-text">Street View</span>';
+    btn.setAttribute('data-tooltip', 'Street View');
+    btn.style.backgroundColor = "#0d6efd"; btn.style.borderColor = "#0d6efd"; 
+    isSatellite = true;
   }
+  if (window.lucide) { window.lucide.createIcons(); }
 });
 
 document.getElementById('radius-slider')?.addEventListener('input', (e) => {
@@ -416,7 +423,7 @@ function updateVisualCircle() {
 }
 
 document.querySelectorAll('.poi-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => searchTomTom(e.target.getAttribute('data-query'), e.target) );
+  btn.addEventListener('click', (e) => searchTomTom(e.target.getAttribute('data-query'), e.currentTarget) );
 });
 
 document.getElementById('manual-map-search-btn')?.addEventListener('click', () => {
@@ -814,11 +821,19 @@ const searchInput = document.getElementById('product-search-bar');
 const cartBtn = document.getElementById('my-cart-btn');
 const ordersBtn = document.getElementById('my-orders-btn');
 const wishlistBtn = document.getElementById('wishlist-btn');
-const allSuggestions = document.querySelectorAll('.suggestion-list li');
+
+const allSuggestions = document.querySelectorAll('.sugg-btn');
 
 if (searchBtn && searchInput) { searchBtn.onclick = () => { const query = searchInput.value.trim(); if (query) fetchProducts(query); }; }
 if (searchInput) { searchInput.onkeypress = (e) => { if (e.key === 'Enter') { const query = e.target.value.trim(); if (query) fetchProducts(query); } }; }
-allSuggestions.forEach(item => { item.onclick = (e) => { const query = e.target.textContent; if (searchInput) searchInput.value = query; fetchProducts(query); }; });
+
+allSuggestions.forEach(btn => { 
+    btn.onclick = (e) => { 
+        const query = btn.getAttribute('data-query'); 
+        if (searchInput) searchInput.value = query; 
+        fetchProducts(query); 
+    }; 
+});
 
 if (ordersBtn) ordersBtn.onclick = () => renderSavedList('orders', 'My Orders');
 if (cartBtn) cartBtn.onclick = () => renderSavedList('cart', 'Cart');
@@ -909,11 +924,16 @@ document.getElementById('shop-wishlist-modal')?.addEventListener('click', (e) =>
 });
 
 // =========================================
-// UI RESPONSIVE: HAMBURGER MENU & ICONS
+// UI RESPONSIVE: POP-UP SIDEBAR & MENUS
 // =========================================
 const hamburgerBtn = document.getElementById('hamburger-menu');
 const navTabsMenu = document.getElementById('nav-tabs-menu');
+const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
+const searchRightPanel = document.getElementById('search-right-panel');
+const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
 
+// 1. Top Navbar Hamburger (Mobile)
 if (hamburgerBtn && navTabsMenu) {
     hamburgerBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -933,6 +953,35 @@ if (hamburgerBtn && navTabsMenu) {
         }
     });
 }
+
+// 2. Off-canvas "Pop-up" Sidebar Drawer (Mobile)
+if (mobileSidebarToggle && searchRightPanel) {
+    mobileSidebarToggle.addEventListener('click', () => {
+        searchRightPanel.classList.add('active');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
+    });
+}
+if (closeSidebarBtn) {
+    closeSidebarBtn.addEventListener('click', () => {
+        if (searchRightPanel) searchRightPanel.classList.remove('active');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    });
+}
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', () => {
+        if (searchRightPanel) searchRightPanel.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+}
+
+// Auto-close Sidebar when clicking a panel option
+const panelBtns = document.querySelectorAll('.search-right-panel .panel-btn');
+panelBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (searchRightPanel) searchRightPanel.classList.remove('active');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    });
+});
 
 if (window.lucide) {
     window.lucide.createIcons();

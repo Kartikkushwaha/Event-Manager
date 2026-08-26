@@ -25,21 +25,14 @@
       </div>
     </div>
     
-    <!-- Navbar Right Side (Tabs + Hamburger + Theme) -->
     <div class="nav-right">
-      
-      <!-- Navigation Tabs (Visible on Desktop, Dropdown on Mobile) -->
       <div class="nav-tabs" id="nav-tabs-menu">
         <button id="tab-budget" class="nav-tab active">📊 Budget Monitor</button>
         <button id="tab-market" class="nav-tab">🛒 My Market</button>
       </div>
-
-      <!-- Hamburger Menu (Only visible on phone sizes) -->
       <button id="hamburger-menu" class="hamburger-btn" aria-label="Toggle Menu">
         <i data-lucide="menu" style="width: 24px; height: 24px;"></i>
       </button>
-      
-      <!-- Theme Button (Always visible) -->
       <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
     </div>
   </nav>
@@ -61,7 +54,6 @@
           </div>
           
           <div class="widgets-wrapper">
-            <!-- Active Event Details -->
             <div class="event-corner-widget">
               <h4>📍 Active Event Details</h4>
               <div class="widget-row"><span class="widget-label">Event Name:</span><span class="widget-value" id="corner-event-name">Loading...</span></div>
@@ -73,7 +65,6 @@
               <div class="widget-row"><span class="widget-label">Total Budget:</span><span class="widget-value highlight" id="corner-budget-val">Loading...</span></div>
             </div>
 
-            <!-- AI Suggestion Card -->
             <div class="suggestion-widget">
               <h4> AI Suggestion</h4>
               <div class="suggestion-content" id="ai-suggestion-box">
@@ -100,19 +91,15 @@
           </div>
         </div>
 
-        <!-- My Orders Section for Budget Monitor -->
         <hr class="widget-divider" style="margin: 2.5rem 0 1.5rem 0; border: none; height: 1px; background: var(--border-color);">
         <h3 style="margin-bottom: 1rem;">My Orders Tracker</h3>
         <div id="budget-orders-summary" style="padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
           <p style="color: var(--text-muted);">No items currently in your orders.</p>
         </div>
 
-        <!-- Final Budget Allocation Breakdown -->
         <hr class="widget-divider" style="margin: 2.5rem 0 1.5rem 0; border: none; height: 1px; background: var(--border-color);">
         <h3 style="margin-bottom: 1rem;">Budget Division</h3>
-        <div id="budget-allocation-container" class="budget-allocation-box">
-          <!-- JS populates mathematically -->
-        </div>
+        <div id="budget-allocation-container" class="budget-allocation-box"></div>
 
       </div>
     </section>
@@ -126,9 +113,15 @@
         </div>
         
         <div class="saas-nav">
-          <button class="saas-tab active" id="tab-explore"> Explore Market</button>
-          <button class="saas-tab" id="tab-search"> Search Products</button>
-          <button class="saas-tab" id="tab-notebook"> Notebook</button>
+          <button class="saas-tab active" id="tab-explore" data-tooltip="Explore Market">
+            <i data-lucide="map" class="tab-icon"></i><span class="tab-text">Explore Market</span>
+          </button>
+          <button class="saas-tab" id="tab-search" data-tooltip="Search Products">
+            <i data-lucide="shopping-bag" class="tab-icon"></i><span class="tab-text">Search Products</span>
+          </button>
+          <button class="saas-tab" id="tab-notebook" data-tooltip="Notebook">
+            <i data-lucide="book-open" class="tab-icon"></i><span class="tab-text">Notebook</span>
+          </button>
         </div>
 
         <!-- VIEW 1: Explore Market -->
@@ -139,31 +132,52 @@
             <label for="radius-slider">Search Radius: <span id="radius-val" style="font-size: 16px;">5</span> km</label>
             <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider">
           </div>
+          
+          <div id="route-panel"></div>
 
-          <!-- Manual Search Field -->
+          <div class="map-controls">
+            <button class="recenter-btn map-control-btn" id="recenter-btn" data-tooltip="Go to My Location">
+              <i data-lucide="navigation" class="map-ctrl-icon"></i><span class="map-ctrl-text">Go to My Location</span>
+            </button>
+            <button class="filter-btn map-control-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;" data-tooltip="Satellite View">
+              <i data-lucide="satellite" class="map-ctrl-icon"></i><span class="map-ctrl-text">Satellite View</span>
+            </button>
+            <button class="filter-btn map-control-btn" id="view-shop-wishlist-btn" style="background-color: #0e72e6; color: white; margin-left: auto;" data-tooltip="View Shop Wishlist">
+              <i data-lucide="heart" class="map-ctrl-icon"></i><span class="map-ctrl-text">View Shop Wishlist</span>
+            </button>
+          </div>
+
           <div style="margin-bottom: 16px; background: var(--card-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
             <label style="font-weight: 600; font-size: 14px; color: var(--text-main); white-space: nowrap;">What are you looking for?</label>
             <input type="text" id="manual-map-search" class="input-control" placeholder="e.g. Caterer, DJ, Photographer..." style="flex: 1; min-width: 200px;" />
             <button id="manual-map-search-btn" class="btn btn-primary" style="white-space: nowrap;">Search Map</button>
           </div>
 
-          <div id="route-panel"></div>
-
-          <div class="map-controls">
-            <button class="recenter-btn" id="recenter-btn">Go to My Location</button>
-            <button class="filter-btn" id="map-style-btn" style="background-color: #343a40; color: white; border-color: #343a40;">Satellite View</button>
-            <button class="filter-btn" id="view-shop-wishlist-btn" style="background-color: #0e72e6; color: white; margin-left: auto;">View Shop Wishlist</button>
-          </div>
-
-          <div class="filter-container" id="filter-container">
-            <button class="filter-btn poi-btn" data-query="Sweet shop">Sweet Shops</button>
-            <button class="filter-btn poi-btn" data-query="Florist flower">Flower Shops</button>
-            <button class="filter-btn poi-btn" data-query="Hotel banquet lawn restaurant">Hotels & Lawns</button>
-            <button class="filter-btn poi-btn" data-query="Park">Parks</button>
-            <button class="filter-btn poi-btn" data-query="Clothing mall">Cloth Shops/Malls</button>
-            <button class="filter-btn poi-btn" data-query="Supermarket grocery catering">Catering & Grocery</button>
-            <button class="filter-btn poi-btn" data-query="Jewelry store">Jewelry Stores</button>
-            <button class="filter-btn poi-btn" data-query="Gift shop">Gift Shops</button>
+          <div class="filter-container candy-box" id="filter-container">
+            <button class="filter-btn poi-btn" data-query="Sweet shop" data-tooltip="Sweet Shops">
+              <i data-lucide="candy" class="poi-icon"></i><span class="poi-text">Sweet Shops</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Florist flower" data-tooltip="Flower Shops">
+              <i data-lucide="flower-2" class="poi-icon"></i><span class="poi-text">Flower Shops</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Hotel banquet lawn restaurant" data-tooltip="Hotels & Lawns">
+              <i data-lucide="building-2" class="poi-icon"></i><span class="poi-text">Hotels & Lawns</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Park" data-tooltip="Parks">
+              <i data-lucide="tree-pine" class="poi-icon"></i><span class="poi-text">Parks</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Clothing mall" data-tooltip="Clothing & Malls">
+              <i data-lucide="shirt" class="poi-icon"></i><span class="poi-text">Cloth Shops</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Supermarket grocery catering" data-tooltip="Grocery & Catering">
+              <i data-lucide="shopping-basket" class="poi-icon"></i><span class="poi-text">Grocery</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Jewelry store" data-tooltip="Jewelry Stores">
+              <i data-lucide="gem" class="poi-icon"></i><span class="poi-text">Jewelry Stores</span>
+            </button>
+            <button class="filter-btn poi-btn" data-query="Gift shop" data-tooltip="Gift Shops">
+              <i data-lucide="gift" class="poi-icon"></i><span class="poi-text">Gift Shops</span>
+            </button>
           </div>
 
           <div id="map"></div>
@@ -173,21 +187,45 @@
 
         <!-- VIEW 2: Search Products -->
         <div id="view-search" class="market-sub-view">
+          
+          <!-- Pop-up trigger floating button (Mobile Only) -->
+          <button id="mobile-sidebar-toggle" class="mobile-sidebar-toggle" aria-label="Open Sidebar Options">
+            <i data-lucide="chevrons-right"></i>
+          </button>
+
           <div class="search-layout">
             
             <aside class="search-sidebar">
-              <h3>Common Suggestions</h3>
-              <ul class="suggestion-list" id="suggestion-list">
-                <li>Men wear for functions</li>
-                <li>Women wear for functions</li>
-                <li>Seating and Tables</li>
-                <li>Lighting</li>
-                <li>Sound and speakers</li>
-                <li>Sweets</li>
-                <li>Snacks</li>
-                <li>Cold drinks</li>
-                <li>Recycle Bags/Dustbins</li>
-              </ul>
+              <h3 class="search-sidebar-title">Common Suggestions</h3>
+              <div class="suggestion-list" id="suggestion-list">
+                <button class="sugg-btn" data-query="Men wear for functions" data-tooltip="Men's Wear">
+                  <i data-lucide="user" class="sugg-icon"></i><span class="sugg-text">Men wear for functions</span>
+                </button>
+                <button class="sugg-btn" data-query="Women wear for functions" data-tooltip="Women's Wear">
+                  <i data-lucide="user-round" class="sugg-icon"></i><span class="sugg-text">Women wear for functions</span>
+                </button>
+                <button class="sugg-btn" data-query="Seating and Tables" data-tooltip="Seating & Tables">
+                  <i data-lucide="sofa" class="sugg-icon"></i><span class="sugg-text">Seating and Tables</span>
+                </button>
+                <button class="sugg-btn" data-query="Lighting" data-tooltip="Lighting">
+                  <i data-lucide="lightbulb" class="sugg-icon"></i><span class="sugg-text">Lighting</span>
+                </button>
+                <button class="sugg-btn" data-query="Sound and speakers" data-tooltip="Sound & Speakers">
+                  <i data-lucide="speaker" class="sugg-icon"></i><span class="sugg-text">Sound and speakers</span>
+                </button>
+                <button class="sugg-btn" data-query="Sweets" data-tooltip="Sweets">
+                  <i data-lucide="candy" class="sugg-icon"></i><span class="sugg-text">Sweets</span>
+                </button>
+                <button class="sugg-btn" data-query="Snacks" data-tooltip="Snacks">
+                  <i data-lucide="cookie" class="sugg-icon"></i><span class="sugg-text">Snacks</span>
+                </button>
+                <button class="sugg-btn" data-query="Cold drinks" data-tooltip="Cold Drinks">
+                  <i data-lucide="cup-soda" class="sugg-icon"></i><span class="sugg-text">Cold drinks</span>
+                </button>
+                <button class="sugg-btn" data-query="Recycle Bags/Dustbins" data-tooltip="Recycle Bins">
+                  <i data-lucide="trash-2" class="sugg-icon"></i><span class="sugg-text">Recycle Bags/Dustbins</span>
+                </button>
+              </div>
             </aside>
 
             <main class="search-main">
@@ -196,11 +234,9 @@
                 <button id="product-search-btn">Search</button>
               </div>
               
-              <!-- Action Bar with Sort & Category Dropdown -->
-              <div id="search-action-bar" style="display: none; margin-bottom: 15px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <div id="search-action-bar" style="display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <button id="back-to-search-btn" class="btn btn-secondary">← Back to Search</button>
                 <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
-                  <!-- Category Filter -->
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <label for="category-filter-select" style="font-weight: 600; font-size: 0.9rem;">Category:</label>
                     <select id="category-filter-select" class="input-control" style="width: auto; padding: 6px 12px; font-size: 0.9rem; cursor: pointer;">
@@ -210,10 +246,10 @@
                   <div style="display: flex; align-items: center; gap: 8px;">
                     <label for="saved-sort-select" style="font-weight: 600; font-size: 0.9rem;">Sort By:</label>
                     <select id="saved-sort-select" class="input-control" style="width: auto; padding: 6px 12px; font-size: 0.9rem; cursor: pointer;">
-                      <option value="time-desc">Time (Newest to Oldest)</option>
-                      <option value="time-asc">Time (Oldest to Newest)</option>
-                      <option value="price-desc">Price (Highest to Lowest)</option>
-                      <option value="price-asc">Price (Lowest to Highest)</option>
+                      <option value="time-desc">Time (Newest)</option>
+                      <option value="time-asc">Time (Oldest)</option>
+                      <option value="price-desc">Price (High to Low)</option>
+                      <option value="price-asc">Price (Low to High)</option>
                     </select>
                   </div>
                 </div>
@@ -225,11 +261,40 @@
               <div class="product-results" id="saved-results" style="display: none;"></div>
             </main>
 
-            <!-- Right Panel -->
-            <aside class="search-right-panel">
-              <div class="panel-btn" id="my-orders-btn">📦 My Orders <span class="badge" id="orders-count">0</span></div>
-              <div class="panel-btn" id="my-cart-btn">🛒 My Cart <span class="badge" id="cart-count">0</span></div>
-              <div class="panel-btn" id="wishlist-btn">❤️ Wishlist <span class="badge" id="wishlist-count">0</span></div>
+            <!-- Overlay for Sidebar -->
+            <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+            <!-- Right Panel (Becomes Left Pop-up Sidebar Drawer on Mobile) -->
+            <aside class="search-right-panel" id="search-right-panel">
+              <div class="sidebar-header mobile-only">
+                <h3>My Options</h3>
+                <button id="close-sidebar-btn" class="close-sidebar-btn"><i data-lucide="x"></i></button>
+              </div>
+
+              <!-- Replaced Emojis with Lucide Icons -->
+              <button class="panel-btn" id="my-orders-btn">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="package" class="panel-icon"></i>
+                  <span class="panel-text">My Orders</span> 
+                </div>
+                <span class="badge" id="orders-count">0</span>
+              </button>
+
+              <button class="panel-btn" id="my-cart-btn">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="shopping-cart" class="panel-icon"></i>
+                  <span class="panel-text">My Cart</span> 
+                </div>
+                <span class="badge" id="cart-count">0</span>
+              </button>
+
+              <button class="panel-btn" id="wishlist-btn">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="heart" class="panel-icon"></i>
+                  <span class="panel-text">Wishlist</span> 
+                </div>
+                <span class="badge" id="wishlist-count">0</span>
+              </button>
             </aside>
             
           </div>
