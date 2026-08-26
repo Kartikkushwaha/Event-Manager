@@ -14,48 +14,41 @@
 </head>
 <body>
 
-   <header class="app-header">
-       <div class="header-left">
+   <header class="header-wrapper">
+       <nav class="navbar">
            <div class="logo">
-               <!-- EventEase Logo Start -->
-        <div class="eventease-glowing-logo">
-            <!-- SVG Symbol -->
-            <svg class="logo-symbol" viewBox="0 0 100 64" xmlns="http://www.w3.org/2000/svg">
-                <!-- Left Dark Circle -->
-                <circle cx="34" cy="32" r="20" stroke="grey" stroke-width="13" fill="none" />
-                <!-- Right Cyan Circle -->
-                <circle cx="64" cy="32" r="20" stroke="#00E5FF" stroke-width="13" fill="none" />
-                <!-- Center Overlap Lens (Blue) -->
-                <path d="M 49 15 Q 38 32 49 49 Q 60 32 49 15 Z" fill="#0088FF" />
-            </svg>
-
-            <!-- Logo Text -->
-            <div class="logo-text">
-                <span class="text-event">Event</span><span class="text-ease">Ease</span>
-            </div>
-        </div>
-        <!-- EventEase Logo End -->
+               <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
+                 <g transform="translate(25, 22)">
+                   <rect x="0" y="0" width="32" height="8" rx="4" style="fill: var(--text-primary); transition: fill 0.3s ease;"/>
+                   <rect x="0" y="14" width="20" height="8" rx="4" style="fill: var(--text-secondary); transition: fill 0.3s ease;"/>
+                   <rect x="0" y="28" width="32" height="8" rx="4" style="fill: var(--text-tertiary); transition: fill 0.3s ease;"/>
+                 </g>
+                 <text x="75" y="52" font-family="'Product Sans', Arial, sans-serif" font-size="32" font-weight="bold" style="fill: var(--text-primary); transition: fill 0.3s ease;" letter-spacing="-0.5">EventEase</text>
+               </svg>
            </div>
-       </div>
-
-      <div class="header-center">
-           <nav class="nav-links">
-               <a href="../../../../dashboard.html" class="nav-link">Dashboard</a>
-               <a href="../../../AI_plan.html" class="nav-link">AI Panel</a>
-               <a href="../../AI_invitation_generator.html" class="nav-link">AI Invitation Generator</a>
-           </nav>
-       </div>
-
-       <div class="header-right">
-           <button class="theme-toggle" id="themeToggleBtn">
-               <span class="icon">☀️</span>
-           </button>
-       </div>
+           
+           <div class="nav-links" id="navLinks">
+               <a href="../../../../dashboard.html" class="nav-item">Dashboard</a>
+               <a href="../../../AI_plan.html" class="nav-item">AI Panel</a>
+               <a href="../../AI_invitation_generator.html" class="nav-item">AI Invitation Generator</a>
+           </div>
+           
+           <div class="nav-controls">
+               <button id="themeToggleBtn" class="theme-btn" aria-label="Toggle Theme">🌙</button>
+               <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+                   <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                       <line x1="3" y1="12" x2="21" y2="12"></line>
+                       <line x1="3" y1="6" x2="21" y2="6"></line>
+                       <line x1="3" y1="18" x2="21" y2="18"></line>
+                   </svg>
+               </button>
+           </div>
+       </nav>
    </header>
 
    <div class="tools-bar">
        <button class="menu-btn" id="sidebarToggleBtn" >
-           <span style="font-size: 18px;">☰</span> 
+           <span class="menu-icon">🎨</span> 
            <span class="desktop-text">Tools & Elements</span>
        </button>
    </div>
@@ -66,20 +59,21 @@
        </div>
    </div>
 
-   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+   <div class="overlay" id="overlay"></div>
 
    <div class="sidebar" id="sidebar">
        <div class="sidebar-header">
            <h3>🎨 Creative Tools</h3>
-           <button class="close-btn" onclick="toggleSidebar()">×</button>
+           <button class="close-btn" id="sidebarCloseBtn">×</button>
        </div>
 
        <div class="controls-inner">
-           <div class="section" style="background: #e8f4f8; border-color: #b6d4fe;">
-               <button class="tool-btn btn-success" onclick="downloadCard()">Download Invitation</button>
+           <!-- Finalized Main Controls -->
+           <div class="section" style="background: var(--card-bg); border-color: var(--primary-color);">
+               <button class="tool-btn btn-success" onclick="downloadInvitation()">Download Invitation</button>
                <div class="btn-group">
-                   <button class="tool-btn btn-danger" onclick="deleteSelected()">🗑️ Delete Selected</button>
-                   <button class="tool-btn btn-danger" style="background-color: #ff9800;" onclick="clearCanvas()">⚠️ Clear All</button>
+                   <button class="tool-btn btn-danger" onclick="deleteSelectedObjects()">🗑️ Delete Selected</button>
+                   <button class="tool-btn btn-danger" style="background-color: #ff9800;" onclick="clearAllCanvas()">⚠️ Clear All</button>
                </div>
            </div>
 
@@ -88,7 +82,7 @@
                <label>Solid Color:</label>
                <input type="color" value="#ffffff" onchange="changeSolidBackground(this.value)">
                
-               <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
+               <hr class="divider">
                
                <label>Gradient Background:</label>
                <div class="flex-row">
@@ -102,7 +96,7 @@
                </select>
                <button class="tool-btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="applyCanvasGradient()">Apply Gradient Background</button>
                
-               <hr style="border: 0.5px solid #ddd; margin: 10px 0;">
+               <hr class="divider">
                <label>Upload BG Image:</label>
                <input type="file" accept="image/*" onchange="uploadBackgroundImage(event)">
            </div>
@@ -138,22 +132,21 @@
                    <option value="Arial">Arial (Default)</option>
                    <option value="'Poppins', sans-serif">Poppins (Modern)</option>
                    <option value="'Mukta', sans-serif">Mukta (Hindi/English)</option>
-                   <option value="'Oswald', sans-serif" class="f-oswald">Oswald (Bold/Clean)</option>
-                   <option value="'Pacifico', cursive" class="f-pacifico">Pacifico (Thick Brush)</option>
-                   <option value="'Lavishly Yours', cursive" class="f-lavishly">Lavishly Yours (Elegant)</option>
-                   <option value="'Imperial Script', cursive" class="f-imperial">Imperial Script (Formal)</option>
-                   <option value="'Birthstone', cursive" class="f-birthstone">Birthstone (Playful)</option>
-                   <option value="'Yesteryear', cursive" class="f-yesteryear">Yesteryear (Vintage)</option>
-                   <option value="'Sacramento', cursive" class="f-sacramento">Sacramento (Thin Script)</option>
-                   <option value="Times New Roman">Times New Roman</option>
+                   <option value="'Oswald', sans-serif">Oswald (Bold/Clean)</option>
+                   <option value="'Pacifico', cursive">Pacifico (Thick Brush)</option>
+                   <option value="'Lavishly Yours', cursive">Lavishly Yours (Elegant)</option>
+                   <option value="'Imperial Script', cursive">Imperial Script (Formal)</option>
+                   <option value="'Birthstone', cursive">Birthstone (Playful)</option>
+                   <option value="'Yesteryear', cursive">Yesteryear (Vintage)</option>
+                   <option value="'Sacramento', cursive">Sacramento (Thin Script)</option>
                </select>
 
-               <div style="background: #e8eaf6; padding: 10px; border-radius: 6px; margin-top: 10px;">
-                   <label style="margin-top: 0; color: #3f51b5;">Solid Text Color:</label>
+               <div class="text-color-box" style="margin-top: 10px;">
+                   <label class="text-color-label">Solid Text Color:</label>
                    <input type="color" value="#333333" id="textColorPicker" onchange="changeSolidTextColor(this.value)">
                </div>
                
-               <label style="color: #d4af37; font-weight: bold; margin-top: 10px;">✨ Premium Text Effects:</label>
+               <label class="premium-text-label" style="margin-top: 10px;">✨ Premium Text Effects:</label>
                <select id="metallicType" onchange="applyMetallicFont(this.value)">
                    <option value="">-- Apply Metallic Effect --</option>
                    <option value="gold">🏆 Gold Metallic</option>
@@ -181,27 +174,8 @@
                </div>
            </div>
 
-           <div class="section" style="background-color: #fff9e6; border-color: #ffe699;">
-               <div class="section-title" style="color: #d49a00; border-bottom-color: #d49a00;">5. Image Formatting</div>
-               <p style="font-size: 11px; color: #777; margin: 0 0 10px 0;">Select an image on the canvas to edit its borders and corners.</p>
-               
-               <label>Image Border Color:</label>
-               <input type="color" id="imgBorderColor" value="#000000" onchange="updateSelectedImage()">
-
-               <div class="flex-row">
-                   <div>
-                       <label>Border: <span id="imgBorderWidthVal">0</span>px</label>
-                       <input type="range" id="imgBorderWidth" min="0" max="20" value="0" oninput="updateSelectedImage()">
-                   </div>
-                   <div>
-                       <label>Radius: <span id="imgBorderRadiusVal">0</span>px</label>
-                       <input type="range" id="imgBorderRadius" min="0" max="150" value="0" oninput="updateSelectedImage()">
-                   </div>
-               </div>
-           </div>
-
            <div class="section">
-               <div class="section-title">6. Insert Shapes</div>
+               <div class="section-title">5. Insert Shapes</div>
                <label>Shape Color:</label>
                <input type="color" id="shapeColor" value="#007bff">
                

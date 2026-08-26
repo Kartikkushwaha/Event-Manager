@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, setDoc, query, where, orderBy, onSnapshot, serverTimestamp, doc, getDoc, updateDoc, arrayUnion, arrayRemove, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+import { getStorage, ref } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
@@ -20,7 +20,7 @@ const storage = getStorage(app);
 let currentUser = null;
 let activeCommunityId = null; 
 let unsubscribeMessages = null; 
-let unsubscribeCommunity = null; // NEW: Listener to detect if active community gets deleted
+let unsubscribeCommunity = null; 
 
 // Elements
 const commList = document.getElementById('community-list');
@@ -31,6 +31,7 @@ const chatInputArea = document.getElementById('chat-input-area');
 const messageInput = document.getElementById('message-input');
 const sidebar = document.getElementById('sidebar');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileActionsBtn = document.getElementById('mobile-actions-btn');
 const sidebarOverlay = document.getElementById('sidebar-overlay');
 
 // -----------------------------------------
@@ -44,6 +45,21 @@ mobileMenuBtn.addEventListener('click', () => {
 sidebarOverlay.addEventListener('click', () => {
     sidebar.classList.remove('open');
     sidebarOverlay.classList.remove('active');
+});
+
+// Mobile Actions Menu Toggle Logic
+if (mobileActionsBtn) {
+    mobileActionsBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chatActions.classList.toggle('show-menu');
+    });
+}
+
+// Close mobile actions menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && chatActions && !chatActions.contains(e.target) && !mobileActionsBtn.contains(e.target)) {
+        chatActions.classList.remove('show-menu');
+    }
 });
 
 window.closeModals = () => {
@@ -118,32 +134,36 @@ function selectCommunity(commId, commData) {
     chatTitle.innerText = commData.name;
     
     chatActions.classList.remove('hidden');
+    if (mobileActionsBtn) mobileActionsBtn.classList.remove('hidden');
     chatInputArea.classList.remove('hidden');
     
     document.querySelectorAll('.community-item').forEach(el => el.classList.remove('active'));
     event.currentTarget.classList.add('active');
 
     const deleteBtn = document.getElementById('btn-delete-comm');
+    const leaveBtn = document.getElementById('btn-leave-comm');
+    
+    // Admin checking logic
     if (currentUser.uid === commData.ownerId) {
         deleteBtn.classList.remove('hidden');
-        // Store the referral code directly on the button so we can delete it later
+        leaveBtn.classList.add('hidden'); // Admin cannot leave, must delete
         deleteBtn.dataset.referralCode = commData.referralCode; 
     } else {
         deleteBtn.classList.add('hidden');
+        leaveBtn.classList.remove('hidden'); // Members can leave
     }
     
     if (window.innerWidth <= 768) {
         sidebar.classList.remove('open');
         sidebarOverlay.classList.remove('active');
+        chatActions.classList.remove('show-menu'); 
     }
 
-    // --- NEW FEATURE 2: DETECT IF ADMIN DELETES THE ACTIVE COMMUNITY ---
     if (unsubscribeCommunity) unsubscribeCommunity();
     unsubscribeCommunity = onSnapshot(doc(db, "communities", commId), (docSnap) => {
         if (!docSnap.exists()) {
-            // The document has been deleted!
             alert("This community has been deleted by the admin.");
-            window.location.reload(); // Redirects/Refreshes the page exactly as requested
+            window.location.reload(); 
         }
     });
 
@@ -172,16 +192,6 @@ function renderMessage(docId, data) {
 
     let timeString = data.timestamp ? data.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
     let html = !isSentByMe ? `<div class="sender-name">${data.senderName}</div>` : '';
-    
-    if (data.attachmentUrl) {
-        if (data.attachmentType && data.attachmentType.startsWith('image/')) {
-            html += `<img src="${data.attachmentUrl}" alt="attachment" style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; display: block;">`;
-        } else if (data.attachmentType && data.attachmentType.startsWith('video/')) {
-            html += `<video src="${data.attachmentUrl}" controls style="max-width: 100%; border-radius: 8px; margin-bottom: 5px; display: block;"></video>`;
-        } else {
-            html += `<a href="${data.attachmentUrl}" target="_blank" style="color: #2563eb; text-decoration: underline; display: block; margin-bottom: 5px;">📎 ${data.attachmentName || 'Download File'}</a>`;
-        }
-    }
 
     if (data.text) { html += `<div>${data.text}</div>`; }
     html += `<span class="time">${timeString}</span>`;
@@ -201,7 +211,7 @@ function renderMessage(docId, data) {
 }
 
 // -----------------------------------------
-// 5. SEND MESSAGE & FILES
+// 5. SEND MESSAGE
 // -----------------------------------------
 document.getElementById('send-btn').addEventListener('click', async () => {
     if (!activeCommunityId) return;
@@ -221,44 +231,8 @@ messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') document.getElementById('send-btn').click(); 
 });
 
-document.getElementById('attach-btn').addEventListener('click', () => {
-    document.getElementById('file-attachment').click();
-});
-
-document.getElementById('file-attachment').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file || !activeCommunityId) return;
-
-    const attachBtn = document.getElementById('attach-btn');
-    attachBtn.innerText = '⏳';
-    attachBtn.disabled = true;
-
-    try {
-        const storageRef = ref(storage, `communities/${activeCommunityId}/attachments/${Date.now()}_${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        
-        await addDoc(collection(db, `communities/${activeCommunityId}/messages`), {
-            text: "",
-            attachmentUrl: downloadURL,
-            attachmentType: file.type, 
-            attachmentName: file.name,
-            uid: currentUser.uid,
-            senderName: currentUser.displayName || currentUser.email.split('@')[0],
-            timestamp: serverTimestamp()
-        });
-    } catch (error) {
-        console.error("Upload failed:", error);
-        alert("Failed to upload file. Check console for details.");
-    } finally {
-        e.target.value = '';
-        attachBtn.innerText = '📎';
-        attachBtn.disabled = false;
-    }
-});
-
 // -----------------------------------------
-// 6. CREATE COMMUNITY & CHECK UNIQUE REFERRAL
+// 6. CREATE COMMUNITY
 // -----------------------------------------
 document.getElementById('btn-create-community').addEventListener('click', () => {
     document.getElementById('modal-create').classList.remove('hidden');
@@ -270,14 +244,12 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
     if (!name || !code) return alert("Fill all fields.");
 
     try {
-        // --- NEW FEATURE 1: CHECK IF REFERRAL CODE ALREADY EXISTS ---
         const codeDoc = await getDoc(doc(db, "referral_codes", code));
         if (codeDoc.exists()) {
             alert("Already in use. Please create a unique referral code!");
-            return; // Stop the creation process
+            return; 
         }
 
-        // If it does not exist, proceed with creation
         const commRef = await addDoc(collection(db, "communities"), {
             name: name,
             ownerId: currentUser.uid,
@@ -288,7 +260,6 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
             createdAt: serverTimestamp()
         });
         
-        // Save the unique code to the database
         await setDoc(doc(db, "referral_codes", code), { is_used: false, community_id: commRef.id });
         
         closeModals();
@@ -298,7 +269,7 @@ document.getElementById('submit-create-comm').addEventListener('click', async ()
 });
 
 // -----------------------------------------
-// 7. JOIN COMMUNITY (REQUEST PENDING)
+// 7. JOIN COMMUNITY
 // -----------------------------------------
 document.getElementById('btn-join-community').addEventListener('click', () => {
     document.getElementById('modal-join').classList.remove('hidden');
@@ -327,10 +298,11 @@ document.getElementById('submit-join-comm').addEventListener('click', async () =
 });
 
 // -----------------------------------------
-// 8. ADD MEMBER DIRECTLY
+// 8. ADD MEMBER DIRECTLY (WITH DUPLICATION CHECK)
 // -----------------------------------------
 document.getElementById('btn-add-member').addEventListener('click', () => {
     document.getElementById('modal-add').classList.remove('hidden');
+    if(window.innerWidth <= 768) chatActions.classList.remove('show-menu');
 });
 
 document.getElementById('submit-add-member').addEventListener('click', async () => {
@@ -338,6 +310,20 @@ document.getElementById('submit-add-member').addEventListener('click', async () 
     if (!email) return alert("Enter an email address.");
 
     try {
+        // Fetch current community state to check for duplicates
+        const commDoc = await getDoc(doc(db, "communities", activeCommunityId));
+        if (commDoc.exists()) {
+            const data = commDoc.data();
+            // Check if already a member
+            if (data.members && data.members.includes(email)) {
+                return alert("This user is already a member of the community.");
+            }
+            // Check if request is already pending
+            if (data.pendingMembers && data.pendingMembers.includes(email)) {
+                return alert("This user already has a pending join request.");
+            }
+        }
+
         await updateDoc(doc(db, "communities", activeCommunityId), {
             members: arrayUnion(email)
         });
@@ -350,12 +336,14 @@ document.getElementById('submit-add-member').addEventListener('click', async () 
 });
 
 // -----------------------------------------
-// 9. MEMBER MANAGEMENT & APPROVALS
+// 9. MEMBER MANAGEMENT
 // -----------------------------------------
 document.getElementById('btn-view-members').addEventListener('click', async () => {
     const listContainer = document.getElementById('member-list-container');
     listContainer.innerHTML = 'Loading...';
     document.getElementById('modal-members').classList.remove('hidden');
+    
+    if(window.innerWidth <= 768) chatActions.classList.remove('show-menu');
 
     try {
         const commDoc = await getDoc(doc(db, "communities", activeCommunityId));
@@ -436,40 +424,34 @@ window.removeCommunityMember = async (memberEmail) => {
     }
 };
 
-// // -----------------------------------------
+// -----------------------------------------
 // 10. DELETE ENTIRE COMMUNITY (DEEP WIPE)
 // -----------------------------------------
 document.getElementById('btn-delete-comm').addEventListener('click', async (event) => {
+    if(window.innerWidth <= 768) chatActions.classList.remove('show-menu');
+    
     if (confirm("Are you sure you want to completely delete this community? This will permanently erase all messages and data for everyone.")) {
         
-        // Change button text to show it's processing, as deleting many messages takes a moment
         const deleteBtn = event.target;
         const originalText = deleteBtn.innerText;
         deleteBtn.innerText = "Deleting...";
         deleteBtn.disabled = true;
 
         try {
-            // 1. Delete the referral code from the database so it can be used again instantly
             const codeToDelete = deleteBtn.dataset.referralCode;
             if (codeToDelete) {
                 await deleteDoc(doc(db, "referral_codes", codeToDelete));
             }
 
-            // 2. Fetch and delete ALL messages in the subcollection to prevent "ghost" data
             const messagesQuery = query(collection(db, `communities/${activeCommunityId}/messages`));
             const querySnapshot = await getDocs(messagesQuery);
             
             const deletePromises = [];
             querySnapshot.forEach((docSnap) => {
-                // Add each message deletion task to an array
                 deletePromises.push(deleteDoc(doc(db, `communities/${activeCommunityId}/messages`, docSnap.id)));
             });
             
-            // Execute all message deletions concurrently
             await Promise.all(deletePromises);
-
-            // 3. Finally, delete the parent community document itself
-            // (This will trigger the onSnapshot listener for connected users and kick them to the main page)
             await deleteDoc(doc(db, "communities", activeCommunityId));
             
         } catch (error) {
@@ -482,30 +464,30 @@ document.getElementById('btn-delete-comm').addEventListener('click', async (even
 });
 
 // -----------------------------------------
-// 11. LEAVE COMMUNITY LOGIC (SELF-REMOVE)
+// 11. LEAVE COMMUNITY
 // -----------------------------------------
 const leaveCommBtn = document.getElementById('btn-leave-comm');
 if (leaveCommBtn) {
     leaveCommBtn.addEventListener('click', async () => {
         if (!activeCommunityId) return;
+        if(window.innerWidth <= 768) chatActions.classList.remove('show-menu');
 
         if (confirm("Are you sure you want to leave this community? You will need to request access again if you wish to rejoin.")) {
             try {
-                // 1. Remove the current user's email from the members array
                 await updateDoc(doc(db, "communities", activeCommunityId), {
                     members: arrayRemove(currentUser.email)
                 });
 
                 alert("You have left the community.");
 
-                // 2. Disconnect active listeners to prevent permission errors
                 if (unsubscribeMessages) unsubscribeMessages();
                 if (unsubscribeCommunity) unsubscribeCommunity();
 
-                // 3. Reset the UI back to an unselected state
                 activeCommunityId = null;
                 chatTitle.innerText = "Select a Community";
                 chatActions.classList.add('hidden');
+                chatActions.classList.remove('show-menu');
+                if (mobileActionsBtn) mobileActionsBtn.classList.add('hidden');
                 chatInputArea.classList.add('hidden');
                 chatMessages.innerHTML = '';
 

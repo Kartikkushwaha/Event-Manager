@@ -275,7 +275,6 @@ if (suggestionBtn) {
         if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #3b82f6;">Generating suggestions for: <em>"${prompt}"</em>...</p>`;
         
         try {
-            // FIXED URL
             const response = await fetch(`${BACKEND_URL}/suggest`, { 
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt: prompt })
             });
@@ -609,7 +608,6 @@ async function fetchProducts(query) {
 
   productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #3b82f6;"><h3 style="margin-bottom: 10px;">⏳ Searching for "${query}"...</h3><p style="color: var(--text-muted);">Scanning Amazon, Flipkart, and other stores...</p></div>`;
   try {
-    // FIXED URL
     const response = await fetch(`${BACKEND_URL}/products/search?query=${encodeURIComponent(query)}`);
     const data = await response.json();
     productResults.innerHTML = ''; 
@@ -909,3 +907,33 @@ document.getElementById('shop-wishlist-modal')?.addEventListener('click', (e) =>
     e.target.classList.remove('active');
   }
 });
+
+// =========================================
+// UI RESPONSIVE: HAMBURGER MENU & ICONS
+// =========================================
+const hamburgerBtn = document.getElementById('hamburger-menu');
+const navTabsMenu = document.getElementById('nav-tabs-menu');
+
+if (hamburgerBtn && navTabsMenu) {
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navTabsMenu.classList.toggle('active-menu');
+    });
+
+    const navTabs = navTabsMenu.querySelectorAll('.nav-tab');
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            navTabsMenu.classList.remove('active-menu');
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!hamburgerBtn.contains(event.target) && !navTabsMenu.contains(event.target)) {
+            navTabsMenu.classList.remove('active-menu');
+        }
+    });
+}
+
+if (window.lucide) {
+    window.lucide.createIcons();
+}

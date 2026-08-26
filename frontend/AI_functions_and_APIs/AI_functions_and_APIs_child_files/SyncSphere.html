@@ -48,6 +48,7 @@
         .chat-window { flex: 1; display: flex; flex-direction: column; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-color: #efeae2; height: 100%; }
         .chat-header { background-color: #f0f2f5; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e1e1e1; }
         .chat-header-left { display: flex; align-items: center; }
+        .chat-header-right { position: relative; display: flex; align-items: center; }
         .chat-header-title { margin: 0; font-size: 16px; color: #111b21; display: inline-block; }
         .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
         
@@ -65,11 +66,6 @@
 
         /* Input Area */
         .chat-input-container { background-color: #f0f2f5; padding: 10px 15px; display: flex; align-items: center; }
-        
-        /* Attachment Button */
-        .attach-btn { background: transparent; border: none; font-size: 22px; cursor: pointer; color: #54656f; padding: 5px 10px 5px 0; display: flex; align-items: center; justify-content: center; }
-        .attach-btn:hover { color: #111b21; }
-
         .chat-input { flex: 1; padding: 12px 15px; border: none; border-radius: 8px; font-size: 15px; outline: none; }
         .send-btn { background-color: #2563eb; color: white; border: none; padding: 12px 20px; margin-left: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex-shrink: 0; }
         .send-btn:hover { background-color: #1d4ed8; }
@@ -79,14 +75,10 @@
         .action-btn:hover { background-color: #059669; }
 
         .action-btn.outline { background-color: transparent; color: #2563eb; border: 1px solid #2563eb; }
-
         .action-btn.outline:hover { background-color: #eff6ff; }
-        #btn-leave-comm{
-             background-color: transparent; color: #ed8787; border: 1px solid #ed8787;
-            border-radius: 6px; }
-        #btn-leave-comm:hover{
-                        background-color: rgb(244, 239, 239);
-            }
+        
+        #btn-leave-comm { background-color: transparent; color: #ed8787; border: 1px solid #ed8787; border-radius: 6px; }
+        #btn-leave-comm:hover { background-color: rgb(244, 239, 239); }
         .btn-danger { color: #dc2626 !important; border-color: #dc2626 !important; }
         .btn-danger:hover { background-color: #fef2f2 !important; }
         .admin-badge { color: #dc2626; font-weight: bold; font-size: 10px; margin-left: 5px; vertical-align: super; }
@@ -119,7 +111,9 @@
         .hidden { display: none !important; }
 
         /* Mobile specific elements */
-        .mobile-menu-btn { display: none; background: transparent; border: none; font-size: 24px; cursor: pointer; margin-right: 15px; color: #41525d; padding: 0; }
+        .mobile-menu-btn { display: none; background: transparent; border: none; font-size: 20px; font-weight: bold; cursor: pointer; margin-right: 15px; color: #41525d; padding: 0; }
+        .mobile-actions-btn { display: none; background: transparent; border: none; font-size: 24px; cursor: pointer; color: #41525d; padding: 0; margin-left: 10px; }
+        
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 900; display: none; }
         .sidebar-overlay.active { display: block; }
 
@@ -130,9 +124,28 @@
             .sidebar.open { left: 0; }
             .chat-window { width: 100%; }
             .message { max-width: 85%; font-size: 13.5px; }
-            .action-btn { padding: 5px 8px; font-size: 11px; }
             .chat-header-title { font-size: 15px; }
             .delete-msg-btn { padding: 4px 8px; font-size: 12px; }
+
+            /* Mobile Actions Menu Dropdown */
+            .mobile-actions-btn { display: inline-block; }
+            .header-actions {
+                display: none;
+                position: absolute;
+                top: 45px;
+                right: 0;
+                background: #fff;
+                flex-direction: column;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border-radius: 8px;
+                padding: 10px;
+                z-index: 1000;
+                min-width: 160px;
+                border: 1px solid #e1e1e1;
+            }
+            .header-actions.show-menu { display: flex !important; }
+            .header-actions button { width: 100%; margin-bottom: 8px; justify-content: center; }
+            .header-actions button:last-child { margin-bottom: 0; }
         }
 
         /* --- PREMIUM DARK MODE OVERRIDES --- */
@@ -146,7 +159,8 @@
         
         body.dark-mode .sidebar-header h3, 
         body.dark-mode .chat-header-title { color: #e9edef; }
-        body.dark-mode .mobile-menu-btn { color: #e9edef; }
+        body.dark-mode .mobile-menu-btn,
+        body.dark-mode .mobile-actions-btn { color: #e9edef; }
         
         body.dark-mode .contact-list { background: #111b21; }
         body.dark-mode .community-item { border-bottom: 1px solid #202c33; }
@@ -164,8 +178,6 @@
         
         body.dark-mode .chat-input { background-color: #2a3942; color: #e9edef; }
         body.dark-mode .chat-input::placeholder { color: #8696a0; }
-        body.dark-mode .attach-btn { color: #8696a0; }
-        body.dark-mode .attach-btn:hover { color: #e9edef; }
         
         body.dark-mode .modal-content { background: #202c33; border: 1px solid #313d45; }
         body.dark-mode .modal-header { border-bottom-color: #313d45; }
@@ -175,6 +187,11 @@
         body.dark-mode .member-list-item { border-bottom-color: #313d45; color: #e9edef; }
         body.dark-mode .pending-heading { color: #fbbf24; border-bottom-color: #313d45; }
         body.dark-mode .pending-item { background-color: #2a3942; }
+        
+        /* Dark mode overrides for mobile actions menu */
+        @media (max-width: 768px) {
+            body.dark-mode .header-actions { background: #202c33; border-color: #313d45; }
+        }
     </style>
 </head>
 <body>
@@ -197,14 +214,17 @@
         <div class="chat-window">
             <div class="chat-header">
                 <div class="chat-header-left">
-                    <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn">&gt;&gt;</button>
                     <h2 id="chat-title" class="chat-header-title">Select a Community</h2>
                 </div>
-                <div class="header-actions hidden" id="chat-actions">
-                    <button id="btn-leave-comm" class="action-btn">Leave Community</button>
-                    <button class="action-btn outline btn-danger hidden" id="btn-delete-comm">Delete</button>
-                    <button class="action-btn outline" id="btn-view-members">Members</button>
-                    <button class="action-btn" id="btn-add-member">+ User</button>
+                <div class="chat-header-right">
+                    <button class="mobile-actions-btn hidden" id="mobile-actions-btn">&#9776;</button>
+                    <div class="header-actions hidden" id="chat-actions">
+                        <button id="btn-leave-comm" class="action-btn">Leave Community</button>
+                        <button class="action-btn outline btn-danger hidden" id="btn-delete-comm">Delete</button>
+                        <button class="action-btn outline" id="btn-view-members">Members</button>
+                        <button class="action-btn" id="btn-add-member">+ User</button>
+                    </div>
                 </div>
             </div>
             
@@ -215,8 +235,6 @@
             </div>
 
             <div class="chat-input-container hidden" id="chat-input-area">
-                <input type="file" id="file-attachment" style="display: none;" accept="image/*,video/*,audio/*,application/*">
-                <button class="attach-btn" id="attach-btn" title="Attach a file">📎</button>
                 <input type="text" id="message-input" class="chat-input" placeholder="Type a message..." autocomplete="off">
                 <button id="send-btn" class="send-btn">Send</button>
             </div>

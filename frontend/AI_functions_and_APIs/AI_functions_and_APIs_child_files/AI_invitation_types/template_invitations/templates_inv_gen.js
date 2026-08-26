@@ -122,13 +122,39 @@ slider.addEventListener('mousemove', (e) => {
   }
 });
 
+// INJECT STYLES FOR LOADER ANIMATION
+const loaderStyle = document.createElement('style');
+loaderStyle.innerHTML = `
+    @keyframes spinRing {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .canvas-loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 45px;
+        height: 45px;
+        border: 4px solid var(--border-color);
+        border-top: 4px solid var(--accent-color);
+        border-radius: 50%;
+        animation: spinRing 0.8s linear infinite;
+        display: none;
+        z-index: 10;
+    }
+    .canvas-fade {
+        transition: opacity 0.3s ease;
+    }
+`;
+document.head.appendChild(loaderStyle);
+
 // ==========================================
 // 3. FULL TEMPLATE DATABASE
 // ==========================================
 const templates = {
     // --- BIRTHDAY ---
     "bd_1": {
-        name: "BD 1", src: "bd_1.png", 
+        name: "Template 1", src: "bd_1.png", 
         fields: [
             { id: "birthName", label: "Birthday Person", x: 795, y: 735, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 802, y: 1004, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -139,7 +165,7 @@ const templates = {
         ]
     },
     "bd_2": {
-        name: "BD 2", src: "bd_2.png",
+        name: "Template 2", src: "bd_2.png",
         fields: [
             { id: "birthName", label: "Birthday Person", x: 993, y: 645, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 772, y: 772, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -150,7 +176,7 @@ const templates = {
         ]
     },
     "bd_9": {
-        name: "BD 9", src: "bd_9.png",
+        name: "Template 3", src: "bd_9.png",
         fields: [
             { id: "birthName", label: "Birthday Person", x: 795, y: 881, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 795, y: 1110, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -163,7 +189,7 @@ const templates = {
     
     // --- BABY SHOWER ---
     "bs_1": {
-        name: "BS 1", src: "bs_1.png", 
+        name: "Template 1", src: "bs_1.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 943, y: 1100, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 811, y: 1244, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -174,7 +200,7 @@ const templates = {
         ]
     },
     "bs_3": {
-        name: "BS 3", src: "bs_3.png", 
+        name: "Template 2", src: "bs_3.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 876, y: 604, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 736, y: 695, font: "bold 60px Arial", color: "#000000", align: "center" },
@@ -185,7 +211,7 @@ const templates = {
         ]
     },
     "bs_12": {
-        name: "BS 12", src: "bs_12.png", 
+        name: "Template 3", src: "bs_12.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 905, y: 494, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 796, y: 574, font: "bold 60px Arial", color: "#000000", align: "center" },
@@ -198,7 +224,7 @@ const templates = {
 
     // --- FAREWELL ---
     "fare_1": {
-        name: "Fare 1", src: "fare_1.jpeg",
+        name: "Template 1", src: "fare_1.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 440, y: 573, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 505, y: 692, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -210,7 +236,7 @@ const templates = {
         ]
     },
     "fare_2": {
-        name: "Fare 2", src: "fare_2.jpeg",
+        name: "Template 2", src: "fare_2.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 364, y: 521, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 411, y: 618, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -222,7 +248,7 @@ const templates = {
         ]
     },
     "fare_3": {
-        name: "Fare 3", src: "fare_3.jpeg",
+        name: "Template 3", src: "fare_3.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 408, y: 582, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 468, y: 691, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -234,7 +260,7 @@ const templates = {
         ]
     },
     "fare_4": {
-        name: "Fare 4", src: "fare_4.jpeg",
+        name: "Template 4", src: "fare_4.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 416, y: 585, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 469, y: 667, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -249,7 +275,7 @@ const templates = {
         ]
     },
     "fare_5": {
-        name: "Fare 5", src: "fare_5.jpeg",
+        name: "Template 5", src: "fare_5.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 392, y: 559, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 437, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -264,7 +290,7 @@ const templates = {
         ]
     },
     "fare_6": {
-        name: "Fare 6", src: "fare_6.jpeg",
+        name: "Template 6", src: "fare_6.jpeg",
         fields: [
             { id: "f1", label: "Detail 1", x: 425, y: 551, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 465, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -281,7 +307,7 @@ const templates = {
 
     // --- VALENTINE ---
     "val_3": {
-        name: "Val 3", src: "val_3.png", 
+        name: "Template 1", src: "val_3.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 837, y: 797, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 713, y: 928, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -296,7 +322,7 @@ const templates = {
         ]
     },
     "val_4": {
-        name: "Val 4", src: "val_4.png", 
+        name: "Template 2", src: "val_4.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 814, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 718, y: 984, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -311,7 +337,7 @@ const templates = {
         ]
     },
     "val_12": {
-        name: "Val 12", src: "val_12.png", 
+        name: "Template 3", src: "val_12.png", 
         fields: [
             { id: "f1", label: "Detail 1", x: 786, y: 812, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 786, y: 960, font: "bold 60px Arial", color: "#000000", align: "center" },
@@ -328,10 +354,10 @@ const templates = {
 
     // --- WEDDING ---
     "wed_1": {
-        name: "Wed 1", src: "wed_1.png",
+        name: "Template 1", src: "wed_1.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 447, y: 373, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 469, y: 509, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f1", label: "Detail 1", x: 447, y: 373, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 469, y: 509, font: "bold 55px Arial", color: "#000000", align: "center" },
             { id: "f3", label: "Detail 3", x: 267, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f4", label: "Detail 4", x: 445, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f5", label: "Detail 5", x: 626, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
@@ -345,10 +371,10 @@ const templates = {
         ]
     },
     "wed_2": {
-        name: "Wed 2", src: "wed_2.png",
+        name: "Template 2", src: "wed_2.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 412, y: 347, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 445, y: 515, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f1", label: "Detail 1", x: 412, y: 347, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 445, y: 515, font: "bold 55px Arial", color: "#000000", align: "center" },
             { id: "f3", label: "Detail 3", x: 234, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f4", label: "Detail 4", x: 433, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f5", label: "Detail 5", x: 644, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
@@ -361,10 +387,10 @@ const templates = {
         ]
     },
     "wed_3": {
-        name: "Wed 3", src: "wed_3.png",
+        name: "Template 3", src: "wed_3.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 436, y: 308, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 442, y: 490, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f1", label: "Detail 1", x: 436, y: 308, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 442, y: 490, font: "bold 55px Arial", color: "#000000", align: "center" },
             { id: "f3", label: "Detail 3", x: 215, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f4", label: "Detail 4", x: 417, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f5", label: "Detail 5", x: 641, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
@@ -406,6 +432,8 @@ window.onclick = function(event) {
 window.openModal = function(categoryPrefix) {
     if(isDragging) return; 
     
+    globalFormData = {}; // CLEAR data when opening a new category
+    
     modal.style.display = 'block';
     const titleMap = {
         'bd_': 'Birthday Templates',
@@ -427,6 +455,11 @@ window.openModal = function(categoryPrefix) {
             btn.innerText = templates[key].name;
             
             btn.onclick = (e) => {
+                // Clear input data if switching to a NEW template
+                if (currentTemplateKey !== key) {
+                    globalFormData = {}; 
+                }
+                
                 document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 renderTemplateInterface(key);
@@ -479,35 +512,71 @@ function renderTemplateInterface(key) {
         fontContainer.style.display = 'block';
     }
 
-    // --- INLINE MODE TOGGLE ---
+    // --- INLINE MODE TOGGLE OR COPIES INPUT ---
     const modeToggleContainer = document.createElement('div');
-    modeToggleContainer.style.display = 'flex';
-    modeToggleContainer.style.gap = '10px';
     modeToggleContainer.style.marginBottom = '20px';
     modeToggleContainer.style.paddingBottom = '15px';
     modeToggleContainer.style.borderBottom = '1px solid var(--border-color)';
 
-    const manBtn = document.createElement('button');
-    manBtn.innerText = 'Manual Entry';
-    manBtn.className = generationMode === 'manual' ? 'action-btn primary' : 'action-btn ghost';
-    manBtn.style.flex = '1';
-    manBtn.style.padding = '10px';
-    manBtn.style.fontSize = '13px';
-    manBtn.onclick = () => {
-        generationMode = 'manual';
-        renderTemplateInterface(key);
-    };
+    if (key.startsWith('wed_') || key.startsWith('val_')) {
+        generationMode = 'manual'; // Force manual logic for inputs
+        modeToggleContainer.style.display = 'flex';
+        modeToggleContainer.style.flexDirection = 'column';
+        modeToggleContainer.style.gap = '6px';
 
-    const guestBtn = document.createElement('button');
-    guestBtn.innerText = 'From Guestlist';
-    guestBtn.className = generationMode === 'guestlist' ? 'action-btn primary' : 'action-btn ghost';
-    guestBtn.style.flex = '1';
-    guestBtn.style.padding = '10px';
-    guestBtn.style.fontSize = '13px';
-    guestBtn.onclick = triggerGuestSelection;
+        const copiesLabel = document.createElement('label');
+        copiesLabel.innerText = 'Number of Cards to Generate';
+        copiesLabel.style.fontSize = '13px';
+        copiesLabel.style.fontWeight = '600';
+        copiesLabel.style.color = 'var(--text-muted)';
+        
+        const copiesInput = document.createElement('input');
+        copiesInput.type = 'number';
+        copiesInput.id = 'copiesInput';
+        copiesInput.value = '1';
+        copiesInput.min = '1';
+        copiesInput.style.padding = '12px';
+        copiesInput.style.background = 'var(--bg-color-1)';
+        copiesInput.style.color = 'var(--text-main)';
+        copiesInput.style.border = '1px solid var(--border-color)';
+        copiesInput.style.borderRadius = '8px';
+        copiesInput.style.outline = 'none';
 
-    modeToggleContainer.appendChild(manBtn);
-    modeToggleContainer.appendChild(guestBtn);
+        copiesInput.addEventListener('input', () => {
+            const dlBtn = document.getElementById('downloadBtn');
+            const val = parseInt(copiesInput.value) || 1;
+            dlBtn.innerText = val > 1 ? `Generate ${val} Cards` : `Download Image`;
+        });
+
+        modeToggleContainer.appendChild(copiesLabel);
+        modeToggleContainer.appendChild(copiesInput);
+    } else {
+        modeToggleContainer.style.display = 'flex';
+        modeToggleContainer.style.gap = '10px';
+
+        const manBtn = document.createElement('button');
+        manBtn.innerText = 'Manual Entry';
+        manBtn.className = generationMode === 'manual' ? 'action-btn primary' : 'action-btn ghost';
+        manBtn.style.flex = '1';
+        manBtn.style.padding = '10px';
+        manBtn.style.fontSize = '13px';
+        manBtn.onclick = () => {
+            generationMode = 'manual';
+            renderTemplateInterface(key);
+        };
+
+        const guestBtn = document.createElement('button');
+        guestBtn.innerText = 'From Guestlist';
+        guestBtn.className = generationMode === 'guestlist' ? 'action-btn primary' : 'action-btn ghost';
+        guestBtn.style.flex = '1';
+        guestBtn.style.padding = '10px';
+        guestBtn.style.fontSize = '13px';
+        guestBtn.onclick = triggerGuestSelection;
+
+        modeToggleContainer.appendChild(manBtn);
+        modeToggleContainer.appendChild(guestBtn);
+    }
+    
     inputContainer.appendChild(modeToggleContainer);
 
     // --- DYNAMIC INPUTS ---
@@ -542,6 +611,7 @@ function renderTemplateInterface(key) {
         input.id = field.id;
         input.placeholder = `Enter ${field.label}`;
         
+        // Restore from Global FormData
         if (globalFormData[field.id]) {
             input.value = globalFormData[field.id];
         }
@@ -559,14 +629,40 @@ function renderTemplateInterface(key) {
     const dlBtn = document.getElementById('downloadBtn');
     if (generationMode === "guestlist") {
         dlBtn.innerText = `Generate Invitations (${selectedGuestNames.length})`;
+    } else if (key.startsWith('wed_') || key.startsWith('val_')) {
+        const copiesVal = document.getElementById('copiesInput') ? (parseInt(document.getElementById('copiesInput').value) || 1) : 1;
+        dlBtn.innerText = copiesVal > 1 ? `Generate ${copiesVal} Cards` : `Download Image`;
     } else {
         dlBtn.innerText = `Download Image`;
     }
 
+    // --- ROTATING RING ANIMATION & CANVAS LOAD ---
+    let canvasArea = document.querySelector('.canvas-area');
+    let loader = document.getElementById('canvasLoader');
+    
+    // Inject the loader element if it doesn't exist
+    if (!loader && canvasArea) {
+        loader = document.createElement('div');
+        loader.id = 'canvasLoader';
+        loader.className = 'canvas-loader';
+        canvasArea.appendChild(loader);
+        canvas.classList.add('canvas-fade');
+    }
+
+    // Trigger Loading State
+    if (loader) loader.style.display = 'block';
+    canvas.style.opacity = '0';
+
     currentImage.onload = () => {
-        canvas.width = currentImage.width;
-        canvas.height = currentImage.height;
-        drawCanvas();
+        // Small delay to ensure the animation is visible during transition
+        setTimeout(() => {
+            canvas.width = currentImage.width;
+            canvas.height = currentImage.height;
+            drawCanvas();
+            
+            if (loader) loader.style.display = 'none';
+            canvas.style.opacity = '1';
+        }, 300);
     };
     currentImage.src = config.src;
 }
@@ -654,7 +750,7 @@ function drawCanvas(overrideGuestName = null) {
             // Enforce Strict Size Rule for Wedding Cards
             let currentFontSize;
             if (currentTemplateKey.startsWith('wed_')) {
-                currentFontSize = (index < 2) ? 60 : 45;
+                currentFontSize = (index < 2) ? 55 : 35;
             } else {
                 currentFontSize = baseFontSize;
             }
@@ -677,7 +773,11 @@ function drawCanvas(overrideGuestName = null) {
 }
 
 document.getElementById('downloadBtn').addEventListener('click', async () => {
-    if (generationMode === "manual") {
+    const copiesInput = document.getElementById('copiesInput');
+    const numCopies = copiesInput ? (parseInt(copiesInput.value) || 1) : 1;
+
+    // Single Manual Download
+    if (generationMode === "manual" && numCopies <= 1) {
         const link = document.createElement('a');
         link.download = `${currentTemplateKey}_invitation.png`;
         link.href = canvas.toDataURL('image/png');
@@ -690,19 +790,36 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
     dlBtn.innerText = "Generating...";
     dlBtn.disabled = true;
 
-    for (let i = 0; i < selectedGuestNames.length; i++) {
-        const currentName = selectedGuestNames[i];
-        
-        drawCanvas(currentName);
-        await new Promise(r => setTimeout(r, 100)); 
+    // Batch Manual Download (Weddings & Valentines)
+    if (generationMode === "manual" && numCopies > 1) {
+        for (let i = 1; i <= numCopies; i++) {
+            drawCanvas();
+            await new Promise(r => setTimeout(r, 100)); 
 
-        const link = document.createElement('a');
-        const safeFileName = currentName.replace(/[^a-z0-9]/gi, '_').toLowerCase(); 
-        link.download = `${currentTemplateKey}_for_${safeFileName}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+            const link = document.createElement('a');
+            link.download = `${currentTemplateKey}_copy_${i}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
 
-        await new Promise(r => setTimeout(r, 500)); 
+            await new Promise(r => setTimeout(r, 500)); 
+        }
+    } 
+    // Batch Guestlist Download
+    else if (generationMode === "guestlist") {
+        for (let i = 0; i < selectedGuestNames.length; i++) {
+            const currentName = selectedGuestNames[i];
+            
+            drawCanvas(currentName);
+            await new Promise(r => setTimeout(r, 100)); 
+
+            const link = document.createElement('a');
+            const safeFileName = currentName.replace(/[^a-z0-9]/gi, '_').toLowerCase(); 
+            link.download = `${currentTemplateKey}_for_${safeFileName}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+
+            await new Promise(r => setTimeout(r, 500)); 
+        }
     }
 
     drawCanvas(); 
