@@ -137,8 +137,8 @@ body {
 .theme-btn {
     background: transparent;
     border: 1px solid var(--text-secondary);
-    padding: 6px 14px; 
-    font-size: 14px;   
+    padding: 6px 10px; 
+    font-size: 10px;   
     border-radius: 15px; 
     cursor: pointer;
     color: var(--text-main);
@@ -159,8 +159,8 @@ body {
 }
 
 .hamburger-btn svg {
-    width: 28px;
-    height: 28px;
+    width: 15px;
+    height: 15px;
 }
 
 /* --- TOOLS BAR STYLES --- */
@@ -171,7 +171,7 @@ body {
     align-items: center;
     background-color: transparent; 
     flex-shrink: 0; 
-    z-index: 77779;
+    z-index: 1040; /* Lowered from 77779 */
 }
 
 .menu-btn { 
