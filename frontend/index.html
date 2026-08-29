@@ -6,13 +6,14 @@
     <title>EventEase — AI Powered Event Planning</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logo.png">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
 <header class="header-wrapper">
     <nav class="navbar">
         <div class="logo" data-view="home">
-            <!-- EventEase Logo Start (Added nav-logo-svg class) -->
             <svg class="nav-logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
               <g transform="translate(25, 22)">
                 <rect x="0" y="0" width="32" height="8" rx="4" style="fill: var(--text-primary); transition: fill 0.3s ease;"/>
@@ -32,19 +33,15 @@
         </ul>
         
         <div class="nav-controls">
-            <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">🌙</button>
+            <!-- Theme Icon dynamically injected by JS -->
+            <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme"></button>
             <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
-                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
+                <i data-lucide="menu"></i>
             </button>
         </div>
     </nav>
 </header>
 
-<!-- SPA VIEW CONTAINERS -->
 <div id="app-content" class="main-container">
 
     <!-- 1. HOME VIEW -->
@@ -99,49 +96,47 @@
             <div class="section-header">
                 <span class="tag">System Capabilities</span>
                 <h1>Engineered For Seamless Event Execution</h1>
-                <p>
-                    EventEase combines generative AI, geospatial mapping, and intuitive project management tools into a singular, enterprise-grade planning platform.
-                </p>
+                <p>EventEase combines generative AI, geospatial mapping, and intuitive project management tools into a singular, enterprise-grade planning platform.</p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-card highlight">
-                    <div class="icon">🤖</div>
+                    <div class="icon"><i data-lucide="bot"></i></div>
                     <h3>AI Planning Engine</h3>
                     <p>Receive real-time, algorithmic event blueprints tailored to your exact budgetary constraints and thematic preferences.</p>
                 </div>
                 <div class="feature-card highlight">
-                    <div class="icon">💌</div>
+                    <div class="icon"><i data-lucide="mail"></i></div>
                     <h3>Generative Invitations</h3>
                     <p>Harness custom typography and AI-generated imagery to craft bespoke digital and print invitations in seconds.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">🔒</div>
+                    <div class="icon"><i data-lucide="lock"></i></div>
                     <h3>Enterprise Security</h3>
                     <p>Authenticate seamlessly via Google Workspace. Your personal itineraries, financial ledgers, and vendor contracts remain encrypted.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">🎨</div>
+                    <div class="icon"><i data-lucide="palette"></i></div>
                     <h3>Parametric Customization</h3>
                     <p>Fine-tune every variable of your event architecture, from guest seating matrices to multi-day scheduling.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">📍</div>
+                    <div class="icon"><i data-lucide="map-pin"></i></div>
                     <h3>Geospatial Discovery</h3>
-                    <p>Integrate directly with Google Maps to evaluate venue proximity, transit logistics, and localized vendor ratings.</p>
+                    <p>Integrate directly with maps to evaluate venue proximity, transit logistics, and localized vendor ratings.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">👥</div>
+                    <div class="icon"><i data-lucide="users"></i></div>
                     <h3>Collaborative Network</h3>
                     <p>Access transparent, verified peer reviews and collaborative itineraries shared across our global host community.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">💰</div>
+                    <div class="icon"><i data-lucide="circle-dollar-sign"></i></div>
                     <h3>Dynamic Budgeting</h3>
                     <p>Track expenditures with predictive cost modeling that alerts you to potential budget overruns before they happen.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="icon">❤️</div>
+                    <div class="icon"><i data-lucide="bookmark"></i></div>
                     <h3>Intelligent Shortlisting</h3>
                     <p>Bookmark, categorize, and compare top-tier vendors in side-by-side analytical matrices.</p>
                 </div>
@@ -149,21 +144,177 @@
         </div>
     </section>
 
-    <!-- 3. HOW IT WORKS VIEW PLACEHOLDER -->
+    <!-- 3. HOW IT WORKS VIEW (WORKFLOW) -->
     <section id="htw" class="view-section">
-        <div class="placeholder-card">
-            <span class="tag">Workflow</span>
-            <h2>How It Works Section</h2>
-            <p>Ready for your custom HTML structure...</p>
+        <div class="workflow-layout">
+            <div class="section-header">
+                <span class="tag">Execution Lifecycle</span>
+                <h1>How EventEase Works</h1>
+                <p>From initial concept to flawless execution in four intelligent, interconnected stages.</p>
+            </div>
+
+            <!-- Stepper Navigation -->
+            <div class="workflow-stepper">
+                <button class="step-tab active" data-step="1">
+                    <span class="step-num">01</span>
+                    <span class="step-title">Event Init</span>
+                </button>
+                <div class="step-line"></div>
+                <button class="step-tab" data-step="2">
+                    <span class="step-num">02</span>
+                    <span class="step-title">AI Engine</span>
+                </button>
+                <div class="step-line"></div>
+                <button class="step-tab" data-step="3">
+                    <span class="step-num">03</span>
+                    <span class="step-title">SyncSphere</span>
+                </button>
+                <div class="step-line"></div>
+                <button class="step-tab" data-step="4">
+                    <span class="step-num">04</span>
+                    <span class="step-title">Market Central</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Workflow Cards -->
+            <div class="workflow-cards-wrap">
+                <!-- Step 1 -->
+                <div class="workflow-card active" id="workflow-step-1">
+                    <div class="card-info">
+                        <span class="card-tag">Phase 01 &bull; Initialization</span>
+                        <h3>Smart Event Setup & Context</h3>
+                        <p>Configure event parameters—category, religion, state jurisdiction, guest tiers, and target budgets. EventEase instantly constructs your tailored event workspace.</p>
+                        <ul class="workflow-features">
+                            <li>Culturally contextualized templates</li>
+                            <li>Dynamic invitation count brackets</li>
+                            <li>Automated budget baseline allocation</li>
+                        </ul>
+                    </div>
+                    <div class="card-preview">
+                        <div class="mock-ui">
+                            <div class="mock-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                <span class="mock-title">event_setup.json</span>
+                            </div>
+                            <div class="mock-body">
+                                <div class="mock-field"><span>Event</span><strong>Birthday</strong></div>
+                                <div class="mock-field"><span>Tradition</span><strong>Traditional/ Modern</strong></div>
+                                <div class="mock-field"><span>Location</span><strong>Punjab, India</strong></div>
+                                <div class="mock-field"><span>Total Budget</span><strong class="text-blue">₹1,00,000 Allocated</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="workflow-card" id="workflow-step-2">
+                    <div class="card-info">
+                        <span class="card-tag">Phase 02 &bull; Intelligence</span>
+                        <h3>TaskMaster AI & Dynamic Invites</h3>
+                        <p>Leverage Gemini Flash AI for generative invitation cards, granular per-guest budgeting metrics, and regional custom celebration checklists.</p>
+                        <ul class="workflow-features">
+                            <li>Natural language AI invite design & instant PNG export</li>
+                            <li>Real-time dynamic per-guest cost recalculation</li>
+                            <li>Contextual ritual and vendor checklists</li>
+                        </ul>
+                    </div>
+                    <div class="card-preview">
+                        <div class="mock-ui">
+                            <div class="mock-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                <span class="mock-title">ai_engine.py</span>
+                            </div>
+                            <div class="mock-body">
+                                <div class="mock-chip">✨ Processing Gemini 3.5 Prompt...</div>
+                                <div class="mock-ai-box">"Create a birthday invitation card."</div>
+                                <div class="mock-field"><span>Est. Cost / Guest</span><strong>₹2,000 / Person</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="workflow-card" id="workflow-step-3">
+                    <div class="card-info">
+                        <span class="card-tag">Phase 03 &bull; Collaboration</span>
+                        <h3>SyncSphere Real-Time Hub</h3>
+                        <p>Coordinate committees, family members, and organizers within dedicated real-time chat forums gated by secure referral codes.</p>
+                        <ul class="workflow-features">
+                            <li>Referral-code based community creation</li>
+                            <li>Admin approval pipeline for pending joins</li>
+                            <li>Unified cross-device secured messaging channels</li>
+                        </ul>
+                    </div>
+                    <div class="card-preview">
+                        <div class="mock-ui">
+                            <div class="mock-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                <span class="mock-title">syncsphere_room_arr_2</span>
+                            </div>
+                            <div class="mock-body">
+                                <div class="mock-chat left">Admin: Approved member John</div>
+                                <div class="mock-chat right">Member: Event created succesfully by John</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="workflow-card" id="workflow-step-4">
+                    <div class="card-info">
+                        <span class="card-tag">Phase 04 &bull; Procurement</span>
+                        <h3>Hyperlocal Discovery & Routing</h3>
+                        <p>Locate nearby verified vendors (caterers, decorators, photo studios, venues) with dynamic GPS radius scanning and turn-by-turn routing paths.</p>
+                        <ul class="workflow-features">
+                            <li>Configurable search radius (1 km to 50 km)</li>
+                            <li>Interactive route pathing and driving estimates</li>
+                            <li>E-commerce product aggregator & multi-store search</li>
+                        </ul>
+                    </div>
+                    <div class="card-preview">
+                        <div class="mock-ui">
+                            <div class="mock-header">
+                                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                                <span class="mock-title">market_routing.map</span>
+                            </div>
+                            <div class="mock-body">
+                                <div class="mock-field"><span>Radius Active</span><strong>22 km (Sangrur Region)</strong></div>
+                                <div class="mock-field"><span>Discovered</span><strong>7 Sweet Shops, 5 Decorators</strong></div>
+                                <div class="mock-field"><span>Path Status</span><strong class="text-blue">Driving Route Active (~7 mins)</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 4. ABOUT VIEW PLACEHOLDER -->
+    <!-- 4. ABOUT VIEW -->
     <section id="abt" class="view-section">
-        <div class="placeholder-card">
-            <span class="tag">Our Mission</span>
-            <h2>About Us Section</h2>
-            <p>Ready for your custom HTML structure...</p>
+        <div class="features-layout">
+            <div class="section-header">
+                <span class="tag">Our Identity</span>
+                <h1>Democratizing Event Planning via AI</h1>
+                <p>Empowering hosts with frictionless organization while bridging tier-2 and tier-3 regional vendors into the modern digital economy.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card highlight">
+                    <div class="icon"><i data-lucide="sparkles"></i></div>
+                    <h3>The Architects</h3>
+                    <p>Meticulously engineered and conceptualized by <strong>Ishnoordeep Kaur</strong> and <strong>Kartik Kumar</strong> to seamlessly redefine the future of intelligent event execution.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Enterprise-Grade Security</h3>
+                    <p>Built with uncompromising security protocols. EventEase offers secured OAuth authentication and encrypted databases to protect your personal itineraries.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon"><i data-lucide="trending-up"></i></div>
+                    <h3>Dual-Market Ecosystem</h3>
+                    <p>Following a robust <strong>B2C and B2B model</strong>. We deliver intuitive planning software to hosts while accelerating business visibility for local vendors.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -173,27 +324,25 @@
             <div class="contact-info">
                 <span class="tag">Direct Channel</span>
                 <h1>Initiate a Conversation With Our Team</h1>
-                <p>
-                    Whether you require enterprise onboarding, technical support, +or bespoke event consulting, our specialists are available to assist.
-                </p>
+                <p>Whether you require onboarding assistance, technical support, or bespoke event consulting, our team is available to assist.</p>
 
                 <div class="info-grid">
                     <div class="info-card">
-                        <div class="info-icon">📧</div>
+                        <div class="info-icon"><i data-lucide="mail"></i></div>
                         <div>
                             <h4>Email Support</h4>
-                            <p>support@eventease.com</p>
+                            <p>support@eventease.in</p>
                         </div>
                     </div>
                     <div class="info-card">
-                        <div class="info-icon">📞</div>
+                        <div class="info-icon"><i data-lucide="phone"></i></div>
                         <div>
                             <h4>Direct Line</h4>
-                            <p>+91 1800 098 537</p>
+                            <p>+91 73100 96838</p>
                         </div>
                     </div>
                     <div class="info-card">
-                        <div class="info-icon">📍</div>
+                        <div class="info-icon"><i data-lucide="map-pin"></i></div>
                         <div>
                             <h4>Headquarters</h4>
                             <p>Sangrur, Punjab, India</p>
@@ -204,34 +353,27 @@
 
             <div class="contact-form-wrapper">
                 <h2>Send a Transmission</h2>
-                <form class="contact-form">
+                <form id="contactForm" class="contact-form">
                     <div class="input-group">
-                        <input type="text" placeholder="Full Name" required>
+                        <input type="text" name="name" placeholder="Full Name" required>
                     </div>
                     <div class="input-group">
-                        <input type="email" placeholder="Email Address" required>
+                        <input type="email" id="senderEmail" name="email" placeholder="Email Address" required>
                     </div>
+                    
                     <div class="input-group">
-                        <input type="text" placeholder="Subject" required>
+                        <textarea name="message" rows="5" placeholder="Detail your requirements..." required></textarea>
                     </div>
-                    <div class="input-group">
-                        <textarea rows="5" placeholder="Detail your requirements..." required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Transmit Message</button>
+                    <button type="submit" class="submit-btn">Send Message</button>
                 </form>
             </div>
         </div>
     </section>
 
 </div>
-<!-- current feature of chatbot is unavailable -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-<script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-    createChat({
-        webhookUrl: 'https://eventease.app.n8n.cloud/webhook/406b7689-c21f-41d5-bd72-baba2765e243/chat'
-    }); -->
-</script>
+
+<!-- Initialize Lucide Icons -->
+<script>lucide.createIcons();</script>
 <script type="module" src="script.js"></script>
 </body>
 </html>

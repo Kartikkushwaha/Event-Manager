@@ -39,7 +39,16 @@ themeBtn.addEventListener("click", ()=>{
 const container = document.getElementById("eventsContainer");
 let workingEvents = [];
 
+function showLoader() {
+    container.innerHTML = `
+        <div class="spinner-wrapper">
+            <div class="spinner"></div>
+        </div>
+    `;
+}
+
 async function loadEvents(){
+    showLoader();
     const uid = localStorage.getItem("userUID");
     
     try {
@@ -58,7 +67,7 @@ async function loadEvents(){
         renderEvents();
     } catch (error) {
         console.error("Error fetching events: ", error);
-        alert("Failed to load events. Check console for details.");
+        container.innerHTML = "<h2 style='grid-column: 1/-1; text-align:left; color:#ef4444;'>Failed to load events.</h2>";
     }
 }
 
@@ -150,7 +159,7 @@ onAuthStateChanged(auth, (user) => {
         localStorage.setItem("userUID", user.uid);
         loadEvents();
     } else {
-        container.innerHTML = "<h2 style='text-align:left;'>Please log in to view your events.</h2>";
+        container.innerHTML = "<h2 style='grid-column: 1/-1; text-align:left;'>Please log in to view your events.</h2>";
     }
 });
 

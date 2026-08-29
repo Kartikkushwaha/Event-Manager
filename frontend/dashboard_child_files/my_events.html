@@ -88,6 +88,37 @@
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
             width: 100%;
+            min-height: 250px;
+            position: relative;
+        }
+
+        /* --- Circular Loading Spinner --- */
+        .spinner-wrapper {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 200px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-color, #2563eb);
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
+        .dark-mode .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.15);
+            border-top: 4px solid var(--primary-color, #38bdf8);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .event-card {
@@ -258,7 +289,7 @@
 </head>
 <body>
 
-    <!-- Unified Navbar (No Links, No Hamburger since this is a dedicated dashboard view) -->
+    <!-- Unified Navbar -->
     <header class="header-wrapper">
         <nav class="navbar">
             <div class="logo">
@@ -281,13 +312,8 @@
     <div class="page-container">
         <h1>My Events</h1>
         
-        <!-- Adaptive Layout Wrapper -->
         <div class="layout-wrapper">
-            
-            <!-- Dynamic Action Bar (Left column on mobile, Top row on desktop) -->
             <div class="action-sidebar" id="actionSidebar">
-                
-                <!-- Toggle Button (Only visible on mobile) -->
                 <button class="sidebar-toggle" id="sidebarToggle">
                     <span>&raquo;</span>
                 </button>
@@ -308,8 +334,12 @@
                 </div>
             </div>
 
-            <!-- The grid where events will be rendered -->
-            <div id="eventsContainer"></div>
+            <!-- Pre-populated with centered loading spinner -->
+            <div id="eventsContainer">
+                <div class="spinner-wrapper">
+                    <div class="spinner"></div>
+                </div>
+            </div>
 
         </div>
     </div>

@@ -24,7 +24,6 @@
     --radius-lg: 20px;
     --radius-md: 14px;
 }
-
 body.dark-mode {
     --bg-color: #0f172a;
     --card-bg: #1e293b; 
