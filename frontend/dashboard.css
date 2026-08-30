@@ -58,6 +58,61 @@ body {
     align-items: center;
 }
 
+/* Base styles for all inputs and textarea */
+#settingInput {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 8px; /* Smooth rounded corners */
+    font-size: 16px;
+    font-family: inherit;
+    color: #333;
+    background-color: #f9fafb; /* Very light gray background */
+    transition: all 0.3s ease; /* Smooth transition for interactions */
+    outline: none; /* Removes the ugly default browser outline */
+}
+
+/* Focus state: when the user clicks inside the box */
+#settingInput:focus {
+    border-color: #3b82f6; /* Modern blue border */
+    background-color: #ffffff; /* Turns white on focus */
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); /* Soft blue glow */
+}
+
+/* Specific styling to make the textarea resize properly */
+textarea#settingInput {
+    resize: vertical; /* Prevents horizontal stretching that breaks layout */
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+/* Specific styling for the file input container */
+#settingInput[type="file"] {
+    padding: 8px 10px;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+/* Customizing the ugly default "Choose File" button inside the file input */
+#settingInput[type="file"]::file-selector-button {
+    padding: 8px 16px;
+    margin-right: 12px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Hover effect for the "Choose File" button */
+#settingInput[type="file"]::file-selector-button:hover {
+    background-color: #2563eb; /* Darker blue on hover */
+}
+
 /* =========================================================
    THE NAVBAR: TALLER & STRICTLY 1-LINE
 ========================================================= */

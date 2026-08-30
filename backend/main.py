@@ -16,8 +16,8 @@ app = FastAPI(title="EventEase Unified API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
-    allow_credentials=True,
+    allow_origins=["*"], 
+    allow_credentials=False, 
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -29,7 +29,6 @@ SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY")
 # Updated API URL without the ?key= parameter
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
 
-
 # ==========================================
 # GEMINI: INVITATION GENERATOR ENDPOINTS
 # ==========================================
@@ -39,7 +38,6 @@ class PromptRequest(BaseModel):
 
 @app.post("/api/generate")
 def generate_invitation(request: PromptRequest):
-    
     if not request.prompt.strip():
         raise HTTPException(status_code=400, detail="Please provide an event prompt.")
 
@@ -58,69 +56,55 @@ def generate_invitation(request: PromptRequest):
     payload = {
         "contents": [{"parts": [{"text": system_instruction}]}],
         "generationConfig": {
-            "temperature": 0.3,
-            "maxOutputTokens": 1000,
             "responseMimeType": "application/json"
         }
     }
 
-    try:
-        # Implemented Exponential Backoff Retry Logic
-        max_retries = 3
-        for attempt in range(max_retries):
-            # Added x-goog-api-key header for authentication
-            response = requests.post(
-                API_URL,
-                headers={
-                    "Content-Type": "application/json",
-                    "x-goog-api-key": GEMINI_API_KEY
-                },
-                json=payload
-            )
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": GEMINI_API_KEY
+    }
+
+    # Primary model with fallback chain
+    model_chain = [
+        "gemini-3.5-flash",       # Primary attempt
+        "gemini-3.5-flash-lite",  # First fallback
+        "gemini-3.1-flash-lite"   # Second fallback
+    ]
+
+    for model in model_chain:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+        
+        try:
+            # 5-second timeout constraint
+            response = requests.post(url, headers=headers, json=payload, timeout=5)
             
-            # Handle server overload
-            if response.status_code == 503:
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)  # Wait 1s, then 2s, then fail
-                    continue
-                else:
-                    return {"success": False, "detail": "Please try again..."}
+            if response.status_code == 200:
+                data = response.json()
+                if "candidates" in data and data["candidates"]:
+                    raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                    
+                    match = re.search(r"\{.*\}", raw_text, re.DOTALL)
+                    if match:
+                        clean_json = match.group(0)
+                        design_data = json.loads(clean_json)
+                        print(f" SUCCESS! Generated using {model}")
+                        return {"success": True, "designData": design_data, "model_used": model}
             
-            # Handle other API errors
-            elif response.status_code != 200:
-                print(f" GOOGLE API ERROR [{response.status_code}]:", response.text)
-                raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
-            
-            break # Break the loop if successful
+            print(f"[{model}] Failed with status {response.status_code}. Shifting to fallback...")
 
-        data = response.json()
-        
-        if "candidates" not in data or not data["candidates"]:
-            print(" GEMINI BLOCKED RESPONSE:", data)
-            raise HTTPException(status_code=500, detail="AI failed to return a valid layout design.")
+        except requests.exceptions.Timeout:
+            print(f"[{model}] Timed out after 5 seconds. Shifting to fallback...")
+        except requests.exceptions.RequestException as e:
+            print(f"[{model}] Network error: {e}. Shifting to fallback...")
+        except json.JSONDecodeError:
+            print(f"[{model}] Invalid JSON output. Shifting to fallback...")
 
-        raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-        
-        match = re.search(r"\{.*\}", raw_text, re.DOTALL)
-        if not match:
-            print(" AI DID NOT RETURN JSON. RAW TEXT:", raw_text)
-            raise HTTPException(status_code=500, detail="AI did not return a valid JSON object.")
-
-        clean_json = match.group(0)
-        design_data = json.loads(clean_json)
-        
-        print(" SUCCESS! Sending design data to browser.")
-        return {"success": True, "designData": design_data}
-        
-    except HTTPException as he:
-        raise he
-    except json.JSONDecodeError as jde:
-        print("JSON PARSE ERROR:", str(jde))
-        raise HTTPException(status_code=500, detail="Failed to parse layout JSON from AI.")
-    except Exception as e:
-        print(" BACKEND CRASH:", str(e))
-        raise HTTPException(status_code=500, detail=str(e))
-
+    # If all models in the chain fail or time out
+    raise HTTPException(
+        status_code=503, 
+        detail="Due to heavy traffic we can't process your request. Please try after few seconds."
+    )
 
 # ==========================================
 # TOMTOM: MAPS, POI SEARCH, & ROUTING ENDPOINTS
