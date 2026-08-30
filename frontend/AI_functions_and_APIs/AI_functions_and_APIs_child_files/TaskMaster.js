@@ -293,7 +293,7 @@ if (suggestionBtn) {
                 }
             }
         } catch (error) { 
-            if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Failed to connect to the server.</p>`; 
+            if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Failed to connect to the server.Please try again later.</p>`; 
         } finally { 
             suggestionBtn.textContent = "Generate Suggestion"; suggestionBtn.disabled = false; 
         }

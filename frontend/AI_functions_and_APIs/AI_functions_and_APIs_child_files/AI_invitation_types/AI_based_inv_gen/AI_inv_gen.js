@@ -37,24 +37,43 @@ const ctx = canvas.getContext("2d");
 
 // Dynamic Text Typing Logic
 let isGenerating = false;
+
 async function playTypingEffect(element) {
   const lines = [
-    "Creating your invitation card...",
-    "Modifying colors and backgrounds...",
-    "Styling fonts...",
-    "Finishing..."
+    "Bringing your vision to life...",
+    "Making it uniquely yours...",
+    "A touch of creativity...",
+    "Perfecting the little details...",
+    "Almost ready"
   ];
-  
+
+  // Type the first 4 lines normally
+  for (let i = 0; i < lines.length - 1; i++) {
+    if (!isGenerating) return;
+
+    const line = lines[i];
+
+    element.textContent = "";
+
+    for (const char of line) {
+      if (!isGenerating) return;
+
+      element.textContent += char;
+
+      await new Promise(res => setTimeout(res, 40));
+    }
+
+    await new Promise(res => setTimeout(res, 1200));
+  }
+
+  // Last line stays fixed, only dots animate
   while (isGenerating) {
-    for (const line of lines) {
-      if (!isGenerating) break;
-      element.textContent = "";
-      for (const char of line) {
-        if (!isGenerating) break;
-        element.textContent += char;
-        await new Promise(res => setTimeout(res, 40)); // Typing speed
-      }
-      if (isGenerating) await new Promise(res => setTimeout(res, 1200)); // Pause between lines
+    for (let dots = 1; dots <= 3; dots++) {
+      if (!isGenerating) return;
+
+      element.textContent = "Almost ready" + ".".repeat(dots);
+
+      await new Promise(res => setTimeout(res, 500));
     }
   }
 }

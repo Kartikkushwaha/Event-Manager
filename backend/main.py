@@ -26,8 +26,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TOMTOM_API_KEY = os.getenv("TOMTOM_API_KEY")  
 SCRAPER_API_KEY = os.getenv("SCRAPER_API_KEY") 
 
-# Updated API URL without the ?key= parameter
-API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
 
 # ==========================================
 # GEMINI: INVITATION GENERATOR ENDPOINTS
@@ -77,7 +75,8 @@ def generate_invitation(request: PromptRequest):
         
         try:
             # 5-second timeout constraint
-            response = requests.post(url, headers=headers, json=payload, timeout=5)
+            response = requests.post(url, headers=headers, json=payload, timeout=5
+            )
             
             if response.status_code == 200:
                 data = response.json()
@@ -179,58 +178,56 @@ def generate_suggestion(request: PromptRequest):
         }
     }
 
-    try:
-        # Implemented Exponential Backoff Retry Logic
-        max_retries = 3
-        for attempt in range(max_retries):
-            # Added x-goog-api-key header for authentication
-            response = requests.post(
-                API_URL,
-                headers={
-                    "Content-Type": "application/json",
-                    "x-goog-api-key": GEMINI_API_KEY
-                },
-                json=payload
-            )
-            
-            if response.status_code == 503:
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
-                    continue
-                else:
-                    raise HTTPException(status_code=503, detail="The AI service is currently experiencing high demand. Please try again in a few moments.")
-            
-            elif response.status_code != 200:
-                raise HTTPException(status_code=response.status_code, detail=f"Google API Error: {response.text}")
-            
-            break
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": GEMINI_API_KEY
+    }
 
-        data = response.json()
+    model_chain = [
+        "gemini-3.5-flash",
+        "gemini-3.5-flash-lite",
+        "gemini-3.1-flash-lite"
+    ]
+
+    error_log = []
+
+    for model in model_chain:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         
-        if "candidates" not in data or not data["candidates"]:
-            raise HTTPException(status_code=500, detail="AI failed to return a valid suggestion.")
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=25)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "candidates" in data and data["candidates"]:
+                    raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+                    
+                    clean_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.IGNORECASE)
+                    clean_text = re.sub(r"\s*```$", "", clean_text).strip()
 
-        raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
-        
-        clean_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.IGNORECASE)
-        clean_text = re.sub(r"\s*```$", "", clean_text).strip()
+                    if not (clean_text.startswith("{") and clean_text.endswith("}")):
+                        match = re.search(r"\{.*\}", clean_text, re.DOTALL)
+                        if match:
+                            clean_text = match.group(0)
 
-        if not (clean_text.startswith("{") and clean_text.endswith("}")):
-            match = re.search(r"\{.*\}", clean_text, re.DOTALL)
-            if match:
-                clean_text = match.group(0)
+                    structured_data = json.loads(clean_text)
+                    return {"success": True, "data": structured_data, "model_used": model}
+            else:
+                error_log.append(f"[{model}] {response.status_code}: {response.text}")
 
-        structured_data = json.loads(clean_text)
-        return {"success": True, "data": structured_data}
-        
-    except json.JSONDecodeError as e:
-        print(f"JSON PARSE ERROR: {e}")
-        raise HTTPException(status_code=500, detail="Failed to parse AI JSON response.")
-    except Exception as e:
-        print(" BACKEND CRASH:", str(e))
-        raise HTTPException(status_code=500, detail=str(e))
+        except requests.exceptions.Timeout:
+            error_log.append(f"[{model}] Timed out after 25s")
+        except Exception as e:
+            error_log.append(f"[{model}] Error: {str(e)}")
 
-
+    # Print to terminal AND send directly to frontend UI
+    debug_message = " | ".join(error_log)
+    print("DIAGNOSTIC LOG:", debug_message)
+    
+    raise HTTPException(
+        status_code=503, 
+        detail=f"Diagnostics: {debug_message}"
+    )
 # ==========================================
 # SCRAPERAPI: E-COMMERCE PRODUCT SEARCH
 # ==========================================
