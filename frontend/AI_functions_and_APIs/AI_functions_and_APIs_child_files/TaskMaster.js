@@ -255,6 +255,7 @@ if (totalBudgetInput) totalBudgetInput.addEventListener('input', calculateCostPe
 
 const suggestionBtn = document.getElementById('generate-suggestion-btn');
 const suggestionBox = document.getElementById('ai-suggestion-box');
+
 if (suggestionBtn) {
     suggestionBtn.addEventListener('click', async () => {
         const theme = document.getElementById('corner-event-theme')?.textContent.trim() || "";
@@ -271,8 +272,59 @@ if (suggestionBtn) {
         if (isValid(place)) prompt += ` in ${place}`;
         prompt += "?";
 
-        suggestionBtn.textContent = "Consulting AI..."; suggestionBtn.disabled = true;
-        if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #3b82f6;">Generating suggestions for: <em>"${prompt}"</em>...</p>`;
+        suggestionBtn.textContent = "Consulting AI..."; 
+        suggestionBtn.disabled = true;
+        
+        const aiLoadingTexts = [
+            `Generating suggestions for: "${prompt}"...`,
+            "AI is modifying according to your request...",
+            "Curating the best options for your event...",
+            "Finalizing event details..."
+        ];
+        let isTypingActive = true;
+
+        if (suggestionBox) {
+            suggestionBox.innerHTML = `
+                <div class="typewriter-wrapper">
+                    <p class="placeholder-text typewriter-text" style="color: #3b82f6; font-style: italic; text-align: center;">
+                        <span id="ai-dynamic-text"></span><span class="typewriter-cursor">|</span>
+                    </p>
+                </div>`;
+        }
+
+        (async function typeWriter() {
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            while (isTypingActive) {
+                const el = document.getElementById('ai-dynamic-text');
+                if (!el) break;
+
+                const currentText = aiLoadingTexts[textIndex];
+                
+                if (isDeleting) {
+                    el.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    el.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                let typingSpeed = isDeleting ? 30 : 60;
+
+                if (!isDeleting && charIndex === currentText.length) {
+                    typingSpeed = 1500; 
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % aiLoadingTexts.length;
+                    typingSpeed = 500; 
+                }
+
+                await new Promise(resolve => setTimeout(resolve, typingSpeed));
+            }
+        })();
         
         try {
             const response = await fetch(`${BACKEND_URL}/suggest`, { 
@@ -280,9 +332,11 @@ if (suggestionBtn) {
             });
             const result = await response.json();
             
+            isTypingActive = false; 
+            
             if (suggestionBox) {
                 if (response.ok && result.success && result.data && result.data.suggestions) {
-                    let htmlContent = '<div style="display: flex; flex-direction: column; gap: 10px;">';
+                    let htmlContent = '<div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">';
                     result.data.suggestions.forEach(sug => {
                         htmlContent += `<div style="background: var(--card-bg); padding: 10px 12px; border-radius: 8px; border-left: 4px solid #3b82f6; box-shadow: 0 1px 3px rgba(0,0,0,0.05);"><strong style="color: var(--primary); display: block; font-size: 0.95rem; margin-bottom: 2px;">${sug.item}</strong><span style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">${sug.description}</span></div>`;
                     });
@@ -293,9 +347,13 @@ if (suggestionBtn) {
                 }
             }
         } catch (error) { 
-            if (suggestionBox) suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Failed to connect to the server.Please try again later.</p>`; 
+            isTypingActive = false; 
+            if (suggestionBox) {
+                suggestionBox.innerHTML = `<p class="placeholder-text" style="color: #ef4444;">Could not connect server to generate suggestions.Please try later.</p>`;
+            }
         } finally { 
-            suggestionBtn.textContent = "Generate Suggestion"; suggestionBtn.disabled = false; 
+            suggestionBtn.textContent = "Generate Suggestion"; 
+            suggestionBtn.disabled = false; 
         }
     });
 }
@@ -525,7 +583,7 @@ async function searchTomTom(query, buttonElement) {
       });
       updateVisualCircle();
     } else { if (resultsList) resultsList.innerHTML = `<p style="color: var(--text-muted);">No places found matching this category within ${currentRadiusKm} km.</p>`; }
-  } catch (error) { if (resultsList) resultsList.innerHTML = `<p style="color: #dc3545;"> Error connecting to the backend server.</p>`; }
+  } catch (error) { if (resultsList) resultsList.innerHTML = `<p style="color: #dc3545;"> Error connecting to the backend server.Please try later.</p>`; }
 }
 
 const productResults = document.getElementById('product-results');
@@ -535,6 +593,8 @@ const ordersCountElement = document.getElementById('orders-count');
 const savedResults = document.getElementById('saved-results');
 const searchActionBar = document.getElementById('search-action-bar');
 const backToSearchBtn = document.getElementById('back-to-search-btn');
+
+let isProductSearchActive = false;
 
 if (backToSearchBtn) {
   backToSearchBtn.onclick = () => {
@@ -613,11 +673,67 @@ async function fetchProducts(query) {
   if (savedResults) savedResults.style.display = 'none';
   if (searchActionBar) searchActionBar.style.display = 'none';
 
-  productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #3b82f6;"><h3 style="margin-bottom: 10px;">⏳ Searching for "${query}"...</h3><p style="color: var(--text-muted);">Scanning Amazon, Flipkart, and other stores...</p></div>`;
+  isProductSearchActive = true;
+  const productLoadingTexts = [
+      `Searching stores for: "${query}"...`,
+      "Scanning Amazon, Flipkart, and partner stores...",
+      "Comparing availability and price listings...",
+      "Curating best options for your event...",
+      "Almost ready with top search items..."
+  ];
+
+  productResults.innerHTML = `
+    <div class="product-loading-container">
+      <div style="font-size: 2.2rem; margin-bottom: 12px; text-align: center;">⏳</div>
+      <div class="typewriter-wrapper product-typewriter-wrapper">
+        <p class="placeholder-text typewriter-text" style="color: #3b82f6; font-size: 1.05rem; font-weight: 600; text-align: center; margin: 0 auto;">
+          <span id="product-dynamic-text"></span><span class="typewriter-cursor">|</span>
+        </p>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px; text-align: center;">Please wait while we fetch real-time items...</p>
+    </div>
+  `;
+
+  (async function productTypeWriter() {
+      let textIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+
+      while (isProductSearchActive) {
+          const el = document.getElementById('product-dynamic-text');
+          if (!el) break;
+
+          const currentText = productLoadingTexts[textIndex];
+          if (isDeleting) {
+              el.textContent = currentText.substring(0, charIndex - 1);
+              charIndex--;
+          } else {
+              el.textContent = currentText.substring(0, charIndex + 1);
+              charIndex++;
+          }
+
+          let typingSpeed = isDeleting ? 25 : 55;
+
+          if (!isDeleting && charIndex === currentText.length) {
+              typingSpeed = 1400;
+              isDeleting = true;
+          } else if (isDeleting && charIndex === 0) {
+              isDeleting = false;
+              textIndex = (textIndex + 1) % productLoadingTexts.length;
+              typingSpeed = 400;
+          }
+
+          await new Promise(resolve => setTimeout(resolve, typingSpeed));
+      }
+  })();
+
   try {
     const response = await fetch(`${BACKEND_URL}/products/search?query=${encodeURIComponent(query)}`);
     const data = await response.json();
+    
+    isProductSearchActive = false; 
     productResults.innerHTML = ''; 
+
     if (data.success && data.results && data.results.length > 0) {
       data.results.forEach(item => {
         const title = item.title ? (item.title.length > 50 ? item.title.substring(0, 50) + '...' : item.title) : 'Unnamed Product';
@@ -654,8 +770,13 @@ async function fetchProducts(query) {
         card.querySelector('.action-wishlist').addEventListener('click', (e) => saveItemToFirebase('wishlist', firebasePayload, e.target));
         productResults.appendChild(card);
       });
-    } else { productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);"><p>No products found for "<b>${query}</b>".</p></div>`; }
-  } catch (error) { productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #ef4444;"><p>⚠️ Could not connect to the backend server.</p></div>`; }
+    } else { 
+      productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: var(--text-muted);"><p>No products found for "<b>${query}</b>".</p></div>`; 
+    }
+  } catch (error) { 
+    isProductSearchActive = false;
+    productResults.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #ef4444;"><p>⚠️ Could not connect to the backend server.</p></div>`; 
+  }
 }
 
 document.getElementById('saved-sort-select')?.addEventListener('change', () => {
