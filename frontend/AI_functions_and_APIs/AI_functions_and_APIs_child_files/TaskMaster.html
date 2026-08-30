@@ -130,7 +130,7 @@
           
           <div class="radius-box">
             <label for="radius-slider">Search Radius: <span id="radius-val" style="font-size: 16px;">5</span> km</label>
-            <input type="range" id="radius-slider" min="1" max="20" value="5" class="slider">
+            <input type="range" id="radius-slider" min="1" max="50" value="5" class="slider">
           </div>
           
           <div id="route-panel"></div>
@@ -153,32 +153,7 @@
             <button id="manual-map-search-btn" class="btn btn-primary" style="white-space: nowrap;">Search Map</button>
           </div>
 
-          <div class="filter-container candy-box" id="filter-container">
-            <button class="filter-btn poi-btn" data-query="Sweet shop" data-tooltip="Sweet Shops">
-              <i data-lucide="candy" class="poi-icon"></i><span class="poi-text">Sweet Shops</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Florist flower" data-tooltip="Flower Shops">
-              <i data-lucide="flower-2" class="poi-icon"></i><span class="poi-text">Flower Shops</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Hotel banquet lawn restaurant" data-tooltip="Hotels & Lawns">
-              <i data-lucide="building-2" class="poi-icon"></i><span class="poi-text">Hotels & Lawns</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Park" data-tooltip="Parks">
-              <i data-lucide="tree-pine" class="poi-icon"></i><span class="poi-text">Parks</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Clothing mall" data-tooltip="Clothing & Malls">
-              <i data-lucide="shirt" class="poi-icon"></i><span class="poi-text">Cloth Shops</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Supermarket grocery catering" data-tooltip="Grocery & Catering">
-              <i data-lucide="shopping-basket" class="poi-icon"></i><span class="poi-text">Grocery</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Jewelry store" data-tooltip="Jewelry Stores">
-              <i data-lucide="gem" class="poi-icon"></i><span class="poi-text">Jewelry Stores</span>
-            </button>
-            <button class="filter-btn poi-btn" data-query="Gift shop" data-tooltip="Gift Shops">
-              <i data-lucide="gift" class="poi-icon"></i><span class="poi-text">Gift Shops</span>
-            </button>
-          </div>
+        
 
           <div id="map"></div>
           <h3 id="results-title">Nearby Results (Within 5 km)</h3>
@@ -195,38 +170,7 @@
 
           <div class="search-layout">
             
-            <aside class="search-sidebar">
-              <h3 class="search-sidebar-title">Common Suggestions</h3>
-              <div class="suggestion-list" id="suggestion-list">
-                <button class="sugg-btn" data-query="Men wear for functions" data-tooltip="Men's Wear">
-                  <i data-lucide="user" class="sugg-icon"></i><span class="sugg-text">Men wear for functions</span>
-                </button>
-                <button class="sugg-btn" data-query="Women wear for functions" data-tooltip="Women's Wear">
-                  <i data-lucide="user-round" class="sugg-icon"></i><span class="sugg-text">Women wear for functions</span>
-                </button>
-                <button class="sugg-btn" data-query="Seating and Tables" data-tooltip="Seating & Tables">
-                  <i data-lucide="sofa" class="sugg-icon"></i><span class="sugg-text">Seating and Tables</span>
-                </button>
-                <button class="sugg-btn" data-query="Lighting" data-tooltip="Lighting">
-                  <i data-lucide="lightbulb" class="sugg-icon"></i><span class="sugg-text">Lighting</span>
-                </button>
-                <button class="sugg-btn" data-query="Sound and speakers" data-tooltip="Sound & Speakers">
-                  <i data-lucide="speaker" class="sugg-icon"></i><span class="sugg-text">Sound and speakers</span>
-                </button>
-                <button class="sugg-btn" data-query="Sweets" data-tooltip="Sweets">
-                  <i data-lucide="candy" class="sugg-icon"></i><span class="sugg-text">Sweets</span>
-                </button>
-                <button class="sugg-btn" data-query="Snacks" data-tooltip="Snacks">
-                  <i data-lucide="cookie" class="sugg-icon"></i><span class="sugg-text">Snacks</span>
-                </button>
-                <button class="sugg-btn" data-query="Cold drinks" data-tooltip="Cold Drinks">
-                  <i data-lucide="cup-soda" class="sugg-icon"></i><span class="sugg-text">Cold drinks</span>
-                </button>
-                <button class="sugg-btn" data-query="Recycle Bags/Dustbins" data-tooltip="Recycle Bins">
-                  <i data-lucide="trash-2" class="sugg-icon"></i><span class="sugg-text">Recycle Bags/Dustbins</span>
-                </button>
-              </div>
-            </aside>
+            
 
             <main class="search-main">
               <div class="search-bar-container">
@@ -256,7 +200,7 @@
               </div>
               
               <div class="product-results" id="product-results">
-                <p class="placeholder-msg">Search for a product or click a suggestion on the left to see results.</p>
+                <p class="placeholder-msg">Search for a product</p>
               </div>
               <div class="product-results" id="saved-results" style="display: none;"></div>
             </main>

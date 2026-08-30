@@ -117,7 +117,7 @@ async def search_poi(query: str, lat: float, lon: float, radius: int):
         "lat": lat,
         "lon": lon,
         "radius": radius,
-        "limit": 20
+        "limit": 50
     }
     async with httpx.AsyncClient() as client:
         response = await client.get(url, params=params)
