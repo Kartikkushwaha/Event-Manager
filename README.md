@@ -23,5 +23,7 @@ EventEase empowers users to orchestrate complex events from a unified digital da
 * **Mapping & Location:** Google Maps Platform / Places API, TomTom APIs.
 * **Web Scraping:** ScraperAPI
 * **Deployment:** GitHub Pages
+* **Deployment (Frontend):** Vercel
+* **Deployment (Backend):** Render
 
 
