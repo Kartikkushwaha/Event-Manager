@@ -192,12 +192,7 @@ if (contactForm) {
             submitBtn.style.opacity = "0.7";
 
             try {
-                /* 
-                   NOTE: To route actual emails to Kartikkushwaha343@gmail.com, 
-                   create a free Formspree.io account and replace 'YOUR_ENDPOINT_ID' below.
-                   For now, this POSTs the data and triggers the exact popup requested.
-                */
-                const response = await fetch("https://formspree.io/f/mdeoklvr", {
+                const response = await fetch("https://formspree.io/f/mdekonde", {
     method: "POST",
     body: new FormData(contactForm),
     headers: { 'Accept': 'application/json' }
