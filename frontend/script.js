@@ -1,23 +1,28 @@
+// 1. Import Firebase App, Analytics, and Auth via CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
 import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+// 2. Your new veloevent Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
-  authDomain: "eventease-c0bd9.firebaseapp.com",
-  projectId: "eventease-c0bd9",
-  storageBucket: "eventease-c0bd9.firebasestorage.app",
-  messagingSenderId: "720737113769",
-  appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+  apiKey: "AIzaSyAhfKUyOjzZijEblzFhbm8f1budNPThudQ",
+  authDomain: "veloevent.firebaseapp.com",
+  projectId: "veloevent",
+  storageBucket: "veloevent.firebasestorage.app",
+  messagingSenderId: "185975138221",
+  appId: "1:185975138221:web:762d3d825a5972e4752324",
+  measurementId: "G-XVGT5GNNNZ"
 };
 
+// 3. Initialize Firebase, Analytics, and Auth
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-
 // ==========================================
 // SPA ROUTING & MOBILE NAVIGATION ENGINE
 // ==========================================
