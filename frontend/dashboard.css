@@ -137,7 +137,7 @@ textarea#settingInput {
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap !important; 
-    padding: 16px 28px; 
+    padding: 10px 28px; 
     border-radius: 20px;
     box-shadow: var(--shadow-md);
 }
@@ -153,7 +153,6 @@ textarea#settingInput {
 }
 
 .nav-logo-svg {
-    height: 64px; 
     width: auto;
     max-width: 100%;
     display: block;
@@ -375,8 +374,8 @@ select:focus, input:focus {
 ========================================================= */
 @media (max-width: 960px) {
     .header-wrapper { padding: 0 10px; }
-    .navbar { padding: 16px 14px; gap: 4px; }
-    .nav-logo-svg { height: 44px; }
+    .navbar { padding: 10px 16px; gap: 4px; }
+    .nav-logo-svg { height: 100px; }
     .nav-controls { gap: 16px; justify-content: flex-end; }
     .theme-btn { padding: 4px 8px; font-size: 11px; border-radius: 11px;}
     .logout-btn { padding: 7px 13px; font-size: 11px; }
