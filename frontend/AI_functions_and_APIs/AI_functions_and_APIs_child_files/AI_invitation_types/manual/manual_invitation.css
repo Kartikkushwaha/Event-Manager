@@ -90,7 +90,7 @@ body {
 }
 
 .nav-logo-svg {
-    height: 64px; 
+    height: 70px; 
     width: auto;
     max-width: 100%;
     display: block;
@@ -336,8 +336,8 @@ input[type="color"] { padding: 0; height: 35px; cursor: pointer; border: none; }
 ========================================================= */
 @media (max-width: 960px) {
     .header-wrapper { padding: 0 10px; }
-    .navbar { padding: 16px 14px; gap: 4px; }
-    .nav-logo-svg { height: 44px; }
+    .navbar { padding: 10px 16px; gap: 4px; }
+    .nav-logo-svg { height: 54px; }
     .nav-controls { gap: 16px; justify-content: flex-end; }
     .hamburger-btn { display: flex; align-items: center; }
     

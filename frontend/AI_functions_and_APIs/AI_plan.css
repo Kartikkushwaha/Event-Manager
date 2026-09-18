@@ -71,7 +71,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 ========================================================= */
 .navbar {
     background: var(--navbar);
-    padding: 10px 28px;
+    padding: 16px 28px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -94,7 +94,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 }
 
 .nav-logo-svg {
-
+    height: 70px;
     width: auto;
     max-width: 100%;
     display: block;
@@ -251,7 +251,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 @media(max-width: 960px) {
     body { padding: 16px; }
     .navbar { padding: 10px 16px; gap: 8px; }
-    .nav-logo-svg { height: 100px; }
+    .nav-logo-svg { height: 54px; }
     .nav-controls { gap: 16px; justify-content: flex-end; }
     .theme-btn { padding: 4px 8px; font-size: 12px; border-radius: 11px;}
     .hamburger-btn { display: flex; align-items: center; }
