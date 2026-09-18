@@ -71,7 +71,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 ========================================================= */
 .navbar {
     background: var(--navbar);
-    padding: 16px 28px;
+    padding: 10px 28px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -94,7 +94,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 }
 
 .nav-logo-svg {
-    height: 56px; 
+
     width: auto;
     max-width: 100%;
     display: block;
@@ -240,6 +240,7 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
     background-color: var(--overviewBoxBg); padding: 30px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); 
     opacity: 0; transform: translateX(-50px); transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+
 .overview-box h3 { color: var(--text); margin-bottom: 12px; font-size: 20px; font-weight: 600; letter-spacing: -0.4px; }
 .overview-box p { color: var(--secondaryText); line-height: 1.6; font-size: 15px; }
 .overview-box.show { opacity: 1; transform: translateX(0); }
@@ -249,8 +250,8 @@ body::after { width: 65vw; height: 65vw; background: linear-gradient(45deg, var(
 ========================================================= */
 @media(max-width: 960px) {
     body { padding: 16px; }
-    .navbar { padding: 12px 16px; gap: 8px; }
-    .nav-logo-svg { height: 38px; }
+    .navbar { padding: 10px 16px; gap: 8px; }
+    .nav-logo-svg { height: 100px; }
     .nav-controls { gap: 16px; justify-content: flex-end; }
     .theme-btn { padding: 4px 8px; font-size: 12px; border-radius: 11px;}
     .hamburger-btn { display: flex; align-items: center; }

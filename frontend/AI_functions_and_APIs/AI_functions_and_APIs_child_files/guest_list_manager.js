@@ -3,12 +3,13 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDpzCghQIIGbPkySYWTPNXvlcsnzsWoBQM",
-    authDomain: "eventease-c0bd9.firebaseapp.com",
-    projectId: "eventease-c0bd9",
-    storageBucket: "eventease-c0bd9.firebasestorage.app",
-    messagingSenderId: "720737113769",
-    appId: "1:720737113769:web:3a7fb2f8a4750448347bb8"
+    apiKey: "AIzaSyAhfKUyOjzZijEblzFhbm8f1budNPThudQ",
+    authDomain: "veloevent.firebaseapp.com",
+    projectId: "veloevent",
+    storageBucket: "veloevent.firebasestorage.app",
+    messagingSenderId: "185975138221",
+    appId: "1:185975138221:web:762d3d825a5972e4752324",
+    measurementId: "G-XVGT5GNNNZ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -271,7 +272,7 @@ if (exportBtn) {
         doc.setFont("helvetica", "bold");
         doc.setFontSize(18);
         doc.setTextColor(37, 99, 235); 
-        doc.text("EventEase - Guest List", 14, 20);
+        doc.text("VeloEvent - Guest List", 14, 20);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
@@ -306,7 +307,7 @@ if (exportBtn) {
             }
         });
 
-        doc.save("EventEase_Guest_List.pdf");
+        doc.save("veloevent_Guest_List.pdf");
     });
 }
 

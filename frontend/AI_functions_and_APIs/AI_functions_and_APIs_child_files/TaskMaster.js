@@ -412,7 +412,7 @@ function initMap() {
   if (!document.getElementById('map')) return;
 
   map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
-  streetLayer = L.tileLayer(`${BACKEND_URL}/tiles/basic/main/{z}/{x}/{y}.png`, { maxZoom: 19, attribution: '© TomTom (via EventEase)' });
+  streetLayer = L.tileLayer(`${BACKEND_URL}/tiles/basic/main/{z}/{x}/{y}.png`, { maxZoom: 19, attribution: '© TomTom (via veloevent)' });
   satLayer = L.tileLayer(`${BACKEND_URL}/tiles/sat/main/{z}/{x}/{y}.jpg`, { maxZoom: 19, attribution: '© TomTom & Maxar' });
   hybridLabelsLayer = L.tileLayer(`${BACKEND_URL}/tiles/hybrid/main/{z}/{x}/{y}.png`, { maxZoom: 19 });
 

@@ -43,7 +43,8 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
-  padding-top: 130px;
+  /* Fixed: Increased clearance so the floating navbar never cuts off the top card content */
+  padding-top: 190px !important;
   padding-bottom: 3rem;
   display: flex;
   flex-direction: column;
@@ -52,7 +53,7 @@ body {
 }
 
 /* =========================================================
-   UPDATED NAVBAR: TALLER, STRICTLY 1-LINE & PERFECTLY CENTERED
+   NAVBAR
 ========================================================= */
 .navbar-wrapper {
   position: fixed;
@@ -76,7 +77,7 @@ body {
   border-radius: 16px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap !important; /* STRICTLY 1 LINE */
+  flex-wrap: nowrap !important;
   align-items: center;
   justify-content: space-between;
   padding: 16px 28px;
@@ -88,11 +89,10 @@ body {
   display: flex;
   align-items: center;
   min-width: 0;
-  flex: 1; /* Pushes equal width to center the links */
+  flex: 1;
 }
 
 .nav-logo-svg {
-  height: 56px; 
   width: auto;
   max-width: 100%;
   display: block;
@@ -104,7 +104,7 @@ body {
   gap: 28px;
   align-items: center;
   justify-content: center;
-  flex: 1; /* Center pillar */
+  flex: 1;
   list-style: none;
 }
 
@@ -124,10 +124,10 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end; /* Anchors controls to the right */
+  justify-content: flex-end;
   gap: 16px;
   white-space: nowrap;
-  flex: 1; /* Matches logo width to guarantee center links */
+  flex: 1;
 }
 
 .theme-btn {
@@ -162,7 +162,7 @@ body {
 }
 
 /* ==========================================
-   MAIN CONTAINER & CONTROLS
+   MAIN CONTAINER & TWO PANELS
 ========================================== */
 .container {
   max-width: 1100px;
@@ -170,7 +170,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 2.5rem;
-  align-items: start;
+  /* Fixed: Stretch ensures both columns have an equal, stable baseline and don't collapse */
+  align-items: stretch;
   padding: 0 1.5rem;
 }
 
@@ -180,6 +181,8 @@ body {
   border-radius: 20px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -237,7 +240,7 @@ textarea:focus {
 }
 
 /* ==========================================
-   BUTTONS (Desktop Default)
+   BUTTONS
 ========================================== */
 .btn-icon { display: none; }
 .btn-text { display: inline; }
@@ -281,12 +284,17 @@ textarea:focus {
   min-height: 20px;
 }
 
+/* ==========================================
+   PREVIEW / LOWER PART (Fixed & Stuck)
+========================================== */
 .preview-area {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  position: sticky;
-  top: 7rem;
+  /* Fixed: Removed position:sticky so it locks static alongside the controls */
+  position: static;
+  width: 100%;
+  height: 100%;
 }
 
 .action-bar {
@@ -321,7 +329,9 @@ textarea:focus {
 .invitation-card {
   background: var(--card-bg);
   width: 100%;
+  /* Fixed: Takes full available container height matching the left card */
   min-height: 540px;
+  height: 100%;
   border-radius: 20px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
@@ -367,7 +377,7 @@ textarea:focus {
 /* Tier 1: Tablets (< 992px) */
 @media (max-width: 992px) {
   body {
-    padding-top: 150px; 
+    padding-top: 170px !important; 
   }
 
   .nav-links {
@@ -377,7 +387,7 @@ textarea:focus {
     left: 0;
     right: 0;
     width: 100%; 
-   background-color: var(--card-bg) !important; /* Uses your solid card color */
+    background-color: var(--card-bg) !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     border: 1px solid var(--nav-border);
@@ -396,7 +406,7 @@ textarea:focus {
 
   .hamburger-btn { display: flex; }
   .navbar { padding: 12px 16px; gap: 4px; }
-  .nav-logo-svg { height: 38px; }
+  .nav-logo-svg { height: 100px; }
   .nav-controls { gap: 16px; }
 
   .container {
@@ -404,14 +414,14 @@ textarea:focus {
     max-width: 700px;
     gap: 1.5rem;
   }
-  
-  .preview-area {
-    position: static;
-  }
 }
 
 /* Tier 2: Smartphones (< 600px) */
 @media (max-width: 600px) {
+  body {
+    padding-top: 130px !important;
+  }
+
   .navbar-wrapper {
     top: 0.5rem;
     padding: 0 0.5rem;
@@ -440,7 +450,6 @@ textarea:focus {
     border-radius: 16px;
   }
 
-  /* --- MAGIC MOBILE FIX: SWAP TEXT TO ICONS --- */
   .btn-icon { display: flex; align-items: center; justify-content: center; }
   .btn-text { display: none; }
   
@@ -450,7 +459,6 @@ textarea:focus {
     width: auto;
   }
 
-  /* Size the Lucide SVGs nicely */
   .btn-icon svg {
     width: 24px;
     height: 24px;

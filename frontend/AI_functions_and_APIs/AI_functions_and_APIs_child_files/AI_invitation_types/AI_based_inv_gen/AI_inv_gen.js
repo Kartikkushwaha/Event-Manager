@@ -169,7 +169,7 @@ generateBtn.addEventListener("click", async () => {
 
     downloadBtn.href = pngUrl;
     actionBar.style.display = "block";
-    statusText.textContent = "Your Invitation card generated successfully! 🎉";
+    statusText.textContent = "Your Invitation card generated successfully!";
 
   } catch (error) {
     console.error("Error generating image:", error);
