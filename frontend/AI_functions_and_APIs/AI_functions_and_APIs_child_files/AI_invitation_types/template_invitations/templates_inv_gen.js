@@ -155,42 +155,75 @@ document.head.appendChild(loaderStyle);
 const templates = {
     // --- BIRTHDAY ---
     "bd_1": {
-        name: "Template 1", src: "bd_1.png", 
+        name: "Template 1", src: "bd_1.png",
         fields: [
-            { id: "birthName", label: "Birthday Person", x: 795, y: 735, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 802, y: 1004, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "ageMilestone", label: "Age or Milestone", x: 850, y: 1274, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "dateTime", label: "Date and Time", x: 865, y: 1545, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "location", label: "Location", x: 789, y: 1817, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "rsvp", label: "RSVP Info", x: 750, y: 2085, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "birthName", label: "Birthday Person", x: 795, y: 735, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 802, y: 1004, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 850, y: 1274, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "dateTime", label: "Date and Time", x: 865, y: 1545, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "location", label: "Location", x: 789, y: 1817, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "rsvp", label: "RSVP Info", x: 750, y: 2085, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
-    "bd_2": {
-        name: "Template 2", src: "bd_2.png",
+    "bd_3": {
+        name: "Template 2", src: "bd_3.png",
         fields: [
-            { id: "birthName", label: "Birthday Person", x: 993, y: 645, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 772, y: 772, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "ageMilestone", label: "Age or Milestone", x: 847, y: 898, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "dateTime", label: "Date and Time", x: 758, y: 1026, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "location", label: "Location", x: 600, y: 1154, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "rsvp", label: "RSVP Info", x: 650, y: 1289, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "birthName", label: "Birthday Person", x: 767, y: 1028, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 808, y: 1230, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 806, y: 1427, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "dateTime", label: "Date and Time", x: 745, y: 1622, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "location", label: "Location", x: 767, y: 1822, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "rsvp", label: "RSVP Info", x: 804, y: 2014, font: "bold 60px Arial", color: "#000000", align: "center" }
+        ]
+    },
+    "bd_6": {
+        name: "Template 3", src: "bd_6.png",
+        fields: [
+            { id: "birthName", label: "Birthday Person", x: 800, y: 937, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 800, y: 1133, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 800, y: 1330, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "dateTime", label: "Date and Time", x: 800, y: 1526, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "location", label: "Location", x: 800, y: 1722, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "rsvp", label: "RSVP Info", x: 800, y: 1919, font: "bold 60px Arial", color: "#000000", align: "center" }
+        ]
+    },
+    "bd_7": {
+        name: "Template 4", src: "bd_7.png",
+        fields: [
+            { id: "birthName", label: "Birthday Person", x: 932, y: 1665, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 628, y: 1780, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 767, y: 1896, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "dateTime", label: "Date and Time", x: 702, y: 2012, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "location", label: "Location", x: 532, y: 2127, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "rsvp", label: "RSVP Info", x: 567, y: 2245, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "bd_9": {
-        name: "Template 3", src: "bd_9.png",
+        name: "Template 5", src: "bd_9.png",
         fields: [
-            { id: "birthName", label: "Birthday Person", x: 795, y: 881, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 795, y: 1110, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "ageMilestone", label: "Age or Milestone", x: 795, y: 1339, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "dateTime", label: "Date and Time", x: 795, y: 1568, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "location", label: "Location", x: 795, y: 1796, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "rsvp", label: "RSVP Info", x: 795, y: 2025, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "birthName", label: "Birthday Person", x: 795, y: 882, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 795, y: 1110, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 795, y: 1339, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "dateTime", label: "Date and Time", x: 795, y: 1568, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "location", label: "Location", x: 795, y: 1796, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "rsvp", label: "RSVP Info", x: 795, y: 2025, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
-    
+    "bd_12": {
+        name: "Template 6", src: "bd_12.png",
+        fields: [
+            { id: "birthName", label: "Birthday Person", x: 793, y: 1013, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 910, y: 1156, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "ageMilestone", label: "Age or Milestone", x: 1093, y: 1297, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "dateTime", label: "Date and Time", x: 1002, y: 1439, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "location", label: "Location", x: 784, y: 1573, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "rsvp", label: "RSVP Info", x: 843, y: 1793, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
+
     // --- BABY SHOWER ---
     "bs_1": {
-        name: "Template 1", src: "bs_1.png", 
+        name: "Template 1", src: "bs_1.png",
         fields: [
             { id: "f1", label: "Detail 1", x: 943, y: 1100, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 811, y: 1244, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -201,25 +234,58 @@ const templates = {
         ]
     },
     "bs_3": {
-        name: "Template 2", src: "bs_3.png", 
+        name: "Template 2", src: "bs_3.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 876, y: 604, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 736, y: 695, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 801, y: 789, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f4", label: "Detail 4", x: 639, y: 880, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f5", label: "Detail 5", x: 685, y: 973, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f6", label: "Detail 6", x: 687, y: 1062, font: "bold 60px Arial", color: "#000000", align: "center" }
+            { id: "f1", label: "Detail 1", x: 876, y: 604, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 736, y: 695, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 801, y: 789, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 639, y: 880, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 685, y: 973, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 687, y: 1062, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
+    "bs_5": {
+        name: "Template 3", src: "bs_5.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 940, y: 951, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 806, y: 1072, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 872, y: 1191, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 713, y: 1310, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 752, y: 1550, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 761, y: 1669, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
+    "bs_7": {
+        name: "Template 4", src: "bs_7.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 758, y: 964, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 758, y: 1158, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Detail 3", x: 758, y: 1341, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f4", label: "Detail 4", x: 758, y: 1523, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f5", label: "Detail 5", x: 758, y: 1707, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f6", label: "Detail 6", x: 758, y: 1872, font: "bold 60px Arial", color: "#000000", align: "center" }
+        ]
+    },
+    "bs_8": {
+        name: "Template 5", src: "bs_8.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 806, y: 903, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Guest Name", x: 806, y: 1110, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Detail 3", x: 806, y: 1320, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f4", label: "Detail 4", x: 806, y: 1525, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f5", label: "Detail 5", x: 806, y: 1725, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f6", label: "Detail 6", x: 806, y: 1925, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
     "bs_12": {
-        name: "Template 3", src: "bs_12.png", 
+        name: "Template 6", src: "bs_12.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 905, y: 494, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 796, y: 574, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 849, y: 653, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f4", label: "Detail 4", x: 713, y: 729, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f5", label: "Detail 5", x: 758, y: 809, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f6", label: "Detail 6", x: 761, y: 885, font: "bold 60px Arial", color: "#000000", align: "center" }
+            { id: "f1", label: "Detail 1", x: 905, y: 494, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 796, y: 574, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 849, y: 653, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 713, y: 729, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 758, y: 809, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 761, y: 885, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
 
@@ -308,7 +374,7 @@ const templates = {
 
     // --- VALENTINE ---
     "val_3": {
-        name: "Template 1", src: "val_3.png", 
+        name: "Template 1", src: "val_3.png",
         fields: [
             { id: "f1", label: "Detail 1", x: 837, y: 797, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 713, y: 928, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -323,7 +389,7 @@ const templates = {
         ]
     },
     "val_4": {
-        name: "Template 2", src: "val_4.png", 
+        name: "Template 2", src: "val_4.png",
         fields: [
             { id: "f1", label: "Detail 1", x: 814, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 718, y: 984, font: "bold 60px Arial", color: "#000000", align: "left" },
@@ -337,8 +403,53 @@ const templates = {
             { id: "f10", label: "Detail 10", x: 763, y: 1985, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
+    "val_6": {
+        name: "Template 3", src: "val_6.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 827, y: 810, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 726, y: 924, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 830, y: 1042, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 912, y: 1247, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 558, y: 1452, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 556, y: 1568, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Detail 7", x: 604, y: 1682, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Detail 8", x: 920, y: 1798, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Detail 9", x: 893, y: 1917, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Detail 10", x: 778, y: 2032, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
+    "val_9": {
+        name: "Template 4", src: "val_9.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 781, y: 913, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 980, y: 1024, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 789, y: 1136, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 870, y: 1343, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 508, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 1102, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Detail 7", x: 543, y: 1674, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Detail 8", x: 876, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Detail 9", x: 882, y: 1894, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Detail 10", x: 827, y: 2008, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
+    "val_11": {
+        name: "Template 5", src: "val_11.png",
+        fields: [
+            { id: "f1", label: "Detail 1", x: 782, y: 698, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Guest Name", x: 697, y: 802, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Detail 3", x: 799, y: 908, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Detail 4", x: 864, y: 1161, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Detail 5", x: 538, y: 1411, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Detail 6", x: 543, y: 1515, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Detail 7", x: 594, y: 1616, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Detail 8", x: 857, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Detail 9", x: 852, y: 1887, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Detail 10", x: 778, y: 1990, font: "bold 60px Arial", color: "#000000", align: "left" }
+        ]
+    },
     "val_12": {
-        name: "Template 3", src: "val_12.png", 
+        name: "Template 6", src: "val_12.png",
         fields: [
             { id: "f1", label: "Detail 1", x: 786, y: 812, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 786, y: 960, font: "bold 60px Arial", color: "#000000", align: "center" },
@@ -433,7 +544,7 @@ window.onclick = function(event) {
 window.openModal = function(categoryPrefix) {
     if(isDragging) return; 
     
-    globalFormData = {}; // CLEAR data when opening a new category
+    globalFormData = {}; 
     
     modal.style.display = 'block';
     const titleMap = {
@@ -456,7 +567,6 @@ window.openModal = function(categoryPrefix) {
             btn.innerText = templates[key].name;
             
             btn.onclick = (e) => {
-                // Clear input data if switching to a NEW template
                 if (currentTemplateKey !== key) {
                     globalFormData = {}; 
                 }
@@ -506,7 +616,6 @@ function renderTemplateInterface(key) {
         fontSizeSelector.addEventListener('input', () => drawCanvas());
     }
 
-    // Toggle Font Size Selector visibility for wedding cards
     if (key.startsWith('wed_')) {
         fontContainer.style.display = 'none';
     } else {
@@ -520,7 +629,7 @@ function renderTemplateInterface(key) {
     modeToggleContainer.style.borderBottom = '1px solid var(--border-color)';
 
     if (key.startsWith('wed_') || key.startsWith('val_')) {
-        generationMode = 'manual'; // Force manual logic for inputs
+        generationMode = 'manual'; 
         modeToggleContainer.style.display = 'flex';
         modeToggleContainer.style.flexDirection = 'column';
         modeToggleContainer.style.gap = '6px';
@@ -612,7 +721,6 @@ function renderTemplateInterface(key) {
         input.id = field.id;
         input.placeholder = `Enter ${field.label}`;
         
-        // Restore from Global FormData
         if (globalFormData[field.id]) {
             input.value = globalFormData[field.id];
         }
@@ -641,7 +749,6 @@ function renderTemplateInterface(key) {
     let canvasArea = document.querySelector('.canvas-area');
     let loader = document.getElementById('canvasLoader');
     
-    // Inject the loader element if it doesn't exist
     if (!loader && canvasArea) {
         loader = document.createElement('div');
         loader.id = 'canvasLoader';
@@ -650,12 +757,10 @@ function renderTemplateInterface(key) {
         canvas.classList.add('canvas-fade');
     }
 
-    // Trigger Loading State
     if (loader) loader.style.display = 'block';
     canvas.style.opacity = '0';
 
     currentImage.onload = () => {
-        // Small delay to ensure the animation is visible during transition
         setTimeout(() => {
             canvas.width = currentImage.width;
             canvas.height = currentImage.height;
@@ -748,7 +853,6 @@ function drawCanvas(overrideGuestName = null) {
             const drawX = (field.align === 'center') ? (canvas.width / 2) : field.x;
             const drawY = field.y;
 
-            // Enforce Strict Size Rule for Wedding Cards
             let currentFontSize;
             if (currentTemplateKey.startsWith('wed_')) {
                 currentFontSize = (index < 2) ? 55 : 35;
