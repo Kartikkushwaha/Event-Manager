@@ -80,7 +80,7 @@ body {
 
 .nav-controls { display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 16px; white-space: nowrap; flex: 1; }
 
-.theme-btn { background: transparent; border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
+.theme-btn { background: transparent; border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 15px; cursor: pointer; transition: all 0.3s ease; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
 .theme-btn:hover { background-color: var(--bg-color-1); }
 
 .hamburger-btn { display: none; background: transparent; border: none; color: var(--text-main); cursor: pointer; padding: 0; }
