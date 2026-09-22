@@ -50,9 +50,6 @@
     overflow-x: hidden;
   }
 
-  /* =========================================================
-     NAVBAR: TALLER, STRICTLY 1-LINE & PERFECTLY CENTERED
-  ========================================================= */
   .navbar {
     background: var(--navbar);
     padding: 16px 28px;
@@ -90,7 +87,6 @@
   .hamburger-btn { display: none; background: transparent; border: none; color: var(--text); cursor: pointer; padding: 0; }
   .hamburger-btn svg { width: 28px; height: 28px; }
 
-  /* Guest Panel */
   .guest-panel {
     width: 92%; max-width: 1200px; margin: 30px auto; background: var(--card); padding: 28px; border-radius: 20px;
     box-shadow: var(--shadow); border: 1px solid var(--border); transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -99,7 +95,6 @@
   .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
   .panel-header h2 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
 
-  /* Top Stat Bar & Controls */
   .guest-stats-bar {
     background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); padding: 12px 18px; border-radius: 12px;
     margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-weight: 600; color: var(--accent); font-size: 15px;
@@ -109,16 +104,12 @@
   .sort-dropdown { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-size: 14px; font-weight: 500; cursor: pointer; outline: none; transition: all 0.2s ease; }
   .sort-dropdown:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
-  /* =========================================================
-     REFINED PANEL BUTTONS & LUCIDE ICONS (DESKTOP)
-  ========================================================= */
   .panel-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
   .panel-buttons button {
     padding: 10px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer;
     transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 6px;
   }
 
-  /* Hide the Lucide icons on laptop, show text */
   .panel-buttons .btn-icon { display: none; }
   .panel-buttons .btn-text { display: inline; }
 
@@ -131,14 +122,57 @@
   #RemoveGuestBtn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid transparent; }
   #RemoveGuestBtn:hover { background: #ef4444; color: white; }
 
-  /* Grid Layouts */
-  .guest-head, .guest-row { display: grid; grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(130px, 1fr) 44px; gap: 14px; align-items: center; }
+  .guest-head, .guest-row { display: grid; grid-template-columns: 50px minmax(160px, 1.5fr) minmax(160px, 1.5fr) minmax(200px, 1.5fr) 44px; gap: 14px; align-items: center; }
   .guest-head { font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--secondaryText); padding: 0 10px 12px 10px; border-bottom: 1px solid var(--border); }
   .guest-row { margin: 12px 0; padding: 6px 10px; border-radius: 12px; transition: background-color 0.2s ease; }
   .guest-row:hover { background: rgba(148, 163, 184, 0.05); }
 
-  .guest-row input { width: 100%; min-width: 0; padding: 10px 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 10px; font-size: 14px; transition: all 0.2s ease; }
+  .guest-row input:not(.guest-phone) { width: 100%; min-width: 0; padding: 10px 14px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 10px; font-size: 14px; transition: all 0.2s ease; }
   .guest-row input:focus { outline: none; border-color: var(--accent); background: var(--card); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+
+  /* UPDATED PHONE CONTAINER CSS FOR DYNAMIC THEME COLORS */
+  .phone-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+  
+  .phone-container:focus-within {
+    border-color: var(--accent);
+    background: var(--card);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .phone-container select {
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border);
+    padding: 10px 8px;
+    color: var(--text); /* Forces white in dark mode, black in light mode */
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    min-width: 80px;
+  }
+
+  .phone-container select option {
+    background-color: var(--bg); /* Prevents transparent options bug on some browsers */
+    color: var(--text); /* Forces white in dark mode, black in light mode */
+  }
+
+  .phone-container input {
+    border: none;
+    padding: 10px 14px;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+  }
 
   .serial-box { display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--secondaryText); font-size: 14px; }
   
@@ -155,9 +189,6 @@
     .deleteBtn::after { font-size: 14px; font-weight: 600; margin-left: 6px; }
   }
 
-  /* =========================================================
-     MOBILE RESPONSIVENESS FIXES (NAVBAR & LUCIDE BUTTONS)
-  ========================================================= */
   @media (max-width: 960px) {
     .navbar { margin: 10px 16px 0 10px; padding: 10px 16px; gap: 4px; }
     .nav-logo-svg { height: 54px; }
@@ -166,7 +197,6 @@
     .hamburger-btn { display: flex; align-items: center; }
     .hamburger-btn svg { width: 24px; height: 24px; }
 
-    /* Solid Opaque Dropdown */
     .nav-links {
       display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; width: 100%;
       background-color: var(--card) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
@@ -182,9 +212,8 @@
     .sort-container { width: 100%; justify-content: space-between; }
     .sort-dropdown { flex-grow: 1; }
 
-    /* --- THE MAGIC FIX FOR LUCIDE SYMBOL BUTTONS ON MOBILE --- */
     .panel-buttons {
-      flex-wrap: nowrap; /* Forces all buttons onto 1 line */
+      flex-wrap: nowrap; 
       width: 100%;
       justify-content: space-between;
       gap: 8px;
@@ -192,7 +221,7 @@
 
     .panel-buttons button {
       width: auto;
-      flex: 1; /* Divides the width equally */
+      flex: 1; 
       padding: 12px 0;
       border-radius: 12px;
       display: flex;
@@ -200,11 +229,9 @@
       justify-content: center;
     }
 
-    /* Hide text, show Lucide symbols */
     .panel-buttons .btn-text { display: none; }
     .panel-buttons .btn-icon { display: flex; }
 
-    /* Size the Lucide SVG beautifully for touch targets */
     .panel-buttons .btn-icon svg {
         width: 22px;
         height: 22px;
@@ -242,7 +269,6 @@
         <div class="panel-header">
             <h2>Guest List Manager</h2>
 
-            <!-- Lucide Icons injected into the btn-icon spans -->
             <div class="panel-buttons">
                 <button id="ExportGuestBtn" title="Export to PDF">
                     <span class="btn-icon"><i data-lucide="arrow-down-to-line"></i></span>
@@ -287,6 +313,7 @@
             <div></div>
         </div>
         
+        <!-- The empty container where the JavaScript will generate all fields -->
         <div id="guestContainer"></div>
     </div>
 

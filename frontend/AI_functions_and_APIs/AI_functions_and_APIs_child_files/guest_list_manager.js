@@ -1,3 +1,4 @@
+// guest_list_manager.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -18,7 +19,6 @@ const db = getFirestore(app);
 
 let currentUserUid = null;
 
-// Track login state AND load data if logged in
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUserUid = user.uid;
@@ -29,7 +29,6 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-// Theme toggle button
 const themeBtn = document.getElementById("themeToggle");
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "dark") {
@@ -47,7 +46,6 @@ themeBtn.addEventListener("click", () => {
     }
 });
 
-// --- GUEST LIST UI & LOGIC ---
 const addGuestBtn = document.getElementById("addGuestBtn");
 const guestContainer = document.getElementById("guestContainer");
 const guestCount = document.getElementById("guestCount");
@@ -64,22 +62,87 @@ function updateGuestNumbers() {
     }
 }
 
-// Function to create a guest row
+// Updated Function to inject the split phone fields into every newly created row dynamically
 function createGuest(name = "", address = "", phone = "", prepend = false, id = null) {
     if (!guestContainer) return; 
 
     const row = document.createElement("div");
     row.classList.add("guest-row");
-    
-    // Assign a creation timestamp ID to track Newest/Oldest accurately
     row.dataset.id = id || Date.now() + Math.random();
+
+    let defaultCode = "+1";
+    let numberOnly = phone || "";
+    
+    // Parse combined saved formats back into code + number (e.g. "+91 9876543210")
+    if (phone && phone.startsWith("+") && phone.includes(" ")) {
+        const parts = phone.split(" ");
+        defaultCode = parts[0];
+        numberOnly = parts.slice(1).join("").replace(/[^0-9]/g, '').slice(0, 10);
+    } else if (phone) {
+        numberOnly = phone.replace(/[^0-9]/g, '').slice(0, 10);
+    }
     
     row.innerHTML = `
         <div class="serial-box"></div>
         <input type="text" class="guest-name" placeholder="Guest Name" value="${name || ""}" required>
         <input type="text" class="guest-address" placeholder="Address" value="${address || ""}">
-        <input type="tel" class="guest-phone" placeholder="Phone" value="${phone || ""}">
-        <button class="deleteBtn">Delete</button>
+        
+        <div class="phone-container">
+            <select class="guest-country">
+                <option value="+1" ${defaultCode === "+1" ? "selected" : ""}>🇺🇸 +1</option>
+                <option value="+86" ${defaultCode === "+86" ? "selected" : ""}>🇨🇳 +86</option>
+                <option value="+49" ${defaultCode === "+49" ? "selected" : ""}>🇩🇪 +49</option>
+                <option value="+91" ${defaultCode === "+91" ? "selected" : ""}>🇮🇳 +91</option>
+                <option value="+81" ${defaultCode === "+81" ? "selected" : ""}>🇯🇵 +81</option>
+                <option value="+44" ${defaultCode === "+44" ? "selected" : ""}>🇬🇧 +44</option>
+                <option value="+33" ${defaultCode === "+33" ? "selected" : ""}>🇫🇷 +33</option>
+                <option value="+39" ${defaultCode === "+39" ? "selected" : ""}>🇮🇹 +39</option>
+                <option value="+7" ${defaultCode === "+7" ? "selected" : ""}>🇷🇺 +7</option>
+                <option value="+55" ${defaultCode === "+55" ? "selected" : ""}>🇧🇷 +55</option>
+                <option value="+82" ${defaultCode === "+82" ? "selected" : ""}>🇰🇷 +82</option>
+                <option value="+61" ${defaultCode === "+61" ? "selected" : ""}>🇦🇺 +61</option>
+                <option value="+52" ${defaultCode === "+52" ? "selected" : ""}>🇲🇽 +52</option>
+                <option value="+34" ${defaultCode === "+34" ? "selected" : ""}>🇪🇸 +34</option>
+                <option value="+62" ${defaultCode === "+62" ? "selected" : ""}>🇮🇩 +62</option>
+                <option value="+966" ${defaultCode === "+966" ? "selected" : ""}>🇸🇦 +966</option>
+                <option value="+31" ${defaultCode === "+31" ? "selected" : ""}>🇳🇱 +31</option>
+                <option value="+90" ${defaultCode === "+90" ? "selected" : ""}>🇹🇷 +90</option>
+                <option value="+41" ${defaultCode === "+41" ? "selected" : ""}>🇨🇭 +41</option>
+                <option value="+66" ${defaultCode === "+66" ? "selected" : ""}>🇹🇭 +66</option>
+                <option value="+353" ${defaultCode === "+353" ? "selected" : ""}>🇮🇪 +353</option>
+                <option value="+43" ${defaultCode === "+43" ? "selected" : ""}>🇦🇹 +43</option>
+                <option value="+972" ${defaultCode === "+972" ? "selected" : ""}>🇮🇱 +972</option>
+                <option value="+971" ${defaultCode === "+971" ? "selected" : ""}>🇦🇪 +971</option>
+                <option value="+65" ${defaultCode === "+65" ? "selected" : ""}>🇸🇬 +65</option>
+                <option value="+47" ${defaultCode === "+47" ? "selected" : ""}>🇳🇴 +47</option>
+                <option value="+84" ${defaultCode === "+84" ? "selected" : ""}>🇻🇳 +84</option>
+                <option value="+63" ${defaultCode === "+63" ? "selected" : ""}>🇵🇭 +63</option>
+                <option value="+60" ${defaultCode === "+60" ? "selected" : ""}>🇲🇾 +60</option>
+                <option value="+45" ${defaultCode === "+45" ? "selected" : ""}>🇩🇰 +45</option>
+                <option value="+27" ${defaultCode === "+27" ? "selected" : ""}>🇿🇦 +27</option>
+                <option value="+852" ${defaultCode === "+852" ? "selected" : ""}>🇭🇰 +852</option>
+                <option value="+57" ${defaultCode === "+57" ? "selected" : ""}>🇨🇴 +57</option>
+                <option value="+40" ${defaultCode === "+40" ? "selected" : ""}>🇷🇴 +40</option>
+                <option value="+56" ${defaultCode === "+56" ? "selected" : ""}>🇨🇱 +56</option>
+                <option value="+420" ${defaultCode === "+420" ? "selected" : ""}>🇨🇿 +420</option>
+                <option value="+358" ${defaultCode === "+358" ? "selected" : ""}>🇫🇮 +358</option>
+                <option value="+351" ${defaultCode === "+351" ? "selected" : ""}>🇵🇹 +351</option>
+                <option value="+64" ${defaultCode === "+64" ? "selected" : ""}>🇳🇿 +64</option>
+                <option value="+30" ${defaultCode === "+30" ? "selected" : ""}>🇬🇷 +30</option>
+                <option value="+51" ${defaultCode === "+51" ? "selected" : ""}>🇵🇪 +51</option>
+            </select>
+            <input 
+                type="tel" 
+                class="guest-phone"
+                placeholder="Phone Number" 
+                value="${numberOnly}"
+                maxlength="10" 
+                pattern="[0-9]{1,10}" 
+                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);"
+                required>
+        </div>
+        
+        <button class="deleteBtn"><i data-lucide="trash-2"></i></button>
     `;
 
     row.querySelector(".deleteBtn").addEventListener("click", () => {
@@ -93,10 +156,13 @@ function createGuest(name = "", address = "", phone = "", prepend = false, id = 
         guestContainer.appendChild(row);
     }
 
+    if (window.lucide) {
+        window.lucide.createIcons();
+    }
+
     updateGuestNumbers();
 }
 
-// --- SORTING LOGIC ---
 if (sortSelect) {
     sortSelect.addEventListener("change", () => {
         sortGuestList(sortSelect.value);
@@ -125,7 +191,6 @@ function sortGuestList(criteria) {
     updateGuestNumbers();
 }
 
-// Function to pull data from Firebase and display it
 async function loadGuestsFromFirestore() {
     if (!currentUserUid || !guestContainer) return;
 
@@ -154,7 +219,6 @@ if (addGuestBtn) {
     addGuestBtn.addEventListener("click", () => createGuest("", "", "", true));
 }
 
-// --- SAVE LOGIC ---
 const saveGuestBtn = document.getElementById("saveGuestBtn");
 if (saveGuestBtn) {
     saveGuestBtn.addEventListener("click", async (e) => {
@@ -165,7 +229,6 @@ if (saveGuestBtn) {
             return;
         }
 
-        // Change text only to keep Lucide icons intact
         const textSpan = saveGuestBtn.querySelector('.btn-text');
         textSpan.textContent = "Saving...";
 
@@ -175,7 +238,9 @@ if (saveGuestBtn) {
         rows.forEach((row) => {
             const name = row.querySelector(".guest-name").value.trim();
             const address = row.querySelector(".guest-address").value.trim();
-            const phone = row.querySelector(".guest-phone").value.trim();
+            const code = row.querySelector(".guest-country").value;
+            const number = row.querySelector(".guest-phone").value.trim();
+            const phone = number ? `${code} ${number}` : ""; 
             const id = parseFloat(row.dataset.id);
 
             if (name) {
@@ -203,9 +268,7 @@ if (saveGuestBtn) {
     });
 }
 
-// --- DELETE ALL LOGIC ---
 const removeAllBtn = document.getElementById("RemoveGuestBtn");
-
 if (removeAllBtn) {
     removeAllBtn.addEventListener("click", async () => {
         const isConfirmed = confirm("Are you sure you want to delete ALL guests? This cannot be undone.");
@@ -238,9 +301,7 @@ if (removeAllBtn) {
     });
 }
 
-// --- EXPORT TO PDF LOGIC ---
 const exportBtn = document.getElementById("ExportGuestBtn");
-
 if (exportBtn) {
     exportBtn.addEventListener("click", () => {
         const rows = document.querySelectorAll(".guest-row");
@@ -249,10 +310,12 @@ if (exportBtn) {
         rows.forEach((row) => {
             const name = row.querySelector(".guest-name").value.trim();
             const address = row.querySelector(".guest-address").value.trim();
-            const phone = row.querySelector(".guest-phone").value.trim();
+            const code = row.querySelector(".guest-country").value;
+            const number = row.querySelector(".guest-phone").value.trim();
+            const phone = number ? `${code} ${number}` : "-";
 
             if (name) {
-                guestData.push([guestData.length + 1, name, address || "-", phone || "-"]);
+                guestData.push([guestData.length + 1, name, address || "-", phone]);
             }
         });
 
@@ -311,7 +374,6 @@ if (exportBtn) {
     });
 }
 
-// --- Mobile Hamburger Menu Logic (Click-to-Close Fix) ---
 document.addEventListener('DOMContentLoaded', () => {
     const hamburgerBtn = document.getElementById('hamburgerBtn');
     const navLinks = document.getElementById('navLinks');
