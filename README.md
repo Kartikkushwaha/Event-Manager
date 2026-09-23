@@ -25,6 +25,6 @@ EventEase empowers users to orchestrate complex events from a unified digital da
 * **Deployment:** GitHub Pages
 * **Deployment (Frontend):** Vercel
 * **Deployment (Backend):** Render
-We are working on it further to improve.
+
 
 
