@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 load_dotenv()
 
-app = FastAPI(title="EventEase Unified API")
+app = FastAPI(title="VeloEvent Unified API")
 
 app.add_middleware(
     CORSMiddleware,

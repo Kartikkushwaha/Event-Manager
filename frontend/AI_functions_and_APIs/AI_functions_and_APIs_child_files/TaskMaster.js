@@ -376,7 +376,7 @@ subTabs.notebook?.addEventListener('click', () => switchSubTab('notebook'));
 const notesArea = document.getElementById('event-notes');
 const saveNotesBtn = document.getElementById('save-notes-btn');
 const notesStatus = document.getElementById('notebook-status');
-const getNoteStorageKey = () => `EventEase_Notebook_${currentEventId || 'default'}`;
+const getNoteStorageKey = () => `veloevent_Notebook_${currentEventId || 'default'}`;
 
 function loadEventNotes() { if (notesArea) notesArea.value = localStorage.getItem(getNoteStorageKey()) || ""; }
 loadEventNotes();
