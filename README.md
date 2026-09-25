@@ -1,8 +1,8 @@
-# EventEase
+# VeloEvent
 
-EventEase is a comprehensive, AI-powered event management platform designed to streamline the entire event planning lifecycle. It addresses the highly fragmented event industry by bridging the gap between digital planning tools and localized offline execution. 
+VeloEvent is a comprehensive, AI-powered event management platform designed to streamline the entire event planning lifecycle. It addresses the highly fragmented event industry by bridging the gap between digital planning tools and localized offline execution. 
 
-EventEase empowers users to orchestrate complex events from a unified digital dashboard, offering tools for dynamic budget tracking, AI-generated invitations, vendor discovery, and real-time team collaboration.
+VeloEvent empowers users to orchestrate complex events from a unified digital dashboard, offering tools for dynamic budget tracking, AI-generated invitations, vendor discovery, and real-time team collaboration.
 
 ## Features
 
