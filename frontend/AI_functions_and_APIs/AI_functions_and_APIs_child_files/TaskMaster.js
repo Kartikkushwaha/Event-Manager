@@ -254,6 +254,7 @@ function calculateCostPerGuest() {
 if (guestCountInput) guestCountInput.addEventListener('input', calculateCostPerGuest);
 if (totalBudgetInput) totalBudgetInput.addEventListener('input', calculateCostPerGuest);
 
+// suggestion AI logic
 const suggestionBtn = document.getElementById('generate-suggestion-btn');
 const suggestionBox = document.getElementById('ai-suggestion-box');
 
@@ -393,199 +394,1012 @@ if (saveNotesBtn) {
       }
     });
 }
-
+// tomtom mapping logic
 let map, userMarker, destMarker, markersLayer, currentRouteLine, radiusCircle;
-let userLocation = { lat: 30.2941, lng: 75.6738 }; 
-let currentRadiusKm = 5; 
-let activeQuery = null;  
+let userLocation = { lat: 30.2941, lng: 75.6738 };
+let currentRadiusKm = 5;
+let activeQuery = null;
 let isSatellite = false;
 let streetLayer, satLayer, hybridLabelsLayer;
 
-const redIcon = L.icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-  iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+// Live location tracking
+let locationWatchId = null;
+let previousLocation = null;
+let currentHeading = 0;
+
+
+// ===============================
+// 3D USER LOCATION ARROW
+// ===============================
+
+const userArrowIcon = L.divIcon({
+  className: 'user-location-arrow-wrapper',
+  html: `
+    <div class="user-location-arrow">
+      <div class="arrow-shadow"></div>
+      <div class="arrow-3d">
+        <div class="arrow-main"></div>
+        <div class="arrow-highlight"></div>
+      </div>
+    </div>
+  `,
+  iconSize: [46, 46],
+  iconAnchor: [23, 23],
+  popupAnchor: [0, -23]
 });
+
+
+// ===============================
+// BEARING CALCULATOR
+// Used when GPS heading is unavailable
+// ===============================
+
+function calculateBearing(lat1, lon1, lat2, lon2) {
+  const toRad = Math.PI / 180;
+  const toDeg = 180 / Math.PI;
+
+  const φ1 = lat1 * toRad;
+  const φ2 = lat2 * toRad;
+  const Δλ = (lon2 - lon1) * toRad;
+
+  const y = Math.sin(Δλ) * Math.cos(φ2);
+
+  const x =
+    Math.cos(φ1) * Math.sin(φ2) -
+    Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
+
+  let bearing = Math.atan2(y, x) * toDeg;
+
+  return (bearing + 360) % 360;
+}
+
+
+// ===============================
+// ROTATE USER ARROW
+// ===============================
+
+function rotateUserArrow(heading) {
+  if (!userMarker) return;
+
+  const arrowElement = userMarker.getElement()?.querySelector('.user-location-arrow');
+
+  if (arrowElement) {
+    arrowElement.style.transform = `rotate(${heading}deg)`;
+  }
+}
+
+
+// ===============================
+// UPDATE USER MARKER POSITION
+// ===============================
+
+function updateUserLocation(position) {
+
+  const lat = position.coords.latitude;
+  const lng = position.coords.longitude;
+
+  const newLocation = {
+    lat: lat,
+    lng: lng
+  };
+
+  // Calculate direction
+  let heading = position.coords.heading;
+
+  // Browser GPS heading may be null
+  if (
+    heading === null ||
+    heading === undefined ||
+    Number.isNaN(heading) ||
+    heading < 0
+  ) {
+
+    if (previousLocation) {
+      const distanceMoved =
+        Math.abs(lat - previousLocation.lat) +
+        Math.abs(lng - previousLocation.lng);
+
+      // Only calculate heading if user actually moved
+      if (distanceMoved > 0.000001) {
+        heading = calculateBearing(
+          previousLocation.lat,
+          previousLocation.lng,
+          lat,
+          lng
+        );
+      }
+    }
+  }
+
+  // Keep previous heading if no new heading available
+  if (
+    heading !== null &&
+    heading !== undefined &&
+    !Number.isNaN(heading)
+  ) {
+    currentHeading = heading;
+  }
+
+  previousLocation = newLocation;
+  userLocation = newLocation;
+
+
+  // ===============================
+  // FIRST LOCATION
+  // ===============================
+
+  if (!userMarker) {
+
+    userMarker = L.marker(
+      [lat, lng],
+      {
+        icon: userArrowIcon,
+        zIndexOffset: 1000
+      }
+    )
+      .addTo(map)
+      .bindPopup("<b>📍 You are here!</b>");
+
+    rotateUserArrow(currentHeading);
+
+    map.setView([lat, lng], 14);
+
+  }
+
+  // ===============================
+  // EVERY NEXT LOCATION
+  // ===============================
+
+  else {
+
+    // Move marker to new GPS position
+    userMarker.setLatLng([lat, lng]);
+
+    // Rotate arrow
+    rotateUserArrow(currentHeading);
+
+  }
+
+
+  // Move radius circle with user
+  updateVisualCircle(false);
+
+
+  const statusPanel = document.getElementById("status-panel");
+
+  if (statusPanel) {
+    statusPanel.textContent =
+      "Live location tracking active.";
+    statusPanel.style.borderLeftColor = "#198754";
+  }
+}
+
+
+// ===============================
+// INITIALIZE MAP
+// ===============================
 
 function initMap() {
+
   const statusPanel = document.getElementById("status-panel");
+
   if (!document.getElementById('map')) return;
 
-  map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
-  streetLayer = L.tileLayer(`${BACKEND_URL}/tiles/basic/main/{z}/{x}/{y}.png`, { maxZoom: 19, attribution: '© TomTom (via veloevent)' });
-  satLayer = L.tileLayer(`${BACKEND_URL}/tiles/sat/main/{z}/{x}/{y}.jpg`, { maxZoom: 19, attribution: '© TomTom & Maxar' });
-  hybridLabelsLayer = L.tileLayer(`${BACKEND_URL}/tiles/hybrid/main/{z}/{x}/{y}.png`, { maxZoom: 19 });
+
+  map = L.map('map').setView(
+    [userLocation.lat, userLocation.lng],
+    13
+  );
+
+
+  streetLayer = L.tileLayer(
+    `${BACKEND_URL}/tiles/basic/main/{z}/{x}/{y}.png`,
+    {
+      maxZoom: 19,
+      attribution: '© TomTom (via veloevent)'
+    }
+  );
+
+
+  satLayer = L.tileLayer(
+    `${BACKEND_URL}/tiles/sat/main/{z}/{x}/{y}.jpg`,
+    {
+      maxZoom: 19,
+      attribution: '© TomTom & Maxar'
+    }
+  );
+
+
+  hybridLabelsLayer = L.tileLayer(
+    `${BACKEND_URL}/tiles/hybrid/main/{z}/{x}/{y}.png`,
+    {
+      maxZoom: 19
+    }
+  );
+
 
   streetLayer.addTo(map);
+
   markersLayer = L.layerGroup().addTo(map);
 
+
+  // ===============================
+  // LIVE GPS LOCATION
+  // ===============================
+
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
+
+    locationWatchId = navigator.geolocation.watchPosition(
+
       (position) => {
-        userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
-        map.setView([userLocation.lat, userLocation.lng], 14);
-        userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon }).addTo(map).bindPopup("<b>📍 You are here!</b>").openPopup();
-        updateVisualCircle();
-        if (statusPanel) { statusPanel.textContent = "Location found! Select your radius and pick a category below."; statusPanel.style.borderLeftColor = "#198754"; }
+
+        updateUserLocation(position);
+
       },
+
       (error) => {
-        if (statusPanel) { statusPanel.textContent = "Geolocation denied/failed. Using default location."; statusPanel.style.borderLeftColor = "#dc3545"; }
-        userMarker = L.marker([userLocation.lat, userLocation.lng], { icon: redIcon }).addTo(map).bindPopup("<b>📍 Default Location</b>");
-        updateVisualCircle();
+
+        if (statusPanel) {
+
+          statusPanel.textContent =
+            "Geolocation denied/failed. Using default location.";
+
+          statusPanel.style.borderLeftColor =
+            "#dc3545";
+        }
+
+
+        // Default marker only if GPS fails
+        if (!userMarker) {
+
+          userMarker = L.marker(
+            [userLocation.lat, userLocation.lng],
+            {
+              icon: userArrowIcon,
+              zIndexOffset: 1000
+            }
+          )
+            .addTo(map)
+            .bindPopup("<b>📍 Default Location</b>");
+
+          rotateUserArrow(0);
+
+        }
+
+        updateVisualCircle(true);
+
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 1000
+      }
     );
+
+  }
+
+  else {
+
+    if (statusPanel) {
+
+      statusPanel.textContent =
+        "Geolocation is not supported by this browser.";
+
+      statusPanel.style.borderLeftColor =
+        "#dc3545";
+
+    }
+
   }
 }
 
-document.getElementById('recenter-btn')?.addEventListener('click', () => {
-  if (!map || !userLocation) return;
-  map.flyTo([userLocation.lat, userLocation.lng], 15, { duration: 1.2 });
-  if (userMarker) userMarker.openPopup();
-});
 
-document.getElementById('map-style-btn')?.addEventListener('click', (e) => {
-  const btn = e.currentTarget;
-  if (isSatellite) {
-    map.removeLayer(satLayer); map.removeLayer(hybridLabelsLayer); map.addLayer(streetLayer);
-    btn.innerHTML = '<i data-lucide="satellite" class="map-ctrl-icon"></i><span class="map-ctrl-text">Satellite View</span>';
-    btn.setAttribute('data-tooltip', 'Satellite View');
-    btn.style.backgroundColor = "#343a40"; btn.style.borderColor = "#343a40"; 
-    isSatellite = false;
-  } else {
-    map.removeLayer(streetLayer); map.addLayer(satLayer); map.addLayer(hybridLabelsLayer); 
-    btn.innerHTML = '<i data-lucide="map" class="map-ctrl-icon"></i><span class="map-ctrl-text">Street View</span>';
-    btn.setAttribute('data-tooltip', 'Street View');
-    btn.style.backgroundColor = "#0d6efd"; btn.style.borderColor = "#0d6efd"; 
-    isSatellite = true;
+// ===============================
+// RECENTER BUTTON
+// ===============================
+
+document.getElementById('recenter-btn')?.addEventListener(
+  'click',
+  () => {
+
+    if (!map || !userLocation) return;
+
+    map.flyTo(
+      [userLocation.lat, userLocation.lng],
+      15,
+      {
+        duration: 1.2
+      }
+    );
+
+    if (userMarker) {
+      userMarker.openPopup();
+    }
+
   }
-  if (window.lucide) { window.lucide.createIcons(); }
-});
+);
 
-document.getElementById('radius-slider')?.addEventListener('input', (e) => {
-  currentRadiusKm = parseInt(e.target.value);
-  const radiusVal = document.getElementById("radius-val");
-  const resultsTitle = document.getElementById("results-title");
-  
-  if (radiusVal) radiusVal.textContent = currentRadiusKm;
-  if (resultsTitle) resultsTitle.textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
-  
-  updateVisualCircle();
-  if (activeQuery) { const activeBtn = document.querySelector('.filter-btn.active'); searchTomTom(activeQuery, activeBtn); }
-});
 
-function updateVisualCircle() {
+// ===============================
+// MAP STYLE BUTTON
+// ===============================
+
+document.getElementById('map-style-btn')?.addEventListener(
+  'click',
+  (e) => {
+
+    const btn = e.currentTarget;
+
+    if (isSatellite) {
+
+      map.removeLayer(satLayer);
+      map.removeLayer(hybridLabelsLayer);
+      map.addLayer(streetLayer);
+
+      btn.innerHTML =
+        '<i data-lucide="satellite" class="map-ctrl-icon"></i><span class="map-ctrl-text">Satellite View</span>';
+
+      btn.setAttribute(
+        'data-tooltip',
+        'Satellite View'
+      );
+
+      btn.style.backgroundColor = "#343a40";
+      btn.style.borderColor = "#343a40";
+
+      isSatellite = false;
+
+    }
+
+    else {
+
+      map.removeLayer(streetLayer);
+
+      map.addLayer(satLayer);
+      map.addLayer(hybridLabelsLayer);
+
+      btn.innerHTML =
+        '<i data-lucide="map" class="map-ctrl-icon"></i><span class="map-ctrl-text">Street View</span>';
+
+      btn.setAttribute(
+        'data-tooltip',
+        'Street View'
+      );
+
+      btn.style.backgroundColor = "#0d6efd";
+      btn.style.borderColor = "#0d6efd";
+
+      isSatellite = true;
+
+    }
+
+
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+  }
+);
+
+
+// ===============================
+// RADIUS SLIDER
+// ===============================
+
+document.getElementById('radius-slider')?.addEventListener(
+  'input',
+  (e) => {
+
+    currentRadiusKm = parseInt(e.target.value);
+
+    const radiusVal =
+      document.getElementById("radius-val");
+
+    const resultsTitle =
+      document.getElementById("results-title");
+
+
+    if (radiusVal) {
+      radiusVal.textContent =
+        currentRadiusKm;
+    }
+
+
+    if (resultsTitle) {
+
+      resultsTitle.textContent =
+        `Nearby Results (Within ${currentRadiusKm} km)`;
+
+    }
+
+
+    updateVisualCircle(true);
+
+
+    if (activeQuery) {
+
+      const activeBtn =
+        document.querySelector('.filter-btn.active');
+
+      searchTomTom(
+        activeQuery,
+        activeBtn
+      );
+
+    }
+
+  }
+);
+
+
+// ===============================
+// UPDATE VISUAL RADIUS CIRCLE
+// ===============================
+
+function updateVisualCircle(shouldFitMap = false) {
+
   if (!map) return;
-  if (radiusCircle) map.removeLayer(radiusCircle);
-  radiusCircle = L.circle([userLocation.lat, userLocation.lng], { color: '#0d6efd', fillColor: '#0d6efd', fillOpacity: 0.08, weight: 1.5, radius: currentRadiusKm * 1000 }).addTo(map);
-  map.fitBounds(radiusCircle.getBounds(), { padding: [30, 30] });
+
+
+  if (radiusCircle) {
+    map.removeLayer(radiusCircle);
+  }
+
+
+  radiusCircle = L.circle(
+    [userLocation.lat, userLocation.lng],
+    {
+      color: '#0d6efd',
+      fillColor: '#0d6efd',
+      fillOpacity: 0.08,
+      weight: 1.5,
+      radius: currentRadiusKm * 1000
+    }
+  ).addTo(map);
+
+
+  // IMPORTANT:
+  // Don't fit map on every GPS update.
+  // Otherwise map will keep jumping.
+  if (shouldFitMap) {
+
+    map.fitBounds(
+      radiusCircle.getBounds(),
+      {
+        padding: [30, 30]
+      }
+    );
+
+  }
+
 }
 
-document.querySelectorAll('.poi-btn').forEach(btn => {
-  btn.addEventListener('click', (e) => searchTomTom(e.target.getAttribute('data-query'), e.currentTarget) );
-});
 
-document.getElementById('manual-map-search-btn')?.addEventListener('click', () => {
-    const searchInputEl = document.getElementById('manual-map-search');
-    const query = searchInputEl ? searchInputEl.value.trim() : "";
-    if(query) { searchTomTom(query, null); }
-});
+// ===============================
+// POI BUTTONS
+// ===============================
 
-window.drawRoute = async function(destLat, destLon, shopName) {
-  const routePanel = document.getElementById("route-panel");
+document.querySelectorAll('.poi-btn').forEach(
+  btn => {
+
+    btn.addEventListener(
+      'click',
+      (e) => {
+
+        searchTomTom(
+          e.target.getAttribute('data-query'),
+          e.currentTarget
+        );
+
+      }
+    );
+
+  }
+);
+
+
+// ===============================
+// MANUAL MAP SEARCH
+// ===============================
+
+document.getElementById(
+  'manual-map-search-btn'
+)?.addEventListener(
+  'click',
+  () => {
+
+    const searchInputEl =
+      document.getElementById(
+        'manual-map-search'
+      );
+
+    const query =
+      searchInputEl
+        ? searchInputEl.value.trim()
+        : "";
+
+
+    if (query) {
+      searchTomTom(query, null);
+    }
+
+  }
+);
+
+
+// ===============================
+// DRAW ROUTE
+// ===============================
+
+window.drawRoute = async function(
+  destLat,
+  destLon,
+  shopName
+) {
+
+  const routePanel =
+    document.getElementById("route-panel");
+
   if (!routePanel) return;
-  routePanel.style.display = "block";
-  routePanel.innerHTML = ` Calculating fastest guiding path to <b>${shopName}</b>...`;
 
-  if (currentRouteLine) map.removeLayer(currentRouteLine);
-  if (destMarker) map.removeLayer(destMarker);
 
-  destMarker = L.marker([destLat, destLon]).addTo(map).bindPopup(`<b>Destination: ${shopName}</b>`).openPopup();
+  routePanel.style.display =
+    "block";
+
+
+  routePanel.innerHTML =
+    `Calculating fastest guiding path to <b>${shopName}</b>...`;
+
+
+  if (currentRouteLine)
+    map.removeLayer(currentRouteLine);
+
+
+  if (destMarker)
+    map.removeLayer(destMarker);
+
+
+  destMarker =
+    L.marker([
+      destLat,
+      destLon
+    ])
+      .addTo(map)
+      .bindPopup(
+        `<b>Destination: ${shopName}</b>`
+      )
+      .openPopup();
+
 
   try {
-    const response = await fetch(`${BACKEND_URL}/route?start_lat=${userLocation.lat}&start_lon=${userLocation.lng}&dest_lat=${destLat}&dest_lon=${destLon}`);
-    const data = await response.json();
-    if (data && data.routes && data.routes.length > 0) {
-      const route = data.routes[0];
-      const points = route.legs[0].points;
-      const lengthKm = (route.summary.lengthInMeters / 1000).toFixed(1);
-      const timeMins = Math.round(route.summary.travelTimeInSeconds / 60);
 
-      routePanel.innerHTML = ` <b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving).`;
+    const response =
+      await fetch(
+        `${BACKEND_URL}/route?start_lat=${userLocation.lat}&start_lon=${userLocation.lng}&dest_lat=${destLat}&dest_lon=${destLon}`
+      );
 
-      const latLngs = points.map(p => [p.latitude, p.longitude]);
-      currentRouteLine = L.polyline(latLngs, { color: '#0d6efd', weight: 6, opacity: 0.8, dashArray: '5, 10' }).addTo(map);
-      
-      const group = new L.featureGroup([userMarker, destMarker, currentRouteLine]);
-      map.fitBounds(group.getBounds(), { padding: [50, 50] });
-    } else {
-      routePanel.innerHTML = ` Could not calculate a driving path to this location.`;
+
+    const data =
+      await response.json();
+
+
+    if (
+      data &&
+      data.routes &&
+      data.routes.length > 0
+    ) {
+
+      const route =
+        data.routes[0];
+
+
+      const points =
+        route.legs[0].points;
+
+
+      const lengthKm =
+        (
+          route.summary.lengthInMeters / 1000
+        ).toFixed(1);
+
+
+      const timeMins =
+        Math.round(
+          route.summary.travelTimeInSeconds / 60
+        );
+
+
+      routePanel.innerHTML =
+        `<b>Path Guider Active:</b> Route to <b>${shopName}</b> is <b>${lengthKm} km</b> (~<b>${timeMins} mins</b> driving).`;
+
+
+      const latLngs =
+        points.map(
+          p => [
+            p.latitude,
+            p.longitude
+          ]
+        );
+
+
+      currentRouteLine =
+        L.polyline(
+          latLngs,
+          {
+            color: '#0d6efd',
+            weight: 6,
+            opacity: 0.8,
+            dashArray: '5, 10'
+          }
+        ).addTo(map);
+
+
+      const group =
+        new L.featureGroup([
+          userMarker,
+          destMarker,
+          currentRouteLine
+        ]);
+
+
+      map.fitBounds(
+        group.getBounds(),
+        {
+          padding: [50, 50]
+        }
+      );
+
     }
-  } catch (error) { routePanel.innerHTML = `Error generating path guider route from backend.`; }
+
+    else {
+
+      routePanel.innerHTML =
+        `Could not calculate a driving path to this location.`;
+
+    }
+
+  }
+
+  catch (error) {
+
+    routePanel.innerHTML =
+      `Error generating path guider route from backend.`;
+
+  }
+
 };
 
-async function searchTomTom(query, buttonElement) {
-  activeQuery = query; 
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  if (buttonElement) buttonElement.classList.add('active');
 
-  const resultsList = document.getElementById("results-list");
-  const routePanel = document.getElementById("route-panel");
-  const resultsTitle = document.getElementById("results-title");
-  
-  if (resultsTitle) resultsTitle.textContent = `Nearby Results (Within ${currentRadiusKm} km)`;
-  if (resultsList) resultsList.innerHTML = `<p>Searching Places within <b>${currentRadiusKm} km</b>...</p>`;
-  if (routePanel) routePanel.style.display = "none"; 
+// ===============================
+// TOMTOM SEARCH
+// ===============================
 
-  if (markersLayer) markersLayer.clearLayers();
-  if (currentRouteLine && map) map.removeLayer(currentRouteLine);
-  if (destMarker && map) map.removeLayer(destMarker);
+async function searchTomTom(
+  query,
+  buttonElement
+) {
+
+  activeQuery = query;
+
+
+  document
+    .querySelectorAll('.filter-btn')
+    .forEach(
+      b => b.classList.remove('active')
+    );
+
+
+  if (buttonElement) {
+    buttonElement.classList.add('active');
+  }
+
+
+  const resultsList =
+    document.getElementById(
+      "results-list"
+    );
+
+
+  const routePanel =
+    document.getElementById(
+      "route-panel"
+    );
+
+
+  const resultsTitle =
+    document.getElementById(
+      "results-title"
+    );
+
+
+  if (resultsTitle) {
+
+    resultsTitle.textContent =
+      `Nearby Results (Within ${currentRadiusKm} km)`;
+
+  }
+
+
+  if (resultsList) {
+
+    resultsList.innerHTML =
+      `<p>Searching Places within <b>${currentRadiusKm} km</b>...</p>`;
+
+  }
+
+
+  if (routePanel) {
+    routePanel.style.display =
+      "none";
+  }
+
+
+  if (markersLayer) {
+    markersLayer.clearLayers();
+  }
+
+
+  if (
+    currentRouteLine &&
+    map
+  ) {
+    map.removeLayer(
+      currentRouteLine
+    );
+  }
+
+
+  if (
+    destMarker &&
+    map
+  ) {
+    map.removeLayer(
+      destMarker
+    );
+  }
+
 
   try {
-    const response = await fetch(`${BACKEND_URL}/search?query=${encodeURIComponent(query)}&lat=${userLocation.lat}&lon=${userLocation.lng}&radius=${currentRadiusKm * 1000}`);
-    const data = await response.json();
-    if (resultsList) resultsList.innerHTML = ""; 
 
-    if (data && data.results && data.results.length > 0) {
-      data.results.forEach((place) => {
-        const shopName = place.poi ? place.poi.name : "Unnamed Shop";
-        const address = place.address ? place.address.freeformAddress : "Address not available";
-        const distKm = (place.dist / 1000).toFixed(1); 
-        const lat = place.position.lat;
-        const lon = place.position.lon;
-        const phone = (place.poi && place.poi.phone) ? place.poi.phone : "No phone provided";
-        const category = (place.poi && place.poi.categories) ? place.poi.categories.join(", ") : "General";
+    const response =
+      await fetch(
+        `${BACKEND_URL}/search?query=${encodeURIComponent(query)}&lat=${userLocation.lat}&lon=${userLocation.lng}&radius=${currentRadiusKm * 1000}`
+      );
 
-        const marker = L.marker([lat, lon]).bindPopup(`<b>${shopName}</b><br>📍 ${address}<br>📞 ${phone}<br>📏 ${distKm} km away<br><button class="guide-btn" onclick="window.drawRoute(${lat}, ${lon}, '${shopName.replace(/'/g, "")}')" style="margin-top: 8px;">🗺️ Guide Me Here</button>`);
-        markersLayer.addLayer(marker);
 
-        const shopPayload = { name: shopName, address, phone, category, distKm, lat, lon };
-        const card = document.createElement("div");
-        card.className = "place-card fade-in";
-        card.innerHTML = `
-          <div><h4>${shopName}</h4><p>📍 ${address}</p><p>📏 <b>${distKm} km away</b></p></div>
-          <div style="margin-top: auto;">
-             <button class="btn-secondary action-visit" style="width: 100%; padding: 8px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; margin-bottom: 8px;">View on Google Maps</button>
-             <div class="place-actions" style="display: flex; gap: 8px; margin-top: 0; width: 100%;">
-               <button class="action-guide" style="flex: 1; padding: 8px; border: none; border-radius: 6px; background-color: #0d6efd; color: white; font-weight: 600; cursor: pointer; text-align: center;">Path</button>
-               <button class="action-wishlist" style="flex: 1; padding: 8px; border: 1px solid #0d6efd; border-radius: 6px; background-color: white; color: #0d6efd; font-weight: 600; cursor: pointer; text-align: center;">Save</button>
-             </div>
-          </div>
-        `;
-        
-        card.querySelector('.action-guide').addEventListener('click', () => { window.drawRoute(lat, lon, shopName); marker.openPopup(); });
-        card.querySelector('.action-wishlist').addEventListener('click', (e) => { saveShopToFirebase(shopPayload, e.target); });
-        card.querySelector('.action-visit').addEventListener('click', () => {
-          const searchQuery = `${shopName} ${address}`.trim();
-          window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`, '_blank');
-        });
-        
-        if (resultsList) resultsList.appendChild(card);
-      });
-      updateVisualCircle();
-    } else { if (resultsList) resultsList.innerHTML = `<p style="color: var(--text-muted);">No places found matching this category within ${currentRadiusKm} km.</p>`; }
-  } catch (error) { if (resultsList) resultsList.innerHTML = `<p style="color: #dc3545;"> Error connecting to the backend server.Please try later.</p>`; }
+    const data =
+      await response.json();
+
+
+    if (resultsList) {
+      resultsList.innerHTML = "";
+    }
+
+
+    if (
+      data &&
+      data.results &&
+      data.results.length > 0
+    ) {
+
+      data.results.forEach(
+        (place) => {
+
+          const shopName =
+            place.poi
+              ? place.poi.name
+              : "Unnamed Shop";
+
+
+          const address =
+            place.address
+              ? place.address.freeformAddress
+              : "Address not available";
+
+
+          const distKm =
+            (
+              place.dist / 1000
+            ).toFixed(1);
+
+
+          const lat =
+            place.position.lat;
+
+
+          const lon =
+            place.position.lon;
+
+
+          const phone =
+            (
+              place.poi &&
+              place.poi.phone
+            )
+              ? place.poi.phone
+              : "No phone provided";
+
+
+          const category =
+            (
+              place.poi &&
+              place.poi.categories
+            )
+              ? place.poi.categories.join(", ")
+              : "General";
+
+
+          const marker =
+            L.marker([
+              lat,
+              lon
+            ])
+              .bindPopup(
+                `<b>${shopName}</b><br>📍 ${address}<br>📞 ${phone}<br>📏 ${distKm} km away<br><button class="guide-btn" onclick="window.drawRoute(${lat}, ${lon}, '${shopName.replace(/'/g, "")}')" style="margin-top: 8px;">🗺️ Guide Me Here</button>`
+              );
+
+
+          markersLayer.addLayer(
+            marker
+          );
+
+
+          const shopPayload = {
+            name: shopName,
+            address,
+            phone,
+            category,
+            distKm,
+            lat,
+            lon
+          };
+
+
+          const card =
+            document.createElement("div");
+
+
+          card.className =
+            "place-card fade-in";
+
+
+          card.innerHTML = `
+            <div>
+              <h4>${shopName}</h4>
+              <p>📍 ${address}</p>
+              <p>📏 <b>${distKm} km away</b></p>
+            </div>
+
+            <div style="margin-top: auto;">
+
+              <button
+                class="btn-secondary action-visit"
+                style="width: 100%; padding: 8px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; margin-bottom: 8px;"
+              >
+                View on Google Maps
+              </button>
+
+              <div
+                class="place-actions"
+                style="display: flex; gap: 8px; margin-top: 0; width: 100%;"
+              >
+
+                <button
+                  class="action-guide"
+                  style="flex: 1; padding: 8px; border: none; border-radius: 6px; background-color: #0d6efd; color: white; font-weight: 600; cursor: pointer; text-align: center;"
+                >
+                  Path
+                </button>
+
+                <button
+                  class="action-wishlist"
+                  style="flex: 1; padding: 8px; border: 1px solid #0d6efd; border-radius: 6px; background-color: white; color: #0d6efd; font-weight: 600; cursor: pointer; text-align: center;"
+                >
+                  Save
+                </button>
+
+              </div>
+
+            </div>
+          `;
+
+
+          card
+            .querySelector('.action-guide')
+            .addEventListener(
+              'click',
+              () => {
+
+                window.drawRoute(
+                  lat,
+                  lon,
+                  shopName
+                );
+
+                marker.openPopup();
+
+              }
+            );
+
+
+          card
+            .querySelector('.action-wishlist')
+            .addEventListener(
+              'click',
+              (e) => {
+
+                saveShopToFirebase(
+                  shopPayload,
+                  e.target
+                );
+
+              }
+            );
+
+
+          card
+            .querySelector('.action-visit')
+            .addEventListener(
+              'click',
+              () => {
+
+                const searchQuery =
+                  `${shopName} ${address}`.trim();
+
+
+                window.open(
+                  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`,
+                  '_blank'
+                );
+
+              }
+            );
+
+
+          if (resultsList) {
+            resultsList.appendChild(card);
+          }
+
+        }
+      );
+
+
+      updateVisualCircle(true);
+
+    }
+
+    else {
+
+      if (resultsList) {
+
+        resultsList.innerHTML =
+          `<p style="color: var(--text-muted);">
+            No places found matching this category within ${currentRadiusKm} km.
+          </p>`;
+
+      }
+
+    }
+
+  }
+
+  catch (error) {
+
+    if (resultsList) {
+
+      resultsList.innerHTML =
+        `<p style="color: #dc3545;">
+          Error connecting to the backend server.Please try later.
+        </p>`;
+
+    }
+
+  }
+
 }
+
+// product searching
 
 const productResults = document.getElementById('product-results');
 const cartCountElement = document.getElementById('cart-count');
