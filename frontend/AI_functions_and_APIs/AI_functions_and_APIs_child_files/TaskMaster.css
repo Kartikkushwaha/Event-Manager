@@ -463,3 +463,31 @@ body { background-color: var(--bg-color); color: var(--text-main); padding-botto
   width: 100%;
   margin: 0 auto;
 }
+/* ==========================================
+   LIVE GPS 3D ARROW
+   ========================================== */
+
+.live-user-arrow {
+  background: transparent !important;
+  border: none !important;
+  width: 52px !important;
+  height: 52px !important;
+  pointer-events: auto;
+}
+
+.live-user-arrow-container {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  transition: transform 0.35s ease-out;
+}
+
+.live-user-arrow svg {
+  width: 52px;
+  height: 52px;
+  display: block;
+  overflow: visible;
+}
