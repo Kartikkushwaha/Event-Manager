@@ -12,7 +12,6 @@ const firebaseConfig = {
     appId: "1:185975138221:web:762d3d825a5972e4752324",
     measurementId: "G-XVGT5GNNNZ"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); 
 const db = initializeFirestore(app, { localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()}) });
