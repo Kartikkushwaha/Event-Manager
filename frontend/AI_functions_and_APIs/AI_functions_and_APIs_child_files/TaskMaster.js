@@ -413,19 +413,57 @@ let currentHeading = 0;
 // ===============================
 
 const userArrowIcon = L.divIcon({
-  className: 'user-location-arrow-wrapper',
+  className: 'live-user-arrow',
   html: `
-    <div class="user-location-arrow">
-      <div class="arrow-shadow"></div>
-      <div class="arrow-3d">
-        <div class="arrow-main"></div>
-        <div class="arrow-highlight"></div>
-      </div>
-    </div>
+    <svg
+      width="52"
+      height="52"
+      viewBox="0 0 52 52"
+      xmlns="http://www.w3.org/2000/svg"
+      style="overflow: visible;"
+    >
+      <!-- Ground shadow -->
+      <ellipse
+        cx="26"
+        cy="43"
+        rx="11"
+        ry="4"
+        fill="rgba(0,0,0,0.30)"
+      />
+
+      <!-- 3D dark side -->
+      <path
+        d="M26 4 L43 37 L26 32 L9 37 Z"
+        fill="#084298"
+      />
+
+      <!-- Main arrow -->
+      <path
+        d="M26 2 L40 34 L26 29 L12 34 Z"
+        fill="#0d6efd"
+        stroke="#ffffff"
+        stroke-width="2"
+        stroke-linejoin="round"
+      />
+
+      <!-- Highlight -->
+      <path
+        d="M26 7 L31 29 L26 27 Z"
+        fill="#8ec5ff"
+      />
+
+      <!-- Center -->
+      <circle
+        cx="26"
+        cy="29"
+        r="2.5"
+        fill="white"
+      />
+    </svg>
   `,
-  iconSize: [46, 46],
-  iconAnchor: [23, 23],
-  popupAnchor: [0, -23]
+  iconSize: [52, 52],
+  iconAnchor: [26, 26],
+  popupAnchor: [0, -26]
 });
 
 
