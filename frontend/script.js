@@ -164,16 +164,16 @@ if (googleBtn) {
 const themeBtn = document.getElementById("themeToggle");
 const savedTheme = localStorage.getItem("theme");
 
+// Apply saved theme on load
 if (savedTheme === "dark") {
     document.body.classList.add("dark-mode");
-    themeBtn.textContent = "☀️";
 }
 
+// Toggle theme and save state
 themeBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
     const isDark = document.body.classList.contains("dark-mode");
     localStorage.setItem("theme", isDark ? "dark" : "light");
-    themeBtn.textContent = isDark ? "☀️" : "🌙";
 });
 
 // ==========================================

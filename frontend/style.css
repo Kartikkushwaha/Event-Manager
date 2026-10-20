@@ -214,19 +214,74 @@ body {
     flex-shrink: 0;
 }
 
-.theme-btn {
-    background: transparent;
-    border: 1px solid var(--text-secondary);
-    padding: 6px 10px; /* Small padding */
-    font-size: 14px;   /* Small text/icon */
-    border-radius: 15px; /* LESS CURVATURE */
+/* =========================================================
+   THEME TOGGLE SWITCH (PILL DESIGN)
+========================================================= */
+.theme-toggle-switch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 56px;
+    height: 30px;
+    padding: 2px 4px;
+    background-color: #0b0f19; /* Deep dark background matching the image */
+    border-radius: 40px;
+    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text-primary);
+    
+    outline: none;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s ease;
 }
 
-.theme-btn:hover {
-    background: var(--bg-core);
+
+.toggle-slider {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: 24px;
+    width: 26px;
+    background-color: #313b52; /* Slider color matching the image */
+    border-radius: 30px;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1;
+}
+
+/* Light mode state (Slider on the left) */
+body:not(.dark-mode) .toggle-slider {
+    transform: translateX(0);
+}
+
+/* Dark mode state (Slider on the right) */
+.dark-mode .toggle-slider {
+    transform: translateX(24px);
+}
+
+.toggle-icon {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #64748b; /* Inactive icon color */
+    transition: color 0.3s ease;
+}
+
+.toggle-icon svg {
+    width: 12px;
+    height: 12px;
+    stroke-width: 2.5;
+}
+
+/* Active Icon Highlights */
+body:not(.dark-mode) .sun-icon {
+    color: #ffffff;
+}
+.dark-mode .moon-icon {
+    color: #ffffff;
 }
 
 .hamburger-btn {
@@ -641,10 +696,30 @@ input:focus, textarea:focus {
         gap: 16px; 
     }
 
-    .theme-btn {
-        padding: 4px 8px; /* Tiny padding */
-        font-size: 11px; /* Tiny icon */
-        border-radius: 11px;
+    /* Inside @media (max-width: 960px) */
+    .theme-toggle-switch {
+        width: 58px;
+        height: 30px;
+        padding: 3px 5px;
+    }
+    
+    .toggle-slider {
+        height: 24px;
+        width: 26px;
+    }
+    
+    .dark-mode .toggle-slider {
+        transform: translateX(22px);
+    }
+    
+    .toggle-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .toggle-icon svg {
+        width: 13px;
+        height: 13px;
     }
 
     .hamburger-btn {
