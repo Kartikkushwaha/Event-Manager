@@ -470,13 +470,13 @@ const templates = {
         fields: [
             { id: "f1", label: "Partner 1 Name", x: 447, y: 373, font: "bold 55px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Partner 2 Name", x: 469, y: 509, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Wedding Date", x: 267, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Day", x: 445, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Time", x: 626, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Wedding Date", x: 260, y: 765, font: "bold 25px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 472, y: 765, font: "bold 25px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 665, y: 765, font: "bold 25px Arial", color: "#000000", align: "left" },
             { id: "f6", label: "Venue Name", x: 426, y: 864, font: "bold 35px Arial", color: "#000000", align: "center" },
             { id: "f7", label: "City/Address", x: 426, y: 906, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f8", label: "Ceremony Time", x: 286, y: 1158, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Reception/Celebration Time", x: 574, y: 1154, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Ceremony Time", x: 310, y: 1162, font: "bold 30px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Reception/Celebration Time", x: 615, y: 1162, font: "bold 30px Arial", color: "#000000", align: "left" },
             { id: "f10", label: "Name/Contact Number", x: 385, y: 1236, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f11", label: "Additional Contact", x: 381, y: 1275, font: "bold 35px Arial", color: "#000000", align: "left" },
             
@@ -487,13 +487,13 @@ const templates = {
         fields: [
             { id: "f1", label: "Partner 1 Name", x: 412, y: 347, font: "bold 55px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Partner 2 Name", x: 445, y: 515, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Wedding Date", x: 234, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Day", x: 433, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Time", x: 644, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Wedding Date", x: 230, y: 785, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 445, y: 785, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 655, y: 785, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f6", label: "Venue Name", x: 410, y: 912, font: "bold 35px Arial", color: "#000000", align: "center" },
             { id: "f7", label: "City/Address", x: 415, y: 960, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f8", label: "Ceremony Time", x: 278, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Reception/Celebration Time", x: 530, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Ceremony Time", x: 280, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Reception/Celebration Time", x: 560, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f10", label: "Name/Contact Number", x: 407, y: 1300, font: "bold 35px Arial", color: "#000000", align: "left" },
             { id: "f11", label: "Additional Contact", x: 377, y: 1339, font: "bold 35px Arial", color: "#000000", align: "left" }
         ]
