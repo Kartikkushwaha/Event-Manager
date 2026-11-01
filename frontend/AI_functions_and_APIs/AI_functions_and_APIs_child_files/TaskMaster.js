@@ -1317,7 +1317,7 @@ window.drawRoute = async function(
           latLngs,
           {
             color: '#0d6efd',
-            weight: 6,
+            weight: 4,
             opacity: 0.8,
             dashArray: '5, 10'
           }
@@ -1849,8 +1849,17 @@ async function fetchProducts(query) {
         const store = item.source || item.store || 'Web Store';
         const image = item.thumbnail || 'https://via.placeholder.com/200x200?text=No+Image';
         let productLink = item.link || '#';
-        if (productLink.includes('scraperapi.com')) { productLink = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(title + ' ' + store)}`; } 
-        else if (productLink !== '#' && !productLink.startsWith('http')) { productLink = 'https://' + productLink; }
+        
+
+
+      if (!productLink || productLink === '#' || productLink.includes('scraperapi.com')) { 
+            productLink = `https://www.google.com/search?tbm=shop&q=${encodeURIComponent(title + ' ' + store)}`; 
+      } 
+        // If it's a valid relative link missing the protocol, append it
+      else if (!productLink.startsWith('http')) { 
+            productLink = 'https://' + productLink; 
+      }
+        
 
         const firebasePayload = { name: title, price: displayPrice, source: store, link: productLink };
         const card = document.createElement('div');
