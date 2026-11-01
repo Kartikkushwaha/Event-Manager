@@ -225,67 +225,67 @@ const templates = {
     "bs_1": {
         name: "Template 1", src: "bs_1.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 943, y: 1100, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f1", label: "Mom-to-be-Name", x: 943, y: 1100, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 811, y: 1244, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 875, y: 1390, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 723, y: 1532, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 763, y: 1676, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 768, y: 1821, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f3", label: "Date and Time", x: 875, y: 1390, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Location", x: 723, y: 1532, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Hosted By", x: 763, y: 1676, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "RSVP Info", x: 768, y: 1821, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "bs_3": {
         name: "Template 2", src: "bs_3.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 876, y: 604, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f1", label: "Mom-to-be-Name", x: 876, y: 604, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 736, y: 695, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 801, y: 789, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 639, y: 880, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 685, y: 973, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 687, y: 1062, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f3", label: "Date and Time", x: 801, y: 789, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Location", x: 639, y: 880, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Hosted By", x: 685, y: 973, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "RSVP Info", x: 687, y: 1062, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "bs_5": {
         name: "Template 3", src: "bs_5.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 940, y: 951, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f1", label: "Mom-to-be-Name", x: 940, y: 951, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 806, y: 1072, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 872, y: 1191, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 713, y: 1310, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 752, y: 1550, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 761, y: 1669, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f3", label: "Date and Time", x: 872, y: 1191, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Location", x: 713, y: 1310, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Hosted By", x: 752, y: 1550, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "RSVP Info", x: 761, y: 1669, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "bs_7": {
         name: "Template 4", src: "bs_7.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 758, y: 964, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f1", label: "Mom-to-be-Name", x: 758, y: 964, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 758, y: 1158, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 758, y: 1341, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f4", label: "Detail 4", x: 758, y: 1523, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f5", label: "Detail 5", x: 758, y: 1707, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f6", label: "Detail 6", x: 758, y: 1872, font: "bold 60px Arial", color: "#000000", align: "center" }
+            { id: "f3", label: "Date and Time", x: 758, y: 1341, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f4", label: "Location", x: 758, y: 1523, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f5", label: "Hosted By", x: 758, y: 1707, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f6", label: "RSVP Info", x: 758, y: 1872, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
     "bs_8": {
         name: "Template 5", src: "bs_8.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 806, y: 903, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f1", label: "Mom-to-be-Name", x: 806, y: 903, font: "bold 60px Arial", color: "#000000", align: "center" },
             { id: "guestName", label: "Guest Name", x: 806, y: 1110, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 806, y: 1320, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f4", label: "Detail 4", x: 806, y: 1525, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f5", label: "Detail 5", x: 806, y: 1725, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f6", label: "Detail 6", x: 806, y: 1925, font: "bold 60px Arial", color: "#000000", align: "center" }
+            { id: "f3", label: "Date and Time", x: 806, y: 1320, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f4", label: "Location", x: 806, y: 1525, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f5", label: "Hosted By", x: 806, y: 1725, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f6", label: "RSVP Info", x: 806, y: 1925, font: "bold 60px Arial", color: "#000000", align: "center" }
         ]
     },
     "bs_12": {
         name: "Template 6", src: "bs_12.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 905, y: 494, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f1", label: "Mom-to-be-Name", x: 905, y: 494, font: "bold 60px Arial", color: "#000000", align: "left" },
             { id: "guestName", label: "Guest Name", x: 796, y: 574, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 849, y: 653, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 713, y: 729, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 758, y: 809, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 761, y: 885, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f3", label: "Date and Time", x: 849, y: 653, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Location", x: 713, y: 729, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Hosted By", x: 758, y: 809, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "RSVP Info", x: 761, y: 885, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
 
@@ -293,82 +293,82 @@ const templates = {
     "fare_1": {
         name: "Template 1", src: "fare_1.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 440, y: 573, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 505, y: 692, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 428, y: 816, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 445, y: 963, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 505, y: 1084, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 600, y: 1214, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 543, y: 1308, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 440, y: 573, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 505, y: 692, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "When", x: 428, y: 816, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Where", x: 445, y: 963, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Highlights", x: 505, y: 1084, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Dress Code (Optional)", x: 600, y: 1214, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Contact/RSVP", x: 543, y: 1308, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "fare_2": {
         name: "Template 2", src: "fare_2.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 364, y: 521, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 411, y: 618, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 356, y: 774, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 368, y: 920, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 318, y: 1059, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 523, y: 1192, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 466, y: 1294, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 364, y: 521, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 411, y: 618, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "When", x: 356, y: 774, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Where", x: 368, y: 920, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Highlights", x: 318, y: 1059, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Dress Code (Optional)", x: 523, y: 1192, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Contact/RSVP", x: 466, y: 1294, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "fare_3": {
         name: "Template 3", src: "fare_3.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 408, y: 582, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 468, y: 691, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 405, y: 803, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 420, y: 945, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 363, y: 1083, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 561, y: 1215, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 521, y: 1288, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 408, y: 582, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 468, y: 691, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "When", x: 405, y: 803, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Where", x: 420, y: 945, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Highlights", x: 363, y: 1083, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Dress Code (Optional)", x: 561, y: 1215, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Contact/RSVP", x: 521, y: 1288, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "fare_4": {
         name: "Template 4", src: "fare_4.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 416, y: 585, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 469, y: 667, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 411, y: 807, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 411, y: 839, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 411, y: 870, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 425, y: 962, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 454, y: 995, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 383, y: 1082, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 580, y: 1210, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 519, y: 1288, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 416, y: 585, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 469, y: 667, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Date", x: 411, y: 807, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 411, y: 839, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 411, y: 870, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue", x: 425, y: 962, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Location", x: 454, y: 995, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Highlights", x: 383, y: 1082, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Dress Code (Optinal)", x: 580, y: 1210, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Contact/RSVP", x: 519, y: 1288, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "fare_5": {
         name: "Template 5", src: "fare_5.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 392, y: 559, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 437, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 359, y: 806, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 359, y: 840, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 359, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 375, y: 964, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 404, y: 1001, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 344, y: 1089, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 539, y: 1214, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 497, y: 1297, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 392, y: 559, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 437, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Date", x: 359, y: 806, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 359, y: 840, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 359, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue", x: 375, y: 964, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Location", x: 404, y: 1001, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Highlights", x: 344, y: 1089, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Dress Code (Optinal)", x: 539, y: 1214, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Contact/RSVP", x: 497, y: 1297, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "fare_6": {
         name: "Template 6", src: "fare_6.jpeg",
         fields: [
-            { id: "f1", label: "Detail 1", x: 425, y: 551, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 465, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 409, y: 790, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 409, y: 822, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 409, y: 856, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 423, y: 952, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 453, y: 986, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 385, y: 1074, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 583, y: 1202, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 517, y: 1286, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Event", x: 425, y: 551, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Invitation", x: 465, y: 660, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Date", x: 409, y: 790, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 409, y: 822, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 409, y: 856, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue", x: 423, y: 952, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Location", x: 453, y: 986, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Highlights", x: 385, y: 1074, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Dress Code (Optional)", x: 583, y: 1202, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Contact/RSVP", x: 517, y: 1286, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
 
@@ -376,91 +376,91 @@ const templates = {
     "val_3": {
         name: "Template 1", src: "val_3.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 837, y: 797, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 713, y: 928, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 837, y: 1060, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 887, y: 1283, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 546, y: 1415, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 531, y: 1548, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 576, y: 1679, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 885, y: 1808, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 948, y: 1940, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 766, y: 2071, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 837, y: 797, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Nickname", x: 713, y: 928, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Love Message", x: 837, y: 1060, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Special Memory", x: 887, y: 1283, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Date", x: 546, y: 1415, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 531, y: 1548, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 576, y: 1679, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 885, y: 1808, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "RSVP/Contact", x: 948, y: 1940, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 766, y: 2071, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "val_4": {
         name: "Template 2", src: "val_4.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 814, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 718, y: 984, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 804, y: 1095, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 858, y: 1298, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 569, y: 1432, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 566, y: 1538, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 597, y: 1649, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 844, y: 1763, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 847, y: 1874, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 763, y: 1985, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 814, y: 875, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Nickname", x: 718, y: 984, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Love Message", x: 804, y: 1095, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Special Memory", x: 858, y: 1298, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Date", x: 569, y: 1432, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 566, y: 1538, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 597, y: 1649, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 844, y: 1763, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "RSVP/Contact", x: 847, y: 1874, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 763, y: 1985, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "val_6": {
         name: "Template 3", src: "val_6.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 827, y: 810, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 726, y: 924, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 830, y: 1042, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 912, y: 1247, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 558, y: 1452, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 556, y: 1568, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 604, y: 1682, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 920, y: 1798, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 893, y: 1917, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 778, y: 2032, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 827, y: 810, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Nickname", x: 726, y: 924, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Love Message", x: 830, y: 1042, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Special Memory", x: 912, y: 1247, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Date", x: 558, y: 1452, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 556, y: 1568, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 604, y: 1682, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 920, y: 1798, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "RSVP/Contact", x: 893, y: 1917, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 778, y: 2032, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "val_9": {
         name: "Template 4", src: "val_9.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 781, y: 913, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 980, y: 1024, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 789, y: 1136, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 870, y: 1343, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 508, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 1102, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 543, y: 1674, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 876, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 882, y: 1894, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 827, y: 2008, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 781, y: 913, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Nickname", x: 980, y: 1024, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Love Message", x: 789, y: 1136, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Special Memory", x: 870, y: 1343, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Date", x: 508, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 1102, y: 1561, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 543, y: 1674, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 876, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "RSVP/Contact", x: 882, y: 1894, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 827, y: 2008, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "val_11": {
         name: "Template 5", src: "val_11.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 782, y: 698, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "guestName", label: "Guest Name", x: 697, y: 802, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f3", label: "Detail 3", x: 799, y: 908, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 864, y: 1161, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 538, y: 1411, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 543, y: 1515, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 594, y: 1616, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 857, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 852, y: 1887, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 778, y: 1990, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 782, y: 698, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "guestName", label: "Nickname", x: 697, y: 802, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f3", label: "Love Message", x: 799, y: 908, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Special Memory", x: 864, y: 1161, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Date", x: 538, y: 1411, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 543, y: 1515, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 594, y: 1616, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 857, y: 1783, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "RSVP/Contact", x: 852, y: 1887, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 778, y: 1990, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
     "val_12": {
         name: "Template 6", src: "val_12.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 786, y: 812, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 786, y: 960, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 801, y: 1112, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f4", label: "Detail 4", x: 839, y: 1264, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f5", label: "Detail 5", x: 680, y: 1357, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 682, y: 1446, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f7", label: "Detail 7", x: 710, y: 1532, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f8", label: "Detail 8", x: 761, y: 1689, font: "bold 60px Arial", color: "#000000", align: "center" },
-            { id: "f9", label: "Detail 9", x: 978, y: 1174, font: "bold 60px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 768, y: 1936, font: "bold 60px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "My Valentine", x: 786, y: 812, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Nickname", x: 786, y: 960, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Love Message", x: 801, y: 1112, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f4", label: "Special Memory", x: 839, y: 1264, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f5", label: "Date", x: 680, y: 1357, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Time", x: 682, y: 1446, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f7", label: "Venue", x: 710, y: 1532, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f8", label: "Special Surprise", x: 761, y: 1689, font: "bold 60px Arial", color: "#000000", align: "center" },
+            { id: "f9", label: "RSVP/Contact", x: 978, y: 1174, font: "bold 60px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Closing Line", x: 768, y: 1936, font: "bold 60px Arial", color: "#000000", align: "left" }
         ]
     },
 
@@ -468,50 +468,50 @@ const templates = {
     "wed_1": {
         name: "Template 1", src: "wed_1.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 447, y: 373, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 469, y: 509, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 267, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 445, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 626, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 426, y: 864, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f7", label: "Detail 7", x: 426, y: 906, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f8", label: "Detail 8", x: 286, y: 1158, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 574, y: 1154, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 385, y: 1236, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f11", label: "Detail 11", x: 381, y: 1275, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f12", label: "Detail 12", x: 369, y: 1446, font: "bold 35px Arial", color: "#000000", align: "center" }
+            { id: "f1", label: "Partner 1 Name", x: 447, y: 373, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Partner 2 Name", x: 469, y: 509, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Wedding Date", x: 267, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 445, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 626, y: 750, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue Name", x: 426, y: 864, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f7", label: "City/Address", x: 426, y: 906, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f8", label: "Ceremony Time", x: 286, y: 1158, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Reception/Celebration Time", x: 574, y: 1154, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Name/Contact Number", x: 385, y: 1236, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f11", label: "Additional Contact", x: 381, y: 1275, font: "bold 35px Arial", color: "#000000", align: "left" },
+            
         ]
     },
     "wed_2": {
         name: "Template 2", src: "wed_2.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 412, y: 347, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 445, y: 515, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 234, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 433, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 644, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 410, y: 912, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f7", label: "Detail 7", x: 415, y: 960, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f8", label: "Detail 8", x: 278, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 530, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 407, y: 1300, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f11", label: "Detail 11", x: 377, y: 1339, font: "bold 35px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Partner 1 Name", x: 412, y: 347, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Partner 2 Name", x: 445, y: 515, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Wedding Date", x: 234, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 433, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 644, y: 780, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue Name", x: 410, y: 912, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f7", label: "City/Address", x: 415, y: 960, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f8", label: "Ceremony Time", x: 278, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Reception/Celebration Time", x: 530, y: 1216, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Name/Contact Number", x: 407, y: 1300, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f11", label: "Additional Contact", x: 377, y: 1339, font: "bold 35px Arial", color: "#000000", align: "left" }
         ]
     },
     "wed_3": {
         name: "Template 3", src: "wed_3.png",
         fields: [
-            { id: "f1", label: "Detail 1", x: 436, y: 308, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "guestName", label: "Guest Name", x: 442, y: 490, font: "bold 55px Arial", color: "#000000", align: "center" },
-            { id: "f3", label: "Detail 3", x: 215, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f4", label: "Detail 4", x: 417, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f5", label: "Detail 5", x: 641, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f6", label: "Detail 6", x: 398, y: 905, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f7", label: "Detail 7", x: 404, y: 955, font: "bold 35px Arial", color: "#000000", align: "center" },
-            { id: "f8", label: "Detail 8", x: 253, y: 1233, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f9", label: "Detail 9", x: 571, y: 1233, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f10", label: "Detail 10", x: 360, y: 1322, font: "bold 35px Arial", color: "#000000", align: "left" },
-            { id: "f11", label: "Detail 11", x: 355, y: 1365, font: "bold 35px Arial", color: "#000000", align: "left" }
+            { id: "f1", label: "Partner 1 Name", x: 436, y: 308, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "guestName", label: "Partner 2 Name", x: 442, y: 490, font: "bold 55px Arial", color: "#000000", align: "center" },
+            { id: "f3", label: "Wedding Date", x: 215, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f4", label: "Day", x: 417, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f5", label: "Time", x: 641, y: 769, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f6", label: "Venue Name", x: 398, y: 905, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f7", label: "City/Address", x: 404, y: 955, font: "bold 35px Arial", color: "#000000", align: "center" },
+            { id: "f8", label: "Ceremony Time", x: 253, y: 1233, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f9", label: "Reception/Celebration Time", x: 571, y: 1233, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f10", label: "Name/Contact Number", x: 360, y: 1322, font: "bold 35px Arial", color: "#000000", align: "left" },
+            { id: "f11", label: "Additional Contact", x: 355, y: 1365, font: "bold 35px Arial", color: "#000000", align: "left" }
         ]
     }
 };
