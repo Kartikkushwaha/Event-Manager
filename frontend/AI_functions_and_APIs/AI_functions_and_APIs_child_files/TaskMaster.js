@@ -466,7 +466,7 @@ const userArrowIcon = L.divIcon({
     </div>
   `,
 
-  iconSize: [52, 52],
+  iconSize: [30, 52],
   iconAnchor: [26, 26],
   popupAnchor: [0, -26]
 });
@@ -1906,7 +1906,7 @@ function renderSavedList(listName, displayName) {
   if (productResults) productResults.style.display = 'none';
   if (savedResults) savedResults.style.display = 'grid';
   if (searchActionBar) searchActionBar.style.display = 'flex';
-  
+
   const dict = getListDict(listName);
   const categorySelect = document.getElementById('category-filter-select');
   
