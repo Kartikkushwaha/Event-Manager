@@ -245,12 +245,13 @@ async def search_ecommerce_products(query: str):
     params = {
         "api_key": SCRAPER_API_KEY,
         "query": query,
-        "country": "in",  
+        "country_code": "in",  # FIX 1: Changed from "country" to "country_code"
         "tld": "co.in",
     }
 
     try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
+        # FIX 2: Increased timeout to 65s (ScraperAPI internal timeout is 60s)
+        async with httpx.AsyncClient(timeout=65.0) as client:
             response = await client.get(scraper_url, params=params)
             
             if response.status_code != 200:
